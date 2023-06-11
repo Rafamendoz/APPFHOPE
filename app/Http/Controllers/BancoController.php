@@ -4,21 +4,43 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Banco;
+use Illuminate\Support\Facades\Log;
+
 
 class BancoController extends Controller
 {
     public function setBanco(Request $request){
-        $banco = Banco::create($request->all());
-        return response()->json(["Banco"=>$banco,"Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Agregado"], 202);
-    }
+        try {
+            log::info("REQUEST: ".$request);
+            $banco = Banco::create($request->all());
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      }
 
-    public function getBancosRest(){
+    public function getBancosRest(Request $request){
+        
+        log::info("REQUEST: ".$request);
         $bancos = Banco::all();
-        return response()->json([
-            "Bancos"=>$bancos, 
-            "Codigo"=>"202",
-            "Estado"=>"Exitoso"
-        ], 202);
+        if(sizeof($bancos)<1){
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+            Log::info("RESPONSE: ".$response);
+            return $response;
+        }else{
+            $response =  response()->json([
+                "Ventas"=>$ventas, "Response"=>[
+                "Codigo"=>"200",
+                "Estado"=>"Exitoso"]
+            ], 200);
+            return $response;  
+
+        }
+       
     }
 
     public function getBancoRestById($id){
