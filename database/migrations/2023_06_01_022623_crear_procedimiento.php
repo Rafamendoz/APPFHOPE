@@ -12,7 +12,18 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
+
     {
+
+        $rollback_procedureVentaById = "DROP PROCEDURE IF EXISTS ObtenerCabeceraVenta";
+        DB::unprepared($rollback_procedureVentaById);
+        
+        $rollback_procedureMonedaVista = "DROP PROCEDURE IF EXISTS obtener_monedas_vista";
+        DB::unprepared($rollback_procedureMonedaVista);
+
+        $rollback_procedureVentas = "drop procedure if EXISTS ObtenerCabeceraVentas";
+        DB::unprepared($rollback_procedureVentas);
+
         $procedureVentaById = "
         CREATE procedure ObtenerCabeceraVenta (IN id_venta INT )
         BEGIN 
@@ -37,8 +48,22 @@ return new class extends Migration
         END
         ";
 
+        $procedureMonedaVista = "
+        CREATE PROCEDURE Obtener_monedas_vista (in estado TEXT COLLATE utf8_general_ci)
+        begin 
+        select m.id, m.moneda_nombre,m.estado, e.valor, m.created_at, m.updated_at  from moneda m
+        inner join estado e on m.estado = e.id 
+        where e.valor=estado;
+        end 
+        ";
+
+        
+
+
+
         DB::unprepared($procedureVentaById);
         DB::unprepared($procedureVentas);
+        DB::unprepared($procedureMonedaVista);
     }
 
     /**
