@@ -4,18 +4,112 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Moneda;
+use Illuminate\Support\Facades\Log;
+use App\Models\Error;
+use Illuminate\Support\Facades\DB;
 
 class MonedaController extends Controller
 {
+    public function getMonedas(){
+        try {
+            $id = "Activo";
+            $monedas1 =DB::select('CALL Obtener_monedas_vista(?)', array($id));
+            $monedas = Moneda::all();
+            return view('monedas', compact('monedas'));
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = 'errir';
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      
+    }
+
+
+
     public function setMoneda(Request $request){
-        $moneda = Moneda::create($request->all());
-        return response()->json(["Moneda"=>$moneda,"Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Agregado"], 202);
+        try {
+            log::info("REQUEST: ".$request);
+            $moneda = Moneda::create($request->all());
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
 
     }
 
-    public function getMonedasRest(){
-        $monedas = Moneda::all();
-        return response()->json(["Monedas"=>$monedas,"Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Encontrados"], 202);
+    public function getMonedasRest(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $monedas = Moneda::all();
+            if(sizeof($monedas)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Monedas"=>$monedas, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                return $response;  
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+    }
+
+    public function getMonedasRestActive(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $monedas =DB::select('CALL Obtener_monedas_vista(?)', array("Activo"));
+            if(sizeof($monedas)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Monedas"=>$monedas, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                return $response;  
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+    }
+
+    public function getMonedasRestNoActive(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $monedas = Moneda::all();
+            if(sizeof($monedas)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Monedas"=>$monedas, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                return $response;  
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
 
     }
 

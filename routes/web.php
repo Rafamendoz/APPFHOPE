@@ -68,7 +68,7 @@ Route::group(["middleware" => "auth"], function () {
       
    
    
-      Route::get('moneda', 'App\Http\Controllers\MonedaController@getMoneda');
+      Route::get('monedas', 'App\Http\Controllers\MonedaController@getMonedas')->name("Monedas");
       /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
      Route::get('monedaR', 'App\Http\Controllers\MonedaController@getMonedasRest');
       /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/

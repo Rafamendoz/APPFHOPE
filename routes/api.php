@@ -55,6 +55,9 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::get('moneda', 'App\Http\Controllers\MonedaController@getMoneda');
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
   Route::get('monedaR', 'App\Http\Controllers\MonedaController@getMonedasRest');
+  /* RUTA PARA OBTENER LAS MONEDAS ACTIVAS */
+  Route::get('monedaR/active', 'App\Http\Controllers\MonedaController@getMonedasRestActive');
+
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
   Route::get('monedaR/{id}', 'App\Http\Controllers\MonedaController@getMonedaRestById');
    /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
