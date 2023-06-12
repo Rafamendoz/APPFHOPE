@@ -4,12 +4,60 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cuenta;
+use Illuminate\Support\Facades\Log;
+use App\Models\Error;
+use Illuminate\Support\Facades\DB;
+use App\Models\Estado;
 
 class CuentaController extends Controller
+
+
 {
+
+    public function addTipoCuenta(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $estados = Estado::all();
+            $vista = view("addtipocuenta", compact('estados'));
+            log::info("RESPONSE: VISTA addmoneda devuelta");
+            return $vista;
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+     
+        
+    }
+
+
+    public function getTipoCuentas(){
+        try {
+            $id = "Activo";
+            $tipocuentas =DB::select('CALL Obtener_tipo_cuenta_vista(?)', array($id));
+            return view('tipocuentas', compact('tipocuentas'));
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = 'errir';
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      
+    }
+
     public function setCuenta(Request $request){
-        $cuenta = Cuenta::create($request->all());
-        return response()->json(["Cuenta"=>$cuenta,"Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Agregado"], 202);
+        try {
+            log::info("REQUEST: ".$request);
+            $cuenta = Cuenta::create($request->all());
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
     }
     
 

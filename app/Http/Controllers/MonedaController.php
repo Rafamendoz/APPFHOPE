@@ -7,6 +7,7 @@ use App\Models\Moneda;
 use Illuminate\Support\Facades\Log;
 use App\Models\Error;
 use Illuminate\Support\Facades\DB;
+use App\Models\Estado;
 
 class MonedaController extends Controller
 {
@@ -182,17 +183,29 @@ class MonedaController extends Controller
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
-                if($request->estado===1){
-                    $moneda->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                }else{
-                    $moneda->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
+                switch($request->estado){
+                    case 1:
+                        $moneda->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    case 2:
+                        $moneda->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    default:
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El valor ingresado no es permitido, para el tipo de campo"]], 202);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+
+
+
                 }
+                
                
             }
         } catch (\Throwable $th) {
@@ -203,4 +216,25 @@ class MonedaController extends Controller
       
 
     }
+
+
+    public function addMoneda(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $estados = Estado::all();
+            $vista = view("addmoneda", compact('estados'));
+            log::info("RESPONSE: VISTA addmoneda devuelta");
+            return $vista;
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+     
+        
+    }
+
+
+
+
 }

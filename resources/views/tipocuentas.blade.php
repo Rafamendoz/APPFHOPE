@@ -5,7 +5,7 @@
  <!-- Page Heading -->
  <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
   <ol class="bg-white breadcrumb shadow p-3 mb-4 rounded">
-    <li class="breadcrumb-item active" aria-current="page">Monedas</li>
+    <li class="breadcrumb-item active" aria-current="page">Tipo de Cuentas</li>
   </ol>
 </nav>
 
@@ -13,7 +13,7 @@
                     <!-- DataTales Example -->
                     <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Data de Monedas</h6>
+                                    <h6 class="m-0 font-weight-bold text-primary">Data de Tipo de Cuentas</h6>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -25,10 +25,8 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
-                                            <a class="dropdown-item" href="{{route('AddMoneda')}}">Agregar Moneda</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
+                                            <a class="dropdown-item" href="{{route('AddTipoCuenta')}}">Agregar Tipo Cuenta</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
                                         </div>
                                     </div>
                                 </div>
@@ -39,7 +37,7 @@
                                     <thead class="text-center">
                                         <tr>
                                             <th>N.</th>
-                                            <th>Nombre de la Moneda</th>
+                                            <th>Nombre del Tipo de Cuenta</th>
                                             <th>Estado</th>
                                             <th>Registro de Creacion</th>
                                             <th>Registro de Modificacion</th>
@@ -51,10 +49,10 @@
                                     </thead>
                             
                                  <tbody class="text-center">
-                                        @foreach ($monedas as $valor)
+                                        @foreach ($tipocuentas as $valor)
                                             <tr>
                                                 <td>{{ $valor->id }}</td>
-                                                <td>{{ $valor->moneda_nombre }}</td>
+                                                <td>{{ $valor->cuenta_nombre }}</td>
                                                 <td>{{$valor->valor }}</td>
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>

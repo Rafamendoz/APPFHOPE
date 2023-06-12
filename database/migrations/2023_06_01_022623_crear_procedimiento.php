@@ -15,6 +15,10 @@ return new class extends Migration
 
     {
 
+        $rollback_procedureCuentaVista = "DROP PROCEDURE IF EXISTS Obtener_tipo_cuenta_vista";
+        DB::unprepared($rollback_procedureCuentaVista);
+
+
         $rollback_procedureVentaById = "DROP PROCEDURE IF EXISTS ObtenerCabeceraVenta";
         DB::unprepared($rollback_procedureVentaById);
         
@@ -57,13 +61,23 @@ return new class extends Migration
         end 
         ";
 
-        
+        $procedureCuentaVista = "
+        create procedure Obtener_tipo_cuenta_vista (in estado TEXT collate utf8_general_ci)
+        begin
+            select c.id, c.cuenta_nombre, e.valor, c.created_at, c.updated_at from cuenta c
+            inner join estado e on c.estado = e.id
+            where e.valor = estado;
+        end
+        ";
+
 
 
 
         DB::unprepared($procedureVentaById);
         DB::unprepared($procedureVentas);
         DB::unprepared($procedureMonedaVista);
+        DB::unprepared($procedureCuentaVista);
+
     }
 
     /**

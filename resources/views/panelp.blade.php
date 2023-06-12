@@ -108,7 +108,7 @@
                  
                         <h6 class="collapse-header">Tablas Independientes</h6> 
                         <a class="collapse-item" href="{{route('Puestos')}}">Puestos</a>
-                        <a class="collapse-item" href="{{route('TipoCuentasBancarias')}}">Tipo Cuentas Bancarias</a>
+                        <a class="collapse-item" href="{{route('TipoCuentas')}}">Tipo Cuentas Bancarias</a>
                         <a class="collapse-item" href="{{route('Monedas')}}">Tipo Monedas</a>
                         <a class="collapse-item" href="{{route('TipoTransaccion')}}">Tipo Transaccion</a>
                     </div>

@@ -62,6 +62,14 @@ return new class extends Migration
 
         });
 
+        Schema::table('moneda', function (Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+
+        Schema::table('cuenta', function (Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+
     }
 
     /**
