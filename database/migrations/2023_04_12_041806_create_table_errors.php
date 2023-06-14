@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('errores', function (Blueprint $table) {
-            $table->unsignedBigInteger('codigo_error', false)->unique()->primary();
+            $table->string('codigo_error')->unique();
             $table->string("descripcion");
-            $table->timestamps();
         });
     }
 

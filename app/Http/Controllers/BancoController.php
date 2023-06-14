@@ -33,10 +33,11 @@ class BancoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Ventas"=>$ventas, "Response"=>[
+                    "CuentasBancarias"=>$bancos, "Response"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
+                Log::info("RESPONSE: ".$response);
                 return $response;  
     
             }
@@ -50,47 +51,93 @@ class BancoController extends Controller
        
     }
 
-    public function getBancoRestById($id){
-        $banco = Banco::find($id);
-        return response()->json([
-            "Banco"=>$banco, 
-            "Codigo"=>"202",
-            "Estado"=>"Exitoso"
-        ], 202);
+    public function getBancoRestById(Request $request,$id){
+        try {
+            log::info('REQUEST '.$request);
+            $banco = Banco::find($id);
+            if(is_null($banco)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "CuentaBancaria"=>$banco, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            
+        }
+    
 
     }
 
     public function putBanco(Request $request, $id){
-        $banco = Banco::find($id);
-        $banco->update($request->all());
-        return response()->json(
-            ["Banco"=>$banco
-            ,"Codigo"=>"200",
-            "Estado"=>"Exitoso",
-            "Descripcion"=>"Registro Modificado"
-            ]
-        );
+        try {
+            Log::info("REQUEST: ".$request);
+            $banco = Banco::find($id);
+            if(is_null($banco)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $banco->update($request->all());
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
     }
     
     public function deleteBanco(Request $request, $id){
-        $banco = Banco::find($id);
-        $x = $request->estado;
+        try {
+            Log::info("REQUEST: ".$request);
+            $banco = banco::find($id);
+            if(is_null($banco)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
 
-        if(is_null($banco)){
-            return response()->json(["Estado"=>'Fallido', "Descripcion:"=>"No se desactivo el registro solicitado, ya que no existe"], 404);
+            }else{
+                switch($request->estado){
+                    case 1:
+                        $banco->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    case 2:
+                        $banco->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    default:
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El valor ingresado no es permitido, para el tipo de campo"]], 202);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
 
-        }else{
-            switch($x){
-                case 1:
-                    $banco->update($request->all());
-                    return response()->json(["Estado"=>"Exito", "Descripcion:"=>"Registro Activado"], 202);
-                    break;
-                case 2:
-                    $banco->update($request->all());
-                    return response()->json(["Estado"=>"Exito", "Descripcion:"=>"Registro Desactivado"], 202);    
-                    break;
-             
-            }   
+
+
+                }
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
+ 
+       
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class AuthBasic
@@ -18,12 +18,15 @@ class AuthBasic
     public function handle(Request $request, Closure $next)
     {
         if(Auth::onceBasic()){
+            log::warning($request." ACCESO NO AUTORIZADO");
             return response()->json(['Codigo'=>401, 'Estado'=>'No Autorizado', 'Descripcion'=>'Acceso No Autorizado'],401);
         }else{
             if(Auth::user()->email!=="QA@fhope.online"){
+             
                 return $next($request);
 
             }else{
+                log::warning($request."USUARIO NO INGRESADO NO TIENE PERMISOS");
                 return response()->json(['Codigo'=>401, 'Estado'=>'No Autorizado', 'Descripcion'=>'El usuario ingresado no tiene permisos'],401);
 
             }

@@ -28,7 +28,7 @@ return new class extends Migration
             ,['codigo_error'=>404,'descripcion'=>'El registro solicitado no fue encontrado porque no existe.']
             ,['codigo_error'=>2002,'descripcion'=>'Error de conexion hacia la BD']
             ,['codigo_error'=>22007,'descripcion'=>'El tipo de dato ingresado no es el que se esperaba, revisar datos']
-
+            ,['codigo_error'=>'01000','descripcion'=>'Hay un valor que excede el limite permitido de tamaño del campo']
             ]
         );
     }
