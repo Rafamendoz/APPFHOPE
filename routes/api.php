@@ -130,7 +130,7 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::get('dbancoR', 'App\Http\Controllers\DetalleBancoController@getDetallesBancoRest');
    Route::get('dbancoR/{id}', 'App\Http\Controllers\DetalleBancoController@getDetalleBancoRestById');
    Route::post('dbancoR/add', 'App\Http\Controllers\DetalleBancoController@setDetalleBanco');
-   Route::post('dbancoR/transaccion/{id}', 'App\Http\Controllers\DetalleBancoController@getDetalleBancoRestByTipoTransaccion');
+   Route::get('dbancoR/transaccion/{id}', 'App\Http\Controllers\DetalleBancoController@getDetalleBancoRestByTipoTransaccion');
 
     //RUTAS PARA ENTIDAD Token
     Route::get('tokenR', 'App\Http\Controllers\DetalleBancoController@getDetallesBancoRest');
