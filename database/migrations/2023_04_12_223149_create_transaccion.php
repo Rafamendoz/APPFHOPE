@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('transaccion', function (Blueprint $table) {
             $table->id();
-            $table->string('trans_nombre');
+            $table->string('trans_nombre')->unique();
             $table->unsignedBigInteger('estado');
             $table->timestamps();
         });
