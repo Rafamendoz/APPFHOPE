@@ -15,12 +15,14 @@ use App\Http\Controllers;
 |
 */
 
+Route::get('ventaR', 'App\Http\Controllers\VentaController@getVentasRest')->middleware('auth.guest');
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 //RUTAS PARA ENTIDAD USUARIO
-Route::group(["middleware" => "api"], function () {
+Route::group(["middleware" => "auth.basic1"], function () {
  /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
 
  Route::get('usuarioR', 'App\Http\Controllers\UsuarioController@getUsuarioRest');
@@ -103,12 +105,12 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::put('puestoR/delete/{id}', 'App\Http\Controllers\PuestoController@deletePuesto');
    
  
-      //RUTAS PARA ENTIDAD Cuenta
-   Route::get('cuentaR', 'App\Http\Controllers\CuentaController@getCuentasRest');
-   Route::get('cuentaR/{id}', 'App\Http\Controllers\CuentaController@getCuentaRestById');
-   Route::post('cuentaR/add', 'App\Http\Controllers\CuentaController@setCuenta');
-   Route::put('cuentaR/update/{id}', 'App\Http\Controllers\CuentaController@putCuenta');
-   Route::put('cuentaR/delete/{id}', 'App\Http\Controllers\CuentaController@deleteCuenta');
+      //RUTAS PARA ENTIDAD TipoCuenta
+   Route::get('cuentaR', 'App\Http\Controllers\TipoCuentaController@getTipoCuentasRest');
+   Route::get('cuentaR/{id}', 'App\Http\Controllers\TipoCuentaController@getTipoCuentaRestById');
+   Route::post('cuentaR/add', 'App\Http\Controllers\TipoCuentaController@setTipoCuenta');
+   Route::put('cuentaR/update/{id}', 'App\Http\Controllers\TipoCuentaController@putTipoCuenta');
+   Route::put('cuentaR/delete/{id}', 'App\Http\Controllers\TipoCuentaController@deleteTipoCuenta');
 
       //RUTAS PARA ENTIDAD Transaccion
    Route::get('transaccionR', 'App\Http\Controllers\TransaccionController@getTransaccionesRest');
@@ -168,7 +170,6 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
   
   
 
-    Route::get('ventaR', 'App\Http\Controllers\VentaController@getVentasRest');
     /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
    Route::get('ventaR/{id}', 'App\Http\Controllers\VentaController@getVentaRestById');
     /* RUTA PARA METODO DE AGREGAR UN USUARIO*/

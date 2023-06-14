@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cuenta', function (Blueprint $table) {
             $table->id();
-            $table->string('cuenta_nombre');
+            $table->string('cuenta_nombre')->unique();
             $table->unsignedBigInteger('estado');
             $table->timestamps();
         });

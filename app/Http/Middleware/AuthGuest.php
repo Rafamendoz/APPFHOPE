@@ -4,11 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AuthBasic
+class AuthGuest
 {
     /**
      * Handle an incoming request.
@@ -17,17 +16,22 @@ class AuthBasic
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Auth::onceBasic()){
+       
+        if( Auth::onceBasic()){
             return response()->json(['Codigo'=>401, 'Estado'=>'No Autorizado', 'Descripcion'=>'Acceso No Autorizado'],401);
+
+            
         }else{
-            if(Auth::user()->email!=="QA@fhope.online"){
+            if(Auth::user()->email=="QA@fhope.online"){
+
                 return $next($request);
 
             }else{
                 return response()->json(['Codigo'=>401, 'Estado'=>'No Autorizado', 'Descripcion'=>'El usuario ingresado no tiene permisos'],401);
 
             }
-
         }
+       
+        
     }
 }
