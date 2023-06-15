@@ -42,13 +42,29 @@ class ClienteController extends Controller
         }
     }
 
-    public function getClientesRest(){
-        $clientes = Cliente::all();
-        return response()->json([
-            "Clientes"=>$clientes, "Response"=>[
-            "Codigo"=>"200",
-            "Estado"=>"Exitoso"]
-        ], 200);
+    public function getClientesRest(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $clientes = Cliente::all();
+            if(sizeof($clientes)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Clientes"=>$clientes, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;  
+    
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
         
     }
 
