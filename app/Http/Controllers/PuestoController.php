@@ -35,68 +35,125 @@ class PuestoController extends Controller
 
     public function setPuesto(Request $request){
         try {
+            log::info("REQUEST: ".$request);
             $puesto = Puesto::create($request->all());
-            Log::info("REQUEST: ".$request);
-           $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
-           Log::info("RESPONSE: ".$response);
-           return $response;
-        } catch (\Illuminate\Database\QueryException $th) {
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+        } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
     }
 
-    public function getPuestosRest(){
-        $puestos = Puesto::all();
-        return response()->json([
-            "Puestos"=>$puestos, "Response"=>[
-            "Codigo"=>"202",
-            "Estado"=>"Exitoso"]
-        ], 202);
+    public function getPuestosRest(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $puestos = Puesto::all();
+            if(sizeof($puestos)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Puestos"=>$puestos, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;  
+    
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
         
     }
 
-    public function getPuestoRestById($id){
-        $puesto = Puesto::find($id);
-        return response()->json([
-            "Puesto"=>$puesto, 
-            "Codigo"=>"202",
-            "Estado"=>"Exitoso"
-        ], 202);
+    public function getPuestoRestById(Request $request, $id){
+        try {
+            log::info('REQUEST '.$request);
+            $puesto = Puesto::find($id);
+            if(is_null($puesto)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Puesto"=>$puesto, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
     }
 
     public function putPuesto(Request $request,$id){
-        $puesto = Puesto::find($id);
-        $puesto->update($request->all());
-        return response()->json(
-            ["Puesto"=>$puesto
-            ,"Codigo"=>"200",
-            "Estado"=>"Exitoso",
-            "Descripcion"=>"Registro Modificado"
-            ]
-        );
+        try {
+            Log::info("REQUEST: ".$request);
+            $puesto = Puesto::find($id);
+            if(is_null($puesto)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $puesto->update($request->all());
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
 
     }
 
     public function deletePuesto(Request $request , $id){
-        Log::info("REQUEST: ".$request);
         try {
+            Log::info("REQUEST: ".$request);
             $puesto = Puesto::find($id);
-            $x = $request->estado;
-            switch($x){
-                case 1:
-                    $puesto->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Activado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
-                case 2:
-                    $puesto->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Desactivado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
+            if(is_null($puesto)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                switch($request->estado){
+                    case 1:
+                        $puesto->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    case 2:
+                        $puesto->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    default:
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El valor ingresado no es permitido, para el tipo de campo"]], 202);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+
+
+
+                }
             }
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());

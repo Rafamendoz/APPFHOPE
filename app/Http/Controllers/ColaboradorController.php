@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 
 class ColaboradorController extends Controller
+
 {
     public function getColaboradores(){
         try {
@@ -20,7 +21,7 @@ class ColaboradorController extends Controller
             return view('colaboradores', compact('colaboradores'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = 'errir';
+            $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
       
@@ -38,8 +39,8 @@ class ColaboradorController extends Controller
         try {
             $colaborador = Colaborador::create($request->all());
             Log::info("REQUEST: ".$request);
-           $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
-           Log::info("RESPONSE: ".$response);
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
            return $response;
         } catch (\Illuminate\Database\QueryException $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
@@ -81,8 +82,8 @@ class ColaboradorController extends Controller
     }
 
     public function deleteColaborador(Request $request , $id){
-        Log::info("REQUEST: ".$request);
         try {
+            Log::info("REQUEST: ".$request);
             $colaborador = Colaborador::find($id);
             $x = $request->estado;
             switch($x){

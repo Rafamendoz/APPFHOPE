@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('usuario_id');
-            $table->datetime('fecha');
-            $table->string('direccionEnvio');
-            $table->float('total',9,2);
+            $table->datetime('fecha')->nullable($value = false);
+            $table->string('direccionEnvio')->nullable($value = false);
+            $table->float('total',9,2)->nullable($value = false);
             $table->unsignedBigInteger('estado');
             $table->timestamps();
         });

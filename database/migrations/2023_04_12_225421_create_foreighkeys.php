@@ -74,6 +74,9 @@ return new class extends Migration
             $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
         });
 
+        Schema::table('cliente', function (Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
     }
 
     /**

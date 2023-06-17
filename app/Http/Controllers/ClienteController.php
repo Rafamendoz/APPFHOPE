@@ -16,15 +16,22 @@ class ClienteController extends Controller
             return view('clientes', compact('clientes'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = 'errir';
+            $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
       
     }
 
     public function addCliente(){
-        $estados = Estado::all();
-        return view('addcliente', compact('estados'));
+        try {
+            $estados = Estado::all();
+            return view('addcliente', compact('estados'));
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+        
     }
 
 
@@ -73,10 +80,10 @@ class ClienteController extends Controller
             $cliente = Cliente::where('id',$id)->get();
             Log::info("REQUEST: ".$request);
             if(sizeof($cliente)<1){
-                $error = Error::where('codigo_error',404)->get();
-                $response =  response()->json(["Estado"=>"No Encontrado","Codigo"=>404, "Mapping_Error"=>$error],404);
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
+
 
             }else{
                 $response = response()->json([
@@ -100,26 +107,25 @@ class ClienteController extends Controller
 
     public function getClienteRestByDNI($id, Request $request){
         try {
+            log::info("REQUEST: ".$request);
             $cliente = Cliente::where('cliente_DNI',$id)->get();
-            Log::info("REQUEST: ".$request);
             if(sizeof($cliente)<1){
-                $error = Error::where('codigo_error',404)->get();
-                $response =  response()->json(["Estado"=>"No Encontrado","Codigo"=>404, "Mapping_Error"=>$error],404);
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
 
             }else{
-                $response = response()->json([
+                $response =  response()->json([
                     "Cliente"=>$cliente, "Response"=>[
                     "Codigo"=>"200",
-                    "Descripcion"=>"Registro Encontrado",
                     "Estado"=>"Exitoso"]
                 ], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
+                Log::info("RESPONSE: ".$response);
+                return $response;  
 
             }
-            
+        
+
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
@@ -129,42 +135,66 @@ class ClienteController extends Controller
     }
 
     public function putCliente(Request $request,$id){
-        $cliente = Cliente::find($id);
-        $cliente->update($request->all());
-        return response()->json(
-            ["Cliente"=>$cliente
-            ,"Codigo"=>"200",
-            "Estado"=>"Exitoso",
-            "Descripcion"=>"Registro Modificado"
-            ]
-        );
+        try {
+            Log::info("REQUEST: ".$request);
+            $cliente = Cliente::find($id);
+            if(is_null($cliente)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $cliente->update($request->all());
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
 
     }
 
     public function deleteCliente(Request $request , $id){
-        Log::info("REQUEST: ".$request);
         try {
-            $puesto = Cliente::find($id);
-            $x = $request->estado;
-            switch($x){
-                case 1:
-                    $puesto->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Activado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
-                case 2:
-                    $puesto->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Desactivado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
+            Log::info("REQUEST: ".$request);
+            $cliente = Cliente::find($id);
+            if(is_null($cliente)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                switch($request->estado){
+                    case 1:
+                        $cliente->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    case 2:
+                        $cliente->update($request->all());
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    default:
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El valor ingresado no es permitido, para el tipo de campo"]], 202);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+
+
+
+                }
             }
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
-       
     }
 }

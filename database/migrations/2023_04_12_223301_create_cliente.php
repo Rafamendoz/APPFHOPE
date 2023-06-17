@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('cliente_nom');
             $table->string('cliente_tel');
-            $table->string('cliente_correo')->unique();
-            $table->string('cliente_DNI')->unique();
+            $table->string('cliente_correo')->unique()->nullable();
+            $table->string('cliente_DNI')->unique()->nullable();
             $table->unsignedBigInteger('estado');
             $table->timestamps();
         });
