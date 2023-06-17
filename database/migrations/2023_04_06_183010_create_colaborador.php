@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('colaborador_nombres');
             $table->string('colaborador_apellidos');
-            $table->string('colaborador_DNI');
-            $table->unsignedBigInteger('colaborador_puesto');
+            $table->string('colaborador_DNI')->unique();
+            $table->unsignedBigInteger('colaborador_puesto')->nullable($value = false);
             $table->unsignedBigInteger('colaborador_idusuario')->unique();
             $table->unsignedBigInteger('estado');
             $table->timestamps();
