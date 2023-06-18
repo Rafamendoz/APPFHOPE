@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Crypt;
 
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -54,7 +55,8 @@ class UsuarioController extends Controller
 
     public function setUsuario(Request $request){
         $contra =   Hash::make($request->password);
-        $usuario = User::insert(['email'=>$request->email,'password'=>$contra,'user'=>$request->user,'intentos'=>$request->intentos,'estado'=>$request->estado]);
+        $apiToken = Crypt::encrypt(base64_encode($request->email.":".$request->password));
+        $usuario = User::insert(['email'=>$request->email,'ApiToken'=>$apiToken,'password'=>$contra,'user'=>$request->user,'intentos'=>$request->intentos,'estado'=>$request->estado]);
         return response()->json(["Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Agregado"], 202);
 
     }
