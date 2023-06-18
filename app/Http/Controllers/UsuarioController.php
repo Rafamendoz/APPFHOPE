@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Crypt;
-
+use Illuminate\Support\Facades\Log;
+use App\Models\Error;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -28,46 +29,129 @@ class UsuarioController extends Controller
 
 
 
-   public function getUsuarioRest(){
-    $data = User::all()->where('estado',1);
-   
-    if(is_null($data) || sizeof($data)<1){
-        return response()->json(["Estado"=>'Fallido', "Descripcion:"=>"No se encontraron los registros solicitado"], 404);
-    }else{
-        return response()->json($data, 202);
-    }
-
-
-    }
-
-    public function getUsuarioRestById($id){
-        $data = User::all()->where('user',$id)->where('estado',1);
-       
-        if(is_null($data) || sizeof($data)<1){
-            return response()->json(["Estado"=>'Fallido', "Descripcion:"=>"No se encontro el registro solicitado"], 404);
+   public function getUsuarioRest(Request $request){
+    try {
+        log::info("REQUEST: ".$request);
+        $usuarios = User::all();
+        if(sizeof($usuarios)<1){
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+            Log::info("RESPONSE: ".$response);
+            return $response;
         }else{
-            return response()->json($data, 202);
+            $response =  response()->json([
+                "Usuarios"=>$usuarios, "Response"=>[
+                "Codigo"=>"200",
+                "Estado"=>"Exitoso"]
+            ], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+
         }
-    
-    
+    } catch (\Throwable $th) {
+        Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+        $error = Error::where('codigo_error',$th->getCode())->get();
+        return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+    }
+
+    }
+
+    public function getUsuarioRestById(Request $request, $id){
+        try {
+            log::info('REQUEST '.$request);
+            $usuario = User::find($id);
+            if(is_null($usuario)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Usuario"=>$usuario, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
+    }
+
+    public function getUsuarioRestByUsuario(Request $request, $id){
+        try {
+            log::info('REQUEST '.$request);
+            $usuario = User::where('user',$id)->get();
+            if(sizeof($usuario)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Usuario"=>$usuario, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+    }
 
 
     public function setUsuario(Request $request){
-        $contra =   Hash::make($request->password);
-        $apiToken = Crypt::encrypt(base64_encode($request->email.":".$request->password));
-        $usuario = User::insert(['email'=>$request->email,'ApiToken'=>$apiToken,'password'=>$contra,'user'=>$request->user,'intentos'=>$request->intentos,'estado'=>$request->estado]);
-        return response()->json(["Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Agregado"], 202);
+        try {
+            log::info("REQUEST: ".$request);
+            $contra =   Hash::make($request->password);
+            $apiToken = Crypt::encrypt(base64_encode($request->email.":".$request->password));
+            $usuario = User::insert(['email'=>$request->email,'ApiToken'=>$apiToken,'password'=>$contra,'user'=>$request->user,'intentos'=>$request->intentos,'estado'=>$request->estado]);
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+        
 
     }
 
     public function putUsuario(Request $request, $id){
-        $usuario = User::find($id);
-        if(is_null($usuario)){
-            return response()->json(["Codigo"=>"412","Estado"=>'Fallido', "Descripcion:"=>"No se actualizo el registro solicitado, ya que no existe"], 412);
-        }else{
-            $usuario->update($request->all());
-            return response()->json(["Codigo"=>"202","Estado"=>"Exitoso", "Descripcion:"=>"Registro Actualizado"], 202);
+        try {
+            Log::info("REQUEST: ".$request);
+            $usuario = User::find($id);
+            if(is_null($usuario)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $contra =   Hash::make($request->password);
+                $apikey = $request->email.":".$request->password;
+                $baseapi = base64_encode($apikey);
+                $ApiToken =  Crypt::encrypt($baseapi);
+                $data['ApiToken']= $ApiToken;
+                $request->merge(['password'=>$contra]); 
+                $request->merge($data);
+                $valore = $request->ApiToken;
+                $usuario->update($request->all());
+                $response = response()->json([$valore,$usuario,"Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
     
 

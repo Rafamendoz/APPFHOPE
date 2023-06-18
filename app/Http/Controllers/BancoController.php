@@ -104,7 +104,7 @@ class BancoController extends Controller
     public function deleteBanco(Request $request, $id){
         try {
             Log::info("REQUEST: ".$request);
-            $banco = banco::find($id);
+            $banco = Banco::find($id);
             if(is_null($banco)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
                 Log::info("RESPONSE: ".$response);

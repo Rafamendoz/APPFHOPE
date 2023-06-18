@@ -28,6 +28,9 @@ Route::group(["middleware" => "auth.basic1"], function () {
  Route::get('usuarioR', 'App\Http\Controllers\UsuarioController@getUsuarioRest');
  /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
 Route::get('usuarioR/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestById');
+
+Route::get('usuarioR/user/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestByUsuario');
+
  /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
 Route::post('usuarioR/add', 'App\Http\Controllers\UsuarioController@setUsuario');
  /* RUTA PARA METODO DE ACTUALIZAR UN USUARIO POR ID*/
