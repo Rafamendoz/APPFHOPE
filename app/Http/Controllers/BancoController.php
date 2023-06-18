@@ -33,7 +33,7 @@ class BancoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "CuentasBancarias"=>$bancos, "Response"=>[
+                    "CuentasBancarias"=>$bancos, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -61,7 +61,7 @@ class BancoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "CuentaBancaria"=>$banco, "Response"=>[
+                    "CuentaBancaria"=>$banco, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);

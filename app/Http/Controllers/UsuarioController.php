@@ -39,7 +39,7 @@ class UsuarioController extends Controller
             return $response;
         }else{
             $response =  response()->json([
-                "Usuarios"=>$usuarios, "Response"=>[
+                "Usuarios"=>$usuarios, "Data_Respuesta"=>[
                 "Codigo"=>"200",
                 "Estado"=>"Exitoso"]
             ], 200);
@@ -65,7 +65,7 @@ class UsuarioController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Usuario"=>$usuario, "Response"=>[
+                    "Usuario"=>$usuario, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -90,7 +90,7 @@ class UsuarioController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Usuario"=>$usuario, "Response"=>[
+                    "Usuario"=>$usuario, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -143,7 +143,7 @@ class UsuarioController extends Controller
                 $request->merge($data);
                 $valore = $request->ApiToken;
                 $usuario->update($request->all());
-                $response = response()->json([$valore,$usuario,"Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }
@@ -164,32 +164,49 @@ class UsuarioController extends Controller
 
 
     public function deleteUsuario(Request $request,$id){
-        $usuario = User::find($id);
-        if(is_null($usuario)){
-            return response()->json(["Estado"=>'Fallido', "Descripcion:"=>"No se desactivo el registro solicitado, ya que no existe"], 404);
-        }else{
-            if($request->estado===1){
-                $usuario->update($request->all());
-                return response()->json(["Estado"=>"Exito", "Descripcion:"=>"Registro Activado"], 202);
+        try {
+            Log::info("REQUEST: ".$request);
+            $user = User::find($id);
+            if(is_null($user)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
             }else{
-                $usuario->update($request->all());
-                return response()->json(["Estado"=>"Exito", "Descripcion:"=>"Registro Desactivado"], 202);
+                switch($request->estado){
+                    case 1:
+                        $user->update(['estado'=>$request->estado]);
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    case 2:
+                        $user->update(['estado'=>$request->estado]);
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    default:
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El valor ingresado no es permitido, para el tipo de campo"]], 202);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+
+
+
+                }
             }
-           
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
+       
     
 
     }
 
-    public function logginUsuario(Request $request){
-        $usuario = User::where('user',$request->user)->get();
-        if($usuario[0]->user === $request->user &&  $usuario[0]->password=== $request->password){
-            return response()->json(["Valor"=>"1","Estado"=>"Exito"], 202);
-        }else{
-            return response()->json(["Valor"=>"0","Estado"=>"Fallo"], 202);
-        }
-    }
-
+ 
 
 
   

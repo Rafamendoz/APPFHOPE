@@ -59,7 +59,7 @@ class ClienteController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Clientes"=>$clientes, "Response"=>[
+                    "Clientes"=>$clientes, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -87,7 +87,7 @@ class ClienteController extends Controller
 
             }else{
                 $response = response()->json([
-                    "Cliente"=>$cliente, "Response"=>[
+                    "Cliente"=>$cliente, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Descripcion"=>"Registro Encontrado",
                     "Estado"=>"Exitoso"]
@@ -116,7 +116,7 @@ class ClienteController extends Controller
 
             }else{
                 $response =  response()->json([
-                    "Cliente"=>$cliente, "Response"=>[
+                    "Cliente"=>$cliente, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);

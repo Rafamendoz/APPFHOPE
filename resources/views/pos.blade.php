@@ -332,11 +332,11 @@
         .done(function( data ) {
 
             let response = JSON.parse(JSON.stringify(data));
-            if(response.Response.Codigo ==200){
+            if(response.Data_Respuesta.Codigo ==200){
                 $("#correo").val(response['Cliente'][0].cliente_correo);
                 $("#nombrecliente").val(response['Cliente'][0].cliente_nom);
                 idcliente = response['Cliente'][0].id;
-                mostrarMensaje(response['Response']);
+                mostrarMensaje(response['Data_Respuesta']);
 
             }else{
                 mostrarMensaje(response['Data_Respuesta']);
