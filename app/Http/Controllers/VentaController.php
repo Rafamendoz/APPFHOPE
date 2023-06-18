@@ -37,57 +37,104 @@ class VentaController extends Controller
 
     public function setVenta(Request $request){
         try {
+            log::info("REQUEST: ".$request);
             $venta = Venta::create($request->all());
-            Log::info("REQUEST: ".$request);
-           $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
-           Log::info("RESPONSE: ".$response);
-           return $response;
-        } catch (\Illuminate\Database\QueryException $th) {
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;  
+        } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
     }
 
-    public function getVentasRest(){
-        $ventas = Venta::all();
-        return response()->json([
-            "Ventas"=>$ventas, "Response"=>[
-            "Codigo"=>"200",
-            "Estado"=>"Exitoso"]
-        ], 200);
+    public function getVentasRest(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $ventas = Venta::all();
+            if(sizeof($ventas)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Ventas"=>$ventas, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;  
+    
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
         
     }
 
-    public function getVentaRestById($id){
-        $venta = Venta::find($id);
-        return response()->json([
-            "Venta"=>$venta, 
-            "Codigo"=>"200",
-            "Estado"=>"Exitoso"
-        ], 200);
+    public function getVentaRestById(Request $request,$id){
+
+        try {
+            log::info('REQUEST '.$request);
+            $venta = Venta::find($id);
+            if(is_null($venta)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Venta"=>$venta, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
     }
 
     
 
     public function deleteVenta(Request $request , $id){
-        Log::info("REQUEST: ".$request);
         try {
+            Log::info("REQUEST: ".$request);
             $venta = Venta::find($id);
-            $x = $request->estado;
-            switch($x){
-                case 1:
-                    $venta->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Activado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
-                case 2:
-                    $venta->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Desactivado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
+            if(is_null($venta)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                switch($request->estado){
+                    case 1:
+                        $venta->update(['estado'=>$request->estado]);
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    case 2:
+                        $venta->update(['estado'=>$request->estado]);
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+                    default:
+                        $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El valor ingresado no es permitido, para el tipo de campo"]], 202);
+                        Log::info("RESPONSE: ".$response);
+                        return $response;
+                        break;
+
+
+
+                }
             }
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
@@ -96,5 +143,31 @@ class VentaController extends Controller
         }
        
     }
+
+    public function putVenta(Request $request, $id){
+        try {
+            Log::info("REQUEST: ".$request);
+            $venta = Venta::find($id);
+            if(is_null($venta)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $venta->update(["direccionEnvio"=>$request->direccionEnvio]);
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+    }
+
+
+
 
 }

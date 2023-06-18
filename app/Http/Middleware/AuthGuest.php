@@ -22,7 +22,7 @@ class AuthGuest
 
             
         }else{
-            if(Auth::user()->email=="QA@fhope.online"){
+            if(Auth::user()->email=="QA@fhope.online" || Auth::user()->email=="admin@fhope.online" ){
 
                 return $next($request);
 
