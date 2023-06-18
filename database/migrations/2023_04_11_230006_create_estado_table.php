@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('estado', function (Blueprint $table) {
             $table->id();
-            $table->string('valor');
+            $table->string('valor')->unique();
             $table->timestamps();
         });
 

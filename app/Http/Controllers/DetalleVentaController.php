@@ -55,32 +55,33 @@ class DetalleVentaController extends Controller
      
     }
 
-    
-
-    public function deleteDetalleVenta(Request $request , $id){
-        Log::info("REQUEST: ".$request);
+    public function getDetallesVentaRest(Request $request){
         try {
-            $venta =Venta::where('venta_id', $id)->get();
-            $x = $request->estado;
-            switch($x){
-                case 1:
-                    $venta->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Activado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
-                case 2:
-                    $venta->update($request->all());
-                    $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exito", "Descripcion"=>"Registro Desactivado"]], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-                    break;
+            log::info('REQUEST '.$request);
+            $detallesV = DetalleVenta::all();
+            if(sizeof($detallesV)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "DetallesV"=>$detallesV, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
             }
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
-       
+     
     }
+
+    
+
+
 }

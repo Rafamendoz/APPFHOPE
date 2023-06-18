@@ -81,6 +81,11 @@ return new class extends Migration
         Schema::table('colaborador', function(Blueprint $table){
             $table->foreign('colaborador_idusuario')->references('id')->on('users')->onDelete('Cascade')->onUpdate('Cascade');
         });
+
+        Schema::table('producto', function(Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        
     }
 
     /**
