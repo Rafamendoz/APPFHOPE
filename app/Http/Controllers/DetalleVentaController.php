@@ -31,16 +31,22 @@ class DetalleVentaController extends Controller
 
     public function getDetalleVentaRestByVentaId(Request $request,$id){
         try {
-            $dventa = DetalleVenta::where('venta_id', $id)->get();
-            Log::info("REQUEST: ".$request);
-            $response =response()->json([
-                "DetalleVenta"=>$dventa, 
-                "Codigo"=>"200",
-                "Estado"=>"Exitoso"
-            ], 200);
-            Log::info("RESPONSE: ".$response);
-            return $response;
+            log::info('REQUEST '.$request);
+            $detalleV = DetalleVenta::where("venta_id",$id)->get();
+            if(sizeof($detalleV)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "DetalleV"=>$detalleV, "Response"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
 
+            }
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('token')->nullable();
             $table->unsignedBigInteger('estado');
             $table->rememberToken();
+            $table->string('ApiToken',300);
             $table->timestamps();
         });
     }

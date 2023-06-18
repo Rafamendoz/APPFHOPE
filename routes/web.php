@@ -90,6 +90,9 @@ Route::group(["middleware" => "auth"], function () {
        //RUTAS PARA ENTIDAD CLIENTE
         /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
       Route::get('cliente', 'App\Http\Controllers\ClienteController@getCliente');
+      Route::get('apiCredenciales', 'App\Http\Controllers\CredencialesConsumoController@GetCredencialesConsumo');
+
+      
       /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
    
    

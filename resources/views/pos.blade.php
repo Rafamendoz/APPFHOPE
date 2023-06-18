@@ -242,6 +242,30 @@
 
 <script>
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var authorization ="";
+    (function(){
+        $.ajax({
+        method: "GET",
+        url: '../../apiCredenciales',
+        headers: {
+        'X-CSRF-TOKEN': csrfToken,
+
+         }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            authorization = response.Token;
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            
+
+        });
+
+    })();
+    
+
 
     let productoactual;
     let contadorf=0;
@@ -291,24 +315,35 @@
         }else{
             let urldinamica="";
             if($('#flexRadioDefault1').is(':checked')){
-                urldinamica ="../../clienteR/dni/"+dni;
+                urldinamica ="../../api/clienteR/dni/"+dni;
             }else{
-                urldinamica ="../../clienteR/"+dni;
+                urldinamica ="../../api/clienteR/"+dni;
             }
             
         $.ajax({
         method: "GET",
         url: urldinamica,
         headers: {
-        'X-CSRF-TOKEN': csrfToken
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': 'Basic '+ authorization
+
          }
         })
         .done(function( data ) {
+
             let response = JSON.parse(JSON.stringify(data));
-            $("#correo").val(response['Cliente'][0].cliente_correo);
-            $("#nombrecliente").val(response['Cliente'][0].cliente_nom);
-            idcliente = response['Cliente'][0].id;
-            mostrarMensaje(response['Response']);
+            if(response.Response.Codigo ==200){
+                $("#correo").val(response['Cliente'][0].cliente_correo);
+                $("#nombrecliente").val(response['Cliente'][0].cliente_nom);
+                idcliente = response['Cliente'][0].id;
+                mostrarMensaje(response['Response']);
+
+            }else{
+                mostrarMensaje(response['Data_Respuesta']);
+
+
+            }
+          
 
         
         }).fail(function(data){
@@ -354,9 +389,12 @@
             $.ajax({
             method: "GET",
             headers: {
-                'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization':'Basic '+authorization
+            
+
             },
-            url: "../../productoR/"+codigoproducto,
+            url: "../../api/productoR/"+codigoproducto,
             })
             .done(function( data ) {
                 let response = JSON.parse(JSON.stringify(data));
@@ -467,17 +505,33 @@
         }
         })
 
-        if(dataResponse.Codigo==200){
-                    Toast.fire({
+        switch(dataResponse.Codigo){
+            case "200":
+                Toast.fire({
                     icon: 'success',
                     title: dataResponse.Estado + "! " + dataResponse.Descripcion 
-                    })
-        }else{
+                });
+                break;
+
+            case "202":
+                Toast.fire({
+                    icon: 'info',
+                    title: dataResponse.Estado + "! " + dataResponse.Descripcion 
+                });
+                break;
+
+            default:
                 Toast.fire({
                 icon: 'error',
                 title: dataResponse.Estado + "! " + dataResponse.Mapping_Error[0].descripcion 
-                })
+                });
+                break;
+
+
+
         }
+
+      
              
     }
 
@@ -519,7 +573,7 @@
                  icon: 'error',
                  title: dataResponse.Estado + "! " + dataResponse.Mapping_Error[0].descripcion 
                  })
-         }
+           }
               
      }
  
@@ -593,13 +647,14 @@
 
     function GuardarDetalleVenta(producto_id, precio, cantidad, descuento, subtotal, count, pos){
         let idorden = $("#orden").val();
-        
+
         $.ajax({
             method: "POST",
             headers: {
-                'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
             },
-            url: "../../detalleVentaR/add",
+            url: "../../api/detalleVentaR/add",
             data: {
                 "venta_id": idorden,
                 "producto_id": producto_id,
@@ -642,9 +697,11 @@
         $.ajax({
             method: "POST",
             headers: {
-                'X-CSRF-TOKEN': csrfToken
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+
             },
-            url: "../../ventaR/add",
+            url: "../../api/ventaR/add",
             data: {
                 "fecha": strDate,
                 "cliente_id": cliente_id,

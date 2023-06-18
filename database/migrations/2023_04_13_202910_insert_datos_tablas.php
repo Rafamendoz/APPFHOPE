@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Crypt;
 
 return new class extends Migration
 {
@@ -16,9 +17,11 @@ return new class extends Migration
             ['valor' => 'INACTIVO']]
         );
         $contra =   Hash::make('admin12345');
+        $baseapi = base64_encode("admin@fhope.online:admin12345");
+        $ApiToken =  Crypt::encrypt($baseapi);
 
         DB::table('users')->insert([
-          ['email'=>"admin@fhope.online",'password'=>$contra,'user'=>'admin','intentos'=>100,'estado'=>1]
+          ['email'=>"admin@fhope.online",'password'=>$contra,'user'=>'admin','intentos'=>100,'ApiToken'=>$ApiToken,'estado'=>1]
 
             ]
         );
