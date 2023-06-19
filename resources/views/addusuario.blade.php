@@ -6,8 +6,8 @@
 
  <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
   <ol class="breadcrumb bg-white shadow p-3 mb-4 rounded">
-    <li class="breadcrumb-item"><a href="{{route('TipoCuentas')}}">Tipo de Cuentas</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Crear Tipo de Cuenta</li>
+    <li class="breadcrumb-item"><a href="{{route('Usuarios')}}">Usuarios</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Crear Usuario</li>
   </ol>
 </nav>
 
@@ -18,22 +18,44 @@
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                                    <h5 class=" font-weight-bold text-primary">Datos del Tipo de Cuenta</h5>
+                                    <h5 class=" font-weight-bold text-primary">Datos del Usuario</h5>
                                     </div>
                                 </div>
 
                                 <div class="card-body">
                                     <form>
                                         <div class="row mb-3">
-                                            <label for="nombreTipoCuenta" class="col-sm-2 col-form-label">Nombre del Tipo de Cuenta:</label>
+                                            <label for="nombreProducto" class="col-sm-2 col-form-label">Email:</label>
                                             <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="nombreTipoCuenta">
+                                            <input type="email" class="form-control" id="email">
                                             </div>
                                         </div>
 
-                                                                            
                                         <div class="row mb-3">
-                                        <label for="inputEmail3" class="col-sm-2 col-form-label">Estado del Tipo de Cuenta:</label>
+                                            <label for="descripcionProducto" class="col-sm-2 col-form-label">Contraseña:</label>
+                                            <div class="col-sm-10">
+                                            <input type="password" class="form-control" id="password"></input>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <label for="precio" class="col-sm-2 col-form-label">Usuario:</label>
+                                            <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="usuario">
+                                            </div>
+                                        </div>
+
+                                        
+                                        <div class="row mb-3">
+                                            <label for="intentos" class="col-sm-2 col-form-label">Intentos:</label>
+                                            <div class="col-sm-10">
+                                            <input type="number" class="form-control" id="intentos">
+                                            </div>
+                                        </div>
+                                
+                                        
+                                        <div class="row mb-3">
+                                        <label for="inputEmail3" class="col-sm-2 col-form-label">Estado del Usuario:</label>
                                         <div class="col-sm-10">
                                             <div class="input-group mb-3">
                                             <div class="input-group-prepend">
@@ -72,20 +94,14 @@
                                         <div class="row p-2">
                                             
                                                 <div class="col-sm-12">
-                                                 <h4 class="text-center font-weight-bold text-primary">Panel de Moneda</h4>
-                                                  <p class="text-justify">El siguiente panel esta destinado a registrar la informacion de las monedas, por favor introduzca la informacion solicitada.
+                                                 <h4 class="text-center font-weight-bold text-primary">Panel de Usuarios</h4>
+                                                  <p class="text-justify">El siguiente panel esta destinado a registrar la informacion de los usuarios, por favor introduzca la informacion solicitada.
                                                   </p>
                                                 </div>
                                                
                                             
                                         </div>
 
-                                        <div class="row">
-                                        <div class="col-sm-12">
-                                                    <img class="img-profile rounded-circle"
-                                                        src="{{ asset('build/img/undraw_profile.svg')}}">
-                                                </div>
-                                        </div>
 
             
 
@@ -108,9 +124,10 @@
 @endsection
 @section('js')
 <script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
-
 <script>
-     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    
+var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var authorization ="";
     (function(){
         $.ajax({
@@ -135,24 +152,29 @@
     })();
 
 
-
     function Guardar(){
-        let nombreTipoCuenta = $("#nombreTipoCuenta").val().toUpperCase();
+        let email = $("#email").val();
+        let password = $("#password").val();
+        let user = $("#usuario").val();
+        let intentos = $("#estado").val();
         let estado = $("#estado").val();
-        const valueEntry = 'YWRtaW5AZmhvcGUub25saW5lOmFkbWluMTIzNDU=';
 
-      
+        var headers= {
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': 'Basic '+ authorization
+
+         };
 		
         $.ajax({
         method: "POST",
-        headers: {
-                'X-CSRF-TOKEN': csrfToken,
-                'Authorization': 'Basic '+ authorization
-        },
-        url: "../../api/cuentaR/add",
+        headers: headers,
+        url: "../../api/usuarioR/add",
         data: {
-            "cuenta_nombre": nombreTipoCuenta,
-            "estado": estado,
+            "email":email,
+            "password": password,
+            "user":user,
+            "intentos":intentos,
+            "estado":estado
         }
         })
         .done(function( data ) {
@@ -181,6 +203,9 @@
         didClose: (toast) => {
                 if(dataResponse.Codigo==200){
                     location.reload();
+                }else{
+                    console.log("NULL");
+
                 }
     
         }

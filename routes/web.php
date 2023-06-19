@@ -52,9 +52,9 @@ Route::group(["middleware" => "auth"], function () {
 
 
       
-      Route::get('tipocuentas', 'App\Http\Controllers\CuentaController@getTipoCuentas')->name("TipoCuentas");
+      Route::get('tipocuentas', 'App\Http\Controllers\TipoCuentaController@getTipoCuentas')->name("TipoCuentas");
         /* RUTA PARA AGREGER NUEVA MONEDA*/
-      Route::get('tipocuentas/addtipocuenta', 'App\Http\Controllers\CuentaController@addTipoCuenta')->name("AddTipoCuenta");
+      Route::get('tipocuentas/addtipocuenta', 'App\Http\Controllers\TipoCuentaController@addTipoCuenta')->name("AddTipoCuenta");
 
    
    //RUTAS PARA ENTIDAD Estado
@@ -133,6 +133,7 @@ Route::post('validate', 'App\Http\Controllers\LoginController@login')->name('Val
 
 //CRUD USUARIO//
 Route::get('usuarios', 'App\Http\Controllers\UsuarioController@getUsuario')->name('Usuarios');
+Route::get('usuarios/addusuario', 'App\Http\Controllers\UsuarioController@addUsuario')->name('AddUsuario');
 
 //CRUD CLIENTE//
 Route::get('clientes', 'App\Http\Controllers\ClienteController@getClientes')->name('Clientes');

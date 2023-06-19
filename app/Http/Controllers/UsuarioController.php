@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Error;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Estado;
+
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -26,6 +28,13 @@ class UsuarioController extends Controller
         }
     
    }
+
+   public function addUsuario(){
+    $estados = Estado::all();
+    return view('addusuario', compact('estados'));
+   
+
+}
 
 
 
@@ -111,7 +120,8 @@ class UsuarioController extends Controller
             log::info("REQUEST: ".$request);
             $contra =   Hash::make($request->password);
             $apiToken = Crypt::encrypt(base64_encode($request->email.":".$request->password));
-            $usuario = User::insert(['email'=>$request->email,'ApiToken'=>$apiToken,'password'=>$contra,'user'=>$request->user,'intentos'=>$request->intentos,'estado'=>$request->estado]);
+            $request->merge(['ApiToken'=>$apiToken, 'password'=>$contra]);
+            $usuario = User::create($request->all());
             $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
             Log::info("RESPONSE: ".$response);
             return $response;  

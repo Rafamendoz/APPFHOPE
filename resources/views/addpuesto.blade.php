@@ -109,8 +109,35 @@
 
         
 @endsection
-
+@section('js')
+<script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
 <script>
+
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var authorization ="";
+    (function(){
+        $.ajax({
+        method: "GET",
+        url: '../../apiCredenciales',
+        headers: {
+        'X-CSRF-TOKEN': csrfToken,
+
+         }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            authorization = response.Token;
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            
+
+        });
+
+    })();
+
+
 
     function Guardar(){
         let puesto_nombre = $("#nombrePuesto").val().toUpperCase();
@@ -119,7 +146,11 @@
       
         $.ajax({
         method: "POST",
-        url: "../../puestoR/add",
+        url: "../../api/puestoR/add",
+        headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+            },
         data: { "puesto_nombre": puesto_nombre, "estado":estado}
         })
         .done(function( data ) {
@@ -173,3 +204,4 @@
     
     
 </script>
+@endsection

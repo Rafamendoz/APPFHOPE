@@ -26,9 +26,7 @@
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
                                             <a class="dropdown-item" href="{{route('AddUsuario')}}">Agregar Usuarios</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
                                         </div>
                                     </div>
                                 </div>
@@ -41,7 +39,6 @@
                                             <th>Identificador</th>
                                             <th>Email</th>
                                             <th>Usuario</th>
-                                            <th>Password</th>
                                             <th>Intentos</th>
                                             <th>Estado</th>
                                             <th>Creacion</th>
@@ -57,13 +54,12 @@
                                                 <td>{{ $user->id }}</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>{{$user->user }}</td>
-                                                <td>{{$user->password }}</td>
                                                 <td>{{$user->intentos}}</td>
                                                 <td>{{$user->estado }}</td>
                                                 <td>{{$user->created_at }}</td>
                                                 <td>{{$user->updated_at }}</td>
                                                 <td>
-                                                            <button class="btn btn-danger btn-sm" type="button"><i class="fas fa-trash"></i></button>
+                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{$user->id}})"><i class="fas fa-trash"></i></button>
                                                             <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>
                                                         
                         
@@ -80,4 +76,113 @@
 
 
         
+@endsection
+@section('js')
+<script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
+<script>
+
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var authorization ="";
+    (function(){
+        $.ajax({
+        method: "GET",
+        url: '../../apiCredenciales',
+        headers: {
+        'X-CSRF-TOKEN': csrfToken,
+
+         }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            authorization = response.Token;
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            
+
+        });
+
+    })();
+
+    function ConsultarEliminar(id){
+        Swal.fire({
+                    title: '¿Está seguro?',
+                    text: "No podrás revertir esto!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '¡Sí, bórralo!',
+                    cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        Eliminar(id);
+                    }
+        })
+    }
+
+    function Eliminar(id){
+
+        $.ajax({
+        method: "PUT",
+        url: "../../api/usuarioR/delete/"+id,
+        headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+        },
+        data: { "estado":2}
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['Data_Respuesta'])
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
+
+        });
+            
+    }
+
+    function mostrarMensaje(dataResponse){
+         
+         const Toast = Swal.mixin({
+         toast: true,
+         position: 'top-end',
+         showConfirmButton: false,
+         timer: 3000,
+         timerProgressBar: true,
+         didOpen: (toast) => {
+             toast.addEventListener('mouseenter', Swal.stopTimer)
+             toast.addEventListener('mouseleave', Swal.resumeTimer)
+         },
+         didClose: (toast) => {
+                 if(dataResponse.Codigo==200){
+                    location.reload();
+                 }
+     
+         }
+         })
+ 
+         if(dataResponse.Codigo==200){
+                     Toast.fire({
+                     icon: 'success',
+                     title: dataResponse.Estado + "! " + dataResponse.Descripcion 
+                     })
+         }else{
+                 Toast.fire({
+                 icon: 'error',
+                 title: dataResponse.Estado + "! " + dataResponse.Mapping_Error[0].descripcion 
+                 })
+         }
+              
+    }
+
+    
+
+
+</script>
 @endsection
