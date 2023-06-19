@@ -65,7 +65,7 @@
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>                                                           
-                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-eye"></i></button>
+                                                            <a class="btn btn-primary btn-sm" href="../detalleBancario/{{ $valor->id }}"><i class="fas fa-eye"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach

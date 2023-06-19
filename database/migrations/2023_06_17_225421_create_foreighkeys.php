@@ -34,7 +34,7 @@ return new class extends Migration
 
         Schema::table('detallebanco', function (Blueprint $table) {
          
-            $table->foreign('id_banco')->references('id')->on('banco')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('id_cuentaBancaria')->references('id')->on('cuentaBancaria')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('id_tipoTransaccion')->references('id')->on('transaccion')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
 

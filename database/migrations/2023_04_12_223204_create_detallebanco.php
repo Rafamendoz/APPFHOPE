@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('detallebanco', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_banco');
+            $table->unsignedBigInteger('id_cuentaBancaria');
             $table->unsignedBigInteger('id_tipoTransaccion');
             $table->float('monto')->nullable($value = false);
+            $table->timestamp('fecha')->nullable($value = false);
             $table->string('descripcion');
             $table->unsignedBigInteger('estado');
             $table->timestamps();

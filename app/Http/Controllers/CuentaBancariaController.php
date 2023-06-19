@@ -154,12 +154,14 @@ class CuentaBancariaController extends Controller
                 switch($request->estado){
                     case 1:
                         $cuentabancaria->update($request->all());
+                        DB::select('call Actualizar_detallesBancarios_estado(?,?) ', array($id,1));
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
                         Log::info("RESPONSE: ".$response);
                         return $response;
                         break;
                     case 2:
                         $cuentabancaria->update($request->all());
+                        DB::select('call Actualizar_detallesBancarios_estado(?,?) ', array($id,2));
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
                         Log::info("RESPONSE: ".$response);
                         return $response;

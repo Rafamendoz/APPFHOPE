@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('cuentaBancaria', function (Blueprint $table) {
             $table->id();
-            $table->string('cBancaria_nCuenta');
+            $table->string('cBancaria_nCuenta')->unique();
             $table->unsignedBigInteger('cBancaria_idBanco');
             $table->unsignedBigInteger('cBancaria_tipoCuenta');
             $table->unsignedBigInteger('cBancaria_tipoMoneda');
