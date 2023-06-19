@@ -83,8 +83,34 @@
 
         
 @endsection
-
+@section('js')
+<script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
 <script>
+
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    var authorization ="";
+    (function(){
+        $.ajax({
+        method: "GET",
+        url: '../../apiCredenciales',
+        headers: {
+        'X-CSRF-TOKEN': csrfToken,
+
+         }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            authorization = response.Token;
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            
+
+        });
+
+    })();
+
 
     function ConsultarEliminar(id){
         Swal.fire({
@@ -105,9 +131,16 @@
 
     function Eliminar(id){
 
+        var headers= {
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization': 'Basic '+ authorization
+
+         };
+
         $.ajax({
         method: "PUT",
-        url: "../../clienteR/delete/"+id,
+        url: "../../api/clienteR/delete/"+id,
+        headers:headers,
         data: { "estado":2}
         })
         .done(function( data ) {
@@ -162,3 +195,4 @@
 
 
 </script>
+@endsection
