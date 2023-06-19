@@ -3,20 +3,27 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\CuentaBancaria;
 use App\Models\Banco;
+use App\Models\Estado;
+use App\Models\Cuenta;
+use App\Models\Moneda;
+
+
+
 use Illuminate\Support\Facades\Log;
 use App\Models\Error;
 use Illuminate\Support\Facades\DB;
 
 
-class BancoController extends Controller
+class CuentaBancariaController extends Controller
 {
 
-    public function getBancos(){
+    public function getCuentasBancarias(){
         try {
          
-            $bancos = DB::select('CALL Obtener_cuentasBancarias_vista(?)',array(1));
-            return view('bancos', compact('bancos'));
+            $cuentasBancarias = DB::select('CALL Obtener_cuentasBancarias_vista(?)',array(1));
+            return view('cuentasBancarias', compact('cuentasBancarias'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
@@ -25,11 +32,27 @@ class BancoController extends Controller
       
     }
 
+    public function AddCuentaBancaria(){
+        try {
+            $bancos = Banco::where('estado',1)->get();
+            $estados = Estado::all();
+            $monedas = Moneda::where('estado',1)->get();
+            $tipoCuentas = Cuenta::where('estado',1)->get();
 
-    public function setBanco(Request $request){
+            return view('addcuentaBancaria', compact('bancos','estados','monedas','tipoCuentas'));
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      
+    }
+    
+
+    public function setCuentaBancaria(Request $request){
         try {
             log::info("REQUEST: ".$request);
-            $banco = Banco::create($request->all());
+            $cuentabancaria = CuentaBancaria::create($request->all());
             $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
             Log::info("RESPONSE: ".$response);
             return $response;  
@@ -40,17 +63,17 @@ class BancoController extends Controller
         }
       }
 
-    public function getBancosRest(Request $request){
+    public function getCuentasBancariasRest(Request $request){
         try {
             log::info("REQUEST: ".$request);
-            $bancos = Banco::all();
-            if(sizeof($bancos)<1){
+            $cuentasbancarias = CuentaBancaria::all();
+            if(sizeof($cuentasbancarias)<1){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Bancos"=>$bancos, "Data_Respuesta"=>[
+                    "CuentasBancarias"=>$cuentasbancarias, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -68,17 +91,17 @@ class BancoController extends Controller
        
     }
 
-    public function getBancoRestById(Request $request,$id){
+    public function getCuentaBancariaRestById(Request $request,$id){
         try {
             log::info('REQUEST '.$request);
-            $banco = Banco::find($id);
-            if(is_null($banco)){
+            $cuentabancaria = CuentaBancaria::find($id);
+            if(is_null($cuentabancaria)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Bancos"=>$banco, "Data_Respuesta"=>[
+                    "CuentaBancaria"=>$cuentabancaria, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -95,17 +118,17 @@ class BancoController extends Controller
 
     }
 
-    public function putBanco(Request $request, $id){
+    public function putCuentaBancaria(Request $request, $id){
         try {
             Log::info("REQUEST: ".$request);
-            $banco = Banco::find($id);
-            if(is_null($banco)){
+            $cuentabancaria = CuentaBancaria::find($id);
+            if(is_null($cuentabancaria)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
 
             }else{
-                $banco->update($request->all());
+                $cuentabancaria->update($request->all());
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
                 Log::info("RESPONSE: ".$response);
                 return $response;
@@ -118,11 +141,11 @@ class BancoController extends Controller
         }
     }
     
-    public function deleteBanco(Request $request, $id){
+    public function deleteCuentaBancaria(Request $request, $id){
         try {
             Log::info("REQUEST: ".$request);
-            $banco = Banco::find($id);
-            if(is_null($banco)){
+            $cuentabancaria = CuentaBancaria::find($id);
+            if(is_null($cuentabancaria)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
@@ -130,13 +153,13 @@ class BancoController extends Controller
             }else{
                 switch($request->estado){
                     case 1:
-                        $banco->update($request->all());
+                        $cuentabancaria->update($request->all());
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
                         Log::info("RESPONSE: ".$response);
                         return $response;
                         break;
                     case 2:
-                        $banco->update($request->all());
+                        $cuentabancaria->update($request->all());
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
                         Log::info("RESPONSE: ".$response);
                         return $response;

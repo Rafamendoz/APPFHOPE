@@ -122,6 +122,14 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::put('transaccionR/update/{id}', 'App\Http\Controllers\TransaccionController@putTransaccion');
    Route::put('transaccionR/delete/{id}', 'App\Http\Controllers\TransaccionController@deleteTransaccion');
 
+ //RUTAS PARA ENTIDAD CUENTA BANCARIA
+ Route::get('cuentaBancariaR', 'App\Http\Controllers\CuentaBancariaController@getCuentasBancariasRest');
+ Route::get('cuentaBancariaR/{id}', 'App\Http\Controllers\CuentaBancariaController@getCuentaBancariaRestById');
+ Route::post('cuentaBancariaR/add', 'App\Http\Controllers\CuentaBancariaController@setCuentaBancaria');
+ Route::put('cuentaBancariaR/update/{id}', 'App\Http\Controllers\CuentaBancariaController@putCuentaBancaria');
+ Route::put('cuentaBancariaR/delete/{id}', 'App\Http\Controllers\CuentaBancariaController@deleteCuentaBancaria');
+
+
    //RUTAS PARA ENTIDAD Banco
    Route::get('bancoR', 'App\Http\Controllers\BancoController@getBancosRest');
    Route::get('bancoR/{id}', 'App\Http\Controllers\BancoController@getBancoRestById');

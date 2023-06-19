@@ -18,10 +18,10 @@ return new class extends Migration
 
         });
 
-        Schema::table('banco', function (Blueprint $table) {
-         
-            $table->foreign('banco_tipoCuenta')->references('id')->on('cuenta')->onDelete('Cascade')->onUpdate('Cascade');
-            $table->foreign('banco_tipoMoneda')->references('id')->on('moneda')->onDelete('Cascade')->onUpdate('Cascade');
+        Schema::table('cuentaBancaria', function (Blueprint $table) {
+            $table->foreign('cBancaria_idBanco')->references('id')->on('banco')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('cBancaria_tipoCuenta')->references('id')->on('cuenta')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('cBancaria_tipoMoneda')->references('id')->on('moneda')->onDelete('Cascade')->onUpdate('Cascade');
             $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
 
         });
@@ -83,6 +83,10 @@ return new class extends Migration
         });
 
         Schema::table('producto', function(Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+
+        Schema::table('banco', function(Blueprint $table){
             $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
         });
         

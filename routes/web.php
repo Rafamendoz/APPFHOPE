@@ -40,8 +40,11 @@ Route::group(["middleware" => "auth"], function () {
     /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
    
    
-      
-   
+    Route::get('cuentasBancarias', 'App\Http\Controllers\CuentaBancariaController@getCuentasBancarias')->name("cuentasBancarias");
+    Route::get('cuentasBancarias/addCuentaBancaria', 'App\Http\Controllers\CuentaBancariaController@AddCuentaBancaria')->name("addCuentaBancaria");
+
+    Route::get('detalleBancario', 'App\Http\Controllers\DetalleBancoController@getDetalleBancario')->name("detalleBancario");
+
    
       Route::get('monedas', 'App\Http\Controllers\MonedaController@getMonedas')->name("Monedas");
         /* RUTA PARA AGREGER NUEVA MONEDA*/

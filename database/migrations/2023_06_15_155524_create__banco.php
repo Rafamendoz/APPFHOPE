@@ -13,11 +13,7 @@ return new class extends Migration
     {
         Schema::create('banco', function (Blueprint $table) {
             $table->id();
-            $table->string('banco_cuenta');
-            $table->string('banco_nombre');
-            $table->unsignedBigInteger('banco_tipoCuenta');
-            $table->unsignedBigInteger('banco_tipoMoneda');
-            $table->float('banco_total');
+            $table->string('banco_nombre')->unique();
             $table->unsignedBigInteger('estado');
             $table->timestamps();
         });
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('banco');
+        Schema::dropIfExists('_banco');
     }
 };

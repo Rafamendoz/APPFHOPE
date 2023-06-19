@@ -88,7 +88,7 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de Finanzas:</h6>
-                        <a class="collapse-item" href="{{route('Bancos')}}">Bancos</a>
+                        <a class="collapse-item" href="{{route('cuentasBancarias')}}">Cuentas Bancarias</a>
                     </div>
                 </div>
             </li>

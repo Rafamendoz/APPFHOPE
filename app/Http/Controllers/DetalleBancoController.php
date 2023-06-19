@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Log;
 class DetalleBancoController extends Controller
 {
     
+    public function getDetalleBancario(){
+        try {
+            return view('detalleBanco');
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+    }
+
 
     public function setDetalleBanco(Request $request){
         try {
