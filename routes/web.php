@@ -76,7 +76,7 @@ Route::group(["middleware" => "auth"], function () {
 
    
          //RUTAS PARA ENTIDAD Transaccion
-      Route::get('transaccionR', 'App\Http\Controllers\TransaccionController@getTransaccionesRest');
+      Route::get('tipotransaccion', 'App\Http\Controllers\TransaccionController@getTipoTransaccion')->name('tipoTransaccion');
 
    
       //RUTAS PARA ENTIDAD Banco
@@ -149,20 +149,20 @@ Route::get('colaboradores/addcolaborador', 'App\Http\Controllers\ColaboradorCont
 
 //CRUD VENTAS//
 Route::get('ventas', 'App\Http\Controllers\VentaController@getVentas')->name('Ventas');
-Route::get('ventas/addventa', 'App\Http\Controllers\ColaboradorController@addVentas')->name('AddVenta');
+Route::get('ventas/addventa', 'App\Http\Controllers\VentaController@addVentas')->name('AddVenta');
 
 //CRUD POS//
 Route::get('pos', 'App\Http\Controllers\POSController@getPOS')->name('POS');
 
 //CRUD BANCOS//
-Route::get('bancos', 'App\Http\Controllers\ColaboradorController@getVentas')->name('Bancos');
+Route::get('bancos', 'App\Http\Controllers\ColaboradorController@getBancos')->name('Bancos');
 
 
-Route::get('tipocuentasbancarias', 'App\Http\Controllers\ColaboradorController@getVentas')->name('TipoCuentasBancarias');
+Route::get('tipocuentasbancarias', 'App\Http\Controllers\ColaboradorController@getTipoCuentasBancarias')->name('TipoCuentasBancarias');
 
 
-Route::get('tipomonedas', 'App\Http\Controllers\ColaboradorController@getVentas')->name('TipoMonedas');
-Route::get('tipotransaccion', 'App\Http\Controllers\ColaboradorController@getVentas')->name('TipoTransaccion');
+Route::get('tipomonedas', 'App\Http\Controllers\MonedaController@getVentas')->name('TipoMonedas');
+Route::get('tipotransaccion', 'App\Http\Controllers\TransaccionController@getTipoTransaccion')->name('TipoTransaccion');
 
 
 Route::get('logout', 'App\Http\Controllers\LoginController@logout')->name('Logout');

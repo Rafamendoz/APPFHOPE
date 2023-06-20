@@ -6,8 +6,28 @@ use Illuminate\Http\Request;
 use App\Models\Transaccion;
 use App\Models\Error;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 class TransaccionController extends Controller
 {
+
+    
+
+    public function getTipoTransaccion(){
+        try {
+            $id = "Activo";
+            $tipotransaccion =DB::select('CALL Obtener_tipo_transaccion_vista(?)', array($id));
+            return view('tipotransaccion', compact('tipotransaccion'));
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = 'errir';
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      
+    }
+
+
+
     public function setTransaccion(Request $request){
         try {
             log::info("REQUEST: ".$request);
