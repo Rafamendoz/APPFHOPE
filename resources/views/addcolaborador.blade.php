@@ -48,7 +48,7 @@
                                 
                                         
                                         <div class="row mb-3">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Estado del Producto:</label>
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Estado del Colaborador:</label>
                                             <div class="col-sm-9">
                                                 <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
