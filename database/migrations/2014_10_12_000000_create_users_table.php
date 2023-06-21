@@ -17,11 +17,11 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('user')->unique();
-            $table->integer('intentos');
+            $table->integer('intentos')->nullable($value=false);
             $table->string('token')->nullable();
             $table->unsignedBigInteger('estado');
             $table->rememberToken();
-            $table->string('ApiToken',300);
+            $table->string('ApiToken',300)->nullable($value=false);
             $table->timestamps();
         });
     }

@@ -55,7 +55,7 @@
                                                 <td>{{ $user->email }}</td>
                                                 <td>{{$user->user }}</td>
                                                 <td>{{$user->intentos}}</td>
-                                                <td>{{$user->estado }}</td>
+                                                <td>{{$user->valor }}</td>
                                                 <td>{{$user->created_at }}</td>
                                                 <td>{{$user->updated_at }}</td>
                                                 <td>

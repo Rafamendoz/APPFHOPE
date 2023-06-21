@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::table('estado')->insert([
+        DB::table('estado')->create([
             ['valor' => 'ACTIVO'],
             ['valor' => 'INACTIVO']]
         );
@@ -20,13 +20,13 @@ return new class extends Migration
         $baseapi = base64_encode("admin@fhope.online:admin12345");
         $ApiToken =  Crypt::encrypt($baseapi);
 
-        DB::table('users')->insert([
+        DB::table('users')->create([
           ['email'=>"admin@fhope.online",'password'=>$contra,'user'=>'admin','intentos'=>100,'ApiToken'=>$ApiToken,'estado'=>1]
 
             ]
         );
 
-        DB::table('errores')->insert([
+        DB::table('errores')->create([
             ['codigo_error'=>23000,'descripcion'=>'Los datos ingresados no son permitidos para la solicitud, por favor revisar.']
             ,['codigo_error'=>404,'descripcion'=>'El registro solicitado no fue encontrado porque no existe.']
             ,['codigo_error'=>2002,'descripcion'=>'Error de conexion hacia la BD']

@@ -19,14 +19,17 @@ use App\Models\ModelHasRoles;
 class UsuarioController extends Controller
 {
     public function getUsuario(){
-        $data = User::all()->where('estado',1);
-        if(sizeof($data)===0){
-            $data=array();
+        try {
+            $data = DB::select('CALL Obtener_usuarios_vista(?)', array('ACTIVO'));
             return view('usuarios', compact('data'));
-        }else{
-            return view('usuarios', compact('data'));
+
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
-    
+       
    }
 
    public function addUsuario(){
