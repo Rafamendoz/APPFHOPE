@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('errores', function (Blueprint $table) {
             $table->string('codigo_error')->unique();
             $table->string("descripcion");
+            $table->timestamps();
         });
     }
 
