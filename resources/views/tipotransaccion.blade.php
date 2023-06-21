@@ -25,7 +25,7 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
-                                            <a class="dropdown-item" href="{{route('AddPuesto')}}">Agregar Tipo de Transaccion</a>
+                                            <a class="dropdown-item" href="{{route('AddTipoTransaccion')}}">Agregar Tipo de Transaccion</a>
                                            
                                         </div>
                                     </div>
@@ -122,7 +122,7 @@
 
         $.ajax({
         method: "PUT",
-        url: "../../api/puestoR/delete/"+id,
+        url: "../../api/transaccionR/delete/"+id,
         headers: {
                 'X-CSRF-TOKEN': csrfToken,
                 'Authorization': 'Basic '+ authorization

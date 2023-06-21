@@ -8,6 +8,8 @@ use App\Models\Error;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Estado;
+
 class TransaccionController extends Controller
 {
 
@@ -25,6 +27,23 @@ class TransaccionController extends Controller
         }
       
     }
+
+    public function addTipoTransaccion(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $estados = Estado::all();
+            $vista = view("addtipotransaccion", compact('estados'));
+            log::info("RESPONSE: VISTA addtransaccion devuelta");
+            return $vista;
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+     
+        
+    }
+
 
 
 

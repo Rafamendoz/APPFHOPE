@@ -67,7 +67,7 @@
                                                 </div>
                                                 <div class="col-12 mb-3">
                                                     <label for="inputAddress" class="form-label">Direccion de Envio:</label>
-                                                    <input type="text" class="form-control" id="direccion" placeholder="1234 Main St">
+                                                    <input type="text" class="form-control" id="direccion" placeholder="Escriba la direccion...">
                                                 </div>
                                             
                                                 <div class="col-md-6">
@@ -123,7 +123,7 @@
                                                         </div>
                                                         <div class="col-md-12 mb-3">
                                                             <label for="inputPassword4" class="form-label">Nombre:</label>
-                                                            <input readonly type="text" class="form-control" id="nombre" value="Sudadera">
+                                                            <input readonly type="text" class="form-control" id="nombre">
                                                         </div>
                                                         <div class="col-12 mb-3">
                                                             <label for="inputAddress" class="form-label">Descripcion:</label>
@@ -398,16 +398,20 @@
             })
             .done(function( data ) {
                 let response = JSON.parse(JSON.stringify(data));
-                productoactual = response;
-                $("#nombre").val(response['Producto'].producto_nom);
-                $("#descripcion").val(response['Producto'].producto_des);
-                mostrarMensaje(response['Response']);
-                $("#CapaBotonBuscarProducto").attr('hidden',true);
-                $("#CapaBotonAgregar").attr('hidden',false);
-                $("#CapaDescuento").attr('hidden',false);
-                $("#cantidad").attr('readonly',false);
+                if(response['Data_Respuesta'].Codigo==200){
+                    productoactual = response;
+                    $("#nombre").val(response['Producto'].producto_nom);
+                    $("#descripcion").val(response['Producto'].producto_des);
+                    mostrarMensaje(response['Data_Respuesta']);
+                    $("#CapaBotonBuscarProducto").attr('hidden',true);
+                    $("#CapaBotonAgregar").attr('hidden',false);
+                    $("#CapaDescuento").attr('hidden',false);
+                    $("#cantidad").attr('readonly',false);
 
-                console.log(productoactual);
+                }else{
+                    mostrarMensaje(response['Data_Respuesta']);
+                }
+                
             }).fail(function(data){
                 let response = JSON.parse(JSON.stringify(data));
                 console.log(response);
@@ -491,18 +495,7 @@
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
         },
-        didClose: (toast) => {
-                if(dataResponse.Codigo==200){
-                   
-
-
-                    
-                }else{
-                    console.log("NULL");
-
-                }
-    
-        }
+        
         })
 
         switch(dataResponse.Codigo){
@@ -516,7 +509,7 @@
             case "202":
                 Toast.fire({
                     icon: 'info',
-                    title: dataResponse.Estado + "! " + dataResponse.Descripcion 
+                    title: dataResponse.Descripcion 
                 });
                 break;
 
