@@ -8,6 +8,7 @@ use App\Models\Estado;
 use App\Models\Error;
 use App\Models\Puesto;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 
@@ -17,7 +18,7 @@ class ColaboradorController extends Controller
 {
     public function getColaboradores(){
         try {
-            $colaboradores = Colaborador::all()->where('estado', 1);
+            $colaboradores = DB::select('CALL Obtener_colaboradores_vista(?)', array('ACTIVO'));
             return view('colaboradores', compact('colaboradores'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());

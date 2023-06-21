@@ -26,9 +26,7 @@
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
                                             <a class="dropdown-item" href="{{route('AddColaborador')}}">Agregar Colaborador</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
+                                         
                                         </div>
                                     </div>
                                 </div>
@@ -62,9 +60,9 @@
                                                 <td>{{ $valor->colaborador_nombres }}</td>
                                                 <td>{{$valor->colaborador_apellidos }}</td>
                                                 <td>{{$valor->colaborador_DNI }}</td>
-                                                <td>{{$valor->colaborador_puesto }}</td>
-                                                <td>{{$valor->colaborador_idusuario }}</td>
-                                                <td>{{$valor->estado }}</td>
+                                                <td>{{$valor->puesto_nombre }}</td>
+                                                <td>{{$valor->user }}</td>
+                                                <td>{{$valor->valor }}</td>
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>
