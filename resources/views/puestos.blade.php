@@ -26,9 +26,7 @@
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
                                             <a class="dropdown-item" href="{{route('AddPuesto')}}">Agregar Puesto</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
+                                          
                                         </div>
                                     </div>
                                 </div>
@@ -53,7 +51,7 @@
                                             <tr>
                                                 <td>{{ $puesto->id }}</td>
                                                 <td>{{ $puesto->puesto_nombre }}</td>
-                                                <td>{{$puesto->estado }}</td>
+                                                <td>{{$puesto->valor }}</td>
                                                 <td>{{$puesto->created_at }}</td>
                                                 <td>{{$puesto->updated_at }}</td>
                                                 <td>

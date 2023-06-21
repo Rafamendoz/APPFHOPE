@@ -11,13 +11,14 @@ use App\Models\Error;
 use Illuminate\Support\Facades\Log;
 
 
+use Illuminate\Support\Facades\DB;
 
 
 class PuestoController extends Controller
 {
     public function getPuestos(){
         try {
-            $puestos = Puesto::all()->where('estado', 1);
+            $puestos = DB::select('CALL Obtener_puesto_vista(?)', array('ACTIVO'));
             return view('puestos', compact('puestos'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
