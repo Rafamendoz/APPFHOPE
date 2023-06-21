@@ -26,9 +26,6 @@
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
                                             <a class="dropdown-item" href="{{route('AddCliente')}}">Agregar Cliente</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +58,7 @@
                                                 <td>{{$valor->cliente_tel }}</td>
                                                 <td>{{$valor->cliente_correo }}</td>
                                                 <td>{{$valor->cliente_DNI }}</td>
-                                                <td>{{$valor->estado }}</td>
+                                                <td>{{$valor->valor }}</td>
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>

@@ -7,12 +7,13 @@ use App\Models\Cliente;
 use App\Models\Estado;
 use App\Models\Error;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ClienteController extends Controller
 {
     public function getClientes(){
         try {
-            $clientes = Cliente::all()->where('estado', 1);
+            $clientes = DB::select('CALL Obtener_clientes_vista(?)', array('ACTIVO'));
             return view('clientes', compact('clientes'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
