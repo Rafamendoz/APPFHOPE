@@ -95,12 +95,7 @@
                                             
                                         </div>
 
-                                        <div class="row">
-                                        <div class="col-sm-12">
-                                                    <img class="img-profile rounded-circle"
-                                                        src="{{ asset('build/img/undraw_profile.svg')}}">
-                                                </div>
-                                        </div>
+                                       
 
             
 
@@ -143,7 +138,6 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('
         
         }).fail(function(data){
             let response = JSON.parse(JSON.stringify(data));
-            console.log(response);
             
 
         });
@@ -200,9 +194,6 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('
         didClose: (toast) => {
                 if(dataResponse.Codigo==200){
                     location.reload();
-                }else{
-                    console.log("NULL");
-
                 }
     
         }

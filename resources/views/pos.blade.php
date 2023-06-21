@@ -317,7 +317,7 @@
             if($('#flexRadioDefault1').is(':checked')){
                 urldinamica ="../../api/clienteR/dni/"+dni;
             }else{
-                urldinamica ="../../api/clienteR/"+dni;
+                urldinamica ="../../api/clienteR/active/"+dni;
             }
             
         $.ajax({

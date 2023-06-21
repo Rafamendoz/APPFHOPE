@@ -26,9 +26,6 @@
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
                                             <a class="dropdown-item" href="{{route('AddProducto')}}">Agregar Producto</a>
-                                            <a class="dropdown-item" href="#">Another action</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Something else here</a>
                                         </div>
                                     </div>
                                 </div>
@@ -60,7 +57,7 @@
                                                 <td>{{ $valor->producto_nom }}</td>
                                                 <td>{{$valor->producto_des }}</td>
                                                 <td>{{$valor->precio }}</td>
-                                                <td>{{$valor->estado }}</td>
+                                                <td>{{$valor->valor }}</td>
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>
@@ -103,7 +100,6 @@
         
         }).fail(function(data){
             let response = JSON.parse(JSON.stringify(data));
-            console.log(response);
             
 
         });
@@ -142,12 +138,10 @@
         })
         .done(function( data ) {
             let response = JSON.parse(JSON.stringify(data));
-            console.log(response);
             mostrarMensaje(response['Data_Respuesta'])
         
         }).fail(function(data){
             let response = JSON.parse(JSON.stringify(data));
-            console.log(response);
             mostrarMensaje(response['responseJSON']);
 
         });

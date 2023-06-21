@@ -158,6 +158,9 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
   Route::get('clienteR/{id}', 'App\Http\Controllers\ClienteController@getClienteRestById');
 
+  Route::get('clienteR/active/{id}', 'App\Http\Controllers\ClienteController@getClienteActiveRestById');
+
+
   Route::get('clienteR/dni/{id}', 'App\Http\Controllers\ClienteController@getClienteRestByDNI');
 
    /* RUTA PARA METODO DE AGREGAR UN USUARIO*/

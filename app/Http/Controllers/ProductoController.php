@@ -8,11 +8,13 @@ use App\Models\Estado;
 use App\Models\Error;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\DB;
+
 class ProductoController extends Controller
 {
     public function getProductos(){
         try {
-            $productos = Producto::all()->where('estado', 1);
+            $productos = DB::select('CALL Obtener_productos_vista(?)', array('ACTIVO'));
             return view('productos', compact('productos'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
@@ -52,7 +54,7 @@ class ProductoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Productos"=>$productos, "Response"=>[
+                    "Productos"=>$productos, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -78,8 +80,9 @@ class ProductoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Producto"=>$producto, "Response"=>[
+                    "Producto"=>$producto, "Data_Respuesta"=>[
                     "Codigo"=>"200",
+                    "Descripcion"=>"Registro Encontrado",
                     "Estado"=>"Exitoso"]
                 ], 200);
                 Log::info("RESPONSE: ".$response);
