@@ -681,7 +681,6 @@
         let idorden = $("#orden").val();
         let cliente_id = idcliente;
         let idusuario = {{auth()->user()->id}};
-        let fecha = $("#estado").val();
         let direccion = $("#direccion").val();
         let total = $("#total").val();
         var d = new Date();
