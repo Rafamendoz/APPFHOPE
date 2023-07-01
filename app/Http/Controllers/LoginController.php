@@ -24,17 +24,20 @@ class LoginController extends Controller
             $remember = ($request->has('remember')? true : false);
             $prevalidate = User::where('user', $request->user)->where('estado',1)->get();
             if(sizeof($prevalidate)==0 || empty($prevalidate) || is_null($prevalidate)){
-                return redirect('/');
+                $response = response()->json(["Data_Response"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"Por favor ingrese las credenciales"]], 202);
+                return $response;
+
             }else{
                     if(Auth::attempt($credenciales, $remember)){
                         Log::info("ACCESO PERMITIDO");
-
-                        return response()->json(["Data_Response"=>['Estado'=>'Exitoso']]);
+                        $response = response()->json(["Data_Response"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Login Exitoso"]], 200);
+                        return $response;
             
                     }else{
                         Log::info("ACCESO DENEGADO");
                         Log::info($prevalidate);
-                        return redirect('/');
+                        $response = response()->json(["Data_Response"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"Credenciales Invalidas"]], 202);
+                        return $response;
                     }
             
     

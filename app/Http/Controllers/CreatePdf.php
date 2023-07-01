@@ -18,7 +18,9 @@ class CreatePdf extends Controller
 
     $pdf = Pdf::loadView('recibos', compact('data'));
 
-    return $pdf;}
+    return $pdf;
+
+}
 
     public function verRecibo($id){
         $cabecera = DB::select('CALL ObtenerCabeceraVenta(?)', array($id));

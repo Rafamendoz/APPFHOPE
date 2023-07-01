@@ -223,7 +223,4 @@ return [
 ];
 
 
-[
-    'log' => env('API_LOG','single'),
-    'log_level' => env('APP_LOG_LEVEL', 'debug')    
-];
+

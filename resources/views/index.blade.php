@@ -100,10 +100,12 @@
 
     <!-- Custom scripts for all pages-->
     <script src="build/js/sb-admin-2.min.js"></script>
-  
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-</html><script>
+
+
+
+<script>
 	function sendPostRequest(){
 		var data = {
 			user: $("#user").val(),			password: $("#password").val()
@@ -120,10 +122,74 @@
     		data: data,
     		success:function(res){
                 let response = JSON.parse(JSON.stringify(res));
-                if(response['Data_Response'].Estado=="Exitoso"){
-                    location.href="/dashboard";
+                console.log(response);
+                switch(response['Data_Response'].Codigo){
+                    case "200":
+                        location.href="/dashboard";
+                        break;
+                    case "202":
+                        mostrarMensaje(response['Data_Response']);
+                        break;
+                    default:
+                        mostrarMensaje(response['Data_Response']);
+                        break;
+                
+
                 }
+             
     		}
 		});
 	}
+
+    function mostrarMensaje(dataResponse){
+         
+         const Toast = Swal.mixin({
+         toast: true,
+         position: 'top-end',
+         showConfirmButton: false,
+         timer: 3000,
+         timerProgressBar: true,
+         didOpen: (toast) => {
+             toast.addEventListener('mouseenter', Swal.stopTimer)
+             toast.addEventListener('mouseleave', Swal.resumeTimer)
+         },
+         
+         })
+ 
+         switch(dataResponse.Codigo){
+             case "200":
+                 Toast.fire({
+                     icon: 'success',
+                     title: dataResponse.Estado + "! " + dataResponse.Descripcion 
+                 });
+                 break;
+ 
+             case "202":
+                 Toast.fire({
+                     icon: 'info',
+                     title: dataResponse.Descripcion 
+                 });
+                 break;
+ 
+             default:
+                 Toast.fire({
+                 icon: 'error',
+                 title: dataResponse.Estado + "! " + dataResponse.Mapping_Error[0].descripcion 
+                 });
+                 break;
+ 
+ 
+ 
+         }
+ 
+       
+              
+     }
+ 
 </script>
+
+
+
+    </body>
+    </html>
+
