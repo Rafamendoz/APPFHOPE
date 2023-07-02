@@ -6,16 +6,37 @@ use Illuminate\Http\Request;
 use App\Models\Banco;
 use Illuminate\Support\Facades\Log;
 use App\Models\Error;
+use App\Models\Estado;
+
 use Illuminate\Support\Facades\DB;
 
 
 class BancoController extends Controller
 {
 
+
+    public function addBanco(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $estados = Estado::all();
+            $vista = view("addbanco", compact('estados'));
+            log::info("RESPONSE: VISTA addbanco devuelta");
+            return $vista;
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+     
+        
+    }
+
+
+
     public function getBancos(){
         try {
          
-            $bancos = DB::select('CALL Obtener_cuentasBancarias_vista(?)',array(1));
+            $bancos = DB::select('CALL Obtener_bancos_vista(?)',array("ACTIVO"));
             return view('bancos', compact('bancos'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());

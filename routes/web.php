@@ -129,8 +129,9 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('pos', 'App\Http\Controllers\POSController@getPOS')->name('POS');
 
     //CRUD BANCOS//
-    Route::get('bancos', 'App\Http\Controllers\ColaboradorController@getBancos')->name('Bancos');
+    Route::get('bancos', 'App\Http\Controllers\BancoController@getBancos')->name('Bancos');
 
+    Route::get('bancos/addbanco', 'App\Http\Controllers\BancoController@addBanco')->name('AddBanco');
 
     Route::get('tipocuentasbancarias', 'App\Http\Controllers\ColaboradorController@getTipoCuentasBancarias')->name('TipoCuentasBancarias');
 
