@@ -47,15 +47,16 @@
                                     </thead>
                             
                                  <tbody class="text-center">
-                                        @foreach ($puestos as $puesto)
+                                        @foreach ($puestos as $valor)
                                             <tr>
-                                                <td>{{ $puesto->id }}</td>
-                                                <td>{{ $puesto->puesto_nombre }}</td>
-                                                <td>{{$puesto->valor }}</td>
-                                                <td>{{$puesto->created_at }}</td>
-                                                <td>{{$puesto->updated_at }}</td>
+                                                <td>{{ $valor->id }}</td>
+                                                <td>{{ $valor->puesto_nombre }}</td>
+                                                @if($valor->valor=="ACTIVO")
+                                                <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
+                                                @endif                                                <td>{{$valor->created_at }}</td>
+                                                <td>{{$valor->updated_at }}</td>
                                                 <td>
-                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{ $puesto->id }})"><i class="fas fa-trash"></i></button>
+                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{ $valor->id }})"><i class="fas fa-trash"></i></button>
                                                             <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>
                                                         
                         

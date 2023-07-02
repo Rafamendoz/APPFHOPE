@@ -62,8 +62,9 @@
                                                 <td>{{$valor->colaborador_DNI }}</td>
                                                 <td>{{$valor->puesto_nombre }}</td>
                                                 <td>{{$valor->user }}</td>
-                                                <td>{{$valor->valor }}</td>
-                                                <td>{{$valor->created_at }}</td>
+                                                @if($valor->valor=="ACTIVO")
+                                                <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
+                                                @endif                                                <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>
                                                             <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{ $valor->id }})"><i class="fas fa-trash"></i></button>

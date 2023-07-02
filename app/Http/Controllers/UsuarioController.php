@@ -18,6 +18,22 @@ use App\Models\ModelHasRoles;
 
 class UsuarioController extends Controller
 {
+
+    
+
+    public function getUsuarioAll(){
+        try {
+            $data = DB::select('CALL Obtener_usuarios_vista_all()');
+            return view('usuarios', compact('data'));
+
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+       
+   }
     public function getUsuario(){
         try {
             $data = DB::select('CALL Obtener_usuarios_vista(?)', array('ACTIVO'));
@@ -120,7 +136,7 @@ class UsuarioController extends Controller
 
     public function setUsuario(Request $request){
         try {
-            log::info("REQUEST: ".$request);
+            Log::info("REQUEST: ".$request);
             $contra =   Hash::make($request->password);
             $apiToken = Crypt::encrypt(base64_encode($request->email.":".$request->password));
             $request->merge(['ApiToken'=>$apiToken, 'password'=>$contra]);
@@ -128,8 +144,8 @@ class UsuarioController extends Controller
             $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
             Log::info("RESPONSE: ".$response);
             return $response;  
-        } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+        } catch (Throwable $th) {
+            log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }

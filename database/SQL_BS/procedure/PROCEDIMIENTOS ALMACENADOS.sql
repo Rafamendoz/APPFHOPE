@@ -14,11 +14,25 @@ DELIMITER //
  CREATE procedure ObtenerCabeceraVentas ()
         BEGIN 
             SELECT 
-            v.id, v.cliente_id, c.cliente_nom, u.user, v.direccionEnvio, v.total, DATE(v.fecha) as 'date', DATE_FORMAT(v.fecha, "%H:%i:%S" ) as 'hour'
+            v.id, v.cliente_id, c.cliente_nom, u.user, v.direccionEnvio, e.valor, v.total, DATE(v.fecha) as 'date', DATE_FORMAT(v.fecha, "%H:%i:%S" ) as 'hour'
             FROM venta v
             INNER JOIN cliente c on c.id = v.cliente_id
             INNER JOIN users u on u.id = v.usuario_id
+            inner join estado e on e.id = v.estado 
             WHERE v.estado = 1;
+        end//
+DELIMITER ;
+
+
+DELIMITER //
+ CREATE procedure ObtenerCabeceraVentasAll ()
+        BEGIN 
+            SELECT 
+            v.id, v.cliente_id, c.cliente_nom, u.user, v.direccionEnvio, e.valor, v.total, DATE(v.fecha) as 'date', DATE_FORMAT(v.fecha, "%H:%i:%S" ) as 'hour'
+            FROM venta v
+            INNER JOIN cliente c on c.id = v.cliente_id
+            INNER JOIN users u on u.id = v.usuario_id
+            inner join estado e on e.id = v.estado 
         end//
 DELIMITER ;
         
@@ -160,6 +174,28 @@ begin
 end//
 DELIMITER ;
 
+DELIMITER //
+
+create procedure Obtener_tipo_transaccion_vista_all ()
+begin
+	select t.id, t.trans_nombre, e.valor, t.created_at, t.updated_at from transaccion t
+	inner join estado e on t.estado = e.id;
+end//
+DELIMITER ;
+
+
+
+DELIMITER //
+
+create procedure Obtener_bancos_vista (in estado TEXT collate utf8_general_ci)
+begin
+	select b.id, b.banco_nombre, e.valor, b.created_at, b.updated_at  from banco b
+	inner join estado e on b.estado = e.id
+	where e.valor = estado;
+end//
+DELIMITER ;
+
+
 
 DELIMITER //
 
@@ -193,6 +229,17 @@ begin
 	where e.valor = estado;
 end//
 DELIMITER ;
+
+
+DELIMITER //
+
+create procedure Obtener_usuarios_vista_all ()
+begin
+	select u.id,u.email,u.`user`,u.intentos,e.valor,u.created_at, u.updated_at  from users u
+	inner join estado e on e.id = u.estado;
+end//
+DELIMITER ;
+
 
 DELIMITER //
 

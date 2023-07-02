@@ -49,23 +49,31 @@
                                     </thead>
                             
                                  <tbody class="text-center">
-                                        @foreach ($data as $user)
+                                        @foreach ($data as $valor)
                                             <tr>
-                                                <td>{{ $user->id }}</td>
-                                                <td>{{ $user->email }}</td>
-                                                <td>{{$user->user }}</td>
-                                                <td>{{$user->intentos}}</td>
-                                                <td>{{$user->valor }}</td>
-                                                <td>{{$user->created_at }}</td>
-                                                <td>{{$user->updated_at }}</td>
+                                                <td>{{ $valor->id }}</td>
+                                                <td>{{ $valor->email }}</td>
+                                                <td>{{$valor->user }}</td>
+                                                <td>{{$valor->intentos}}</td>
+                                                @if($valor->valor=="ACTIVO")
+                                                <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
+                                                <td>{{$valor->created_at }}</td>
+                                                <td>{{$valor->updated_at }}</td>
                                                 <td>
-                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{$user->id}})"><i class="fas fa-trash"></i></button>
-                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>
-                                                        
-                        
-                                                      
-                                                    
+                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{$valor->id}})"><i class="fas fa-trash"></i></button>
+                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>              
                                                 </td>
+                                                @endif    
+                                                @if($valor->valor=="INACTIVO")
+                                                <td><div class="rounded-pill bg-danger text-white"><b>{{$valor->valor}}</b></div></td>
+                                                <td>{{$valor->created_at }}</td>
+                                                <td>{{$valor->updated_at }}</td>
+                                                <td>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ConsultarActivar({{$valor->id}})"><i class="fas fa-eye"></i></button>
+                                                </td>
+                                                @endif                                                
+                                          
+                                               
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -122,6 +130,49 @@
         })
     }
 
+    function ConsultarActivar(id){
+        Swal.fire({
+                    title: '¿Está seguro?',
+                    text: "Se activara el registro!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '¡Sí, activalo!',
+                    cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        Activar(id);
+                    }
+        })
+    }
+
+    function Activar(id){
+
+        $.ajax({
+        method: "PUT",
+        url: "../../api/usuarioR/delete/"+id,
+        headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+        },
+        data: { "estado":1}
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['Data_Respuesta'])
+
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
+
+        });
+
+    }
+    
+
     function Eliminar(id){
 
         $.ajax({
@@ -146,6 +197,9 @@
         });
             
     }
+
+   
+
 
     function mostrarMensaje(dataResponse){
          

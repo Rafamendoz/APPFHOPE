@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\Error;
 use App\Models\User;
 use App\Models\Estado;
+use Spatie\Permission\Models\Role;
+
 
 use Illuminate\Support\Facades\Crypt;
 
@@ -18,12 +20,15 @@ return new class extends Migration
     {
         Estado::create(['valor' => 'ACTIVO']);
         Estado::create(['valor' => 'INACTIVO']);
+        Role::create(['name' => 'ADMINISTRADOR']);
         $contra =   Hash::make('admin12345');
         $baseapi = base64_encode("admin@fhope.online:admin12345");
         $ApiToken =  Crypt::encrypt($baseapi);
 
-        User::create( ['email'=>"admin@fhope.online",'password'=>$contra,'user'=>'admin','intentos'=>100,'ApiToken'=>$ApiToken,'estado'=>1]
+        $usuario =User::create( ['email'=>"admin@fhope.online",'password'=>$contra,'user'=>'admin','intentos'=>100,'ApiToken'=>$ApiToken,'estado'=>1]
         );
+        $usuario->assignRole('ADMINISTRADOR');
+
 
        Error::create(['codigo_error'=>23000,'descripcion'=>'Los datos ingresados no son permitidos para la solicitud, por favor revisar.']);
 

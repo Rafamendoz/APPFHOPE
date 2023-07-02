@@ -59,8 +59,9 @@
                                                 <td>{{$valor->banco_nombre }}</td>
                                                 <td>{{$valor->cuenta_nombre }}</td>
                                                 <td>{{$valor->moneda_nombre }}</td>
-                                                <td>{{$valor->valor }}</td>
-                                                <td>{{$valor->created_at }}</td>
+                                                @if($valor->valor=="ACTIVO")
+                                                <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
+                                                @endif                                                <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>                                                           
                                                             <a class="btn btn-primary btn-sm" href="../detalleBancario/{{ $valor->id }}"><i class="fas fa-eye"></i></button>

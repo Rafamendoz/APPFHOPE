@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\Log;
 
 class VentaController extends Controller
 {
+
+    public function getVentasAll(){
+        try {
+         
+            $ventas = DB::select('CALL ObtenerCabeceraVentasAll()');
+           
+            return view('ventas', compact('ventas'));
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = 'errir';
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      
+    }
+
     public function getVentas(){
         try {
          

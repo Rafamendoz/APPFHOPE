@@ -13,7 +13,19 @@ use App\Models\Estado;
 class TransaccionController extends Controller
 {
 
-    
+    public function getTipoTransaccionAll(){
+        try {
+            $tipotransaccion = DB::select('CALL Obtener_tipo_transaccion_vista_all()');
+            return view('tipotransaccion', compact('tipotransaccion'));
+
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+       
+   }
 
     public function getTipoTransaccion(){
         try {

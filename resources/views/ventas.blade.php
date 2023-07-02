@@ -44,6 +44,9 @@
                                             <th>Total</th>
                                             <th>Fecha</th>
                                             <th>Hora</th>
+                                            @role('ADMINISTRADOR')
+                                            <th>Estado</th>
+                                            @endrole
                                             <th>Acciones</th>
 
 
@@ -62,15 +65,23 @@
                                                 <td>{{$valor->total }}</td>
                                                 <td>{{$valor->date }}</td>
                                                 <td>{{$valor->hour }}</td>
-
+                                                @if($valor->valor=="ACTIVO")
+                                                    @role('ADMINISTRADOR')
+                                                        <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
+                                                    @endrole
+                                                    <td>
+                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{$valor->id}})"><i class="fas fa-trash"></i></button>
+                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>              
+                                                    </td>
+                                                @endif                                                  
+                                                @if($valor->valor=="INACTIVO")
+                                                <td><div class="rounded-pill bg-danger text-white"><b>{{$valor->valor}}</b></div></td>
+                                      
                                                 <td>
-                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{ $valor->id }})"><i class="fas fa-trash"></i></button>
-                                                            <a class="btn btn-primary btn-sm" href="/ver/recibo/{{$valor->id}}" ><i class="fas fa-eye"></i></a>
-                                                        
-                        
-                                                      
-                                                    
-                                                </td>
+                                                            <button class="btn btn-primary btn-sm" type="button" onclick="ConsultarActivar({{$valor->id}})"><i class="fas fa-eye"></i></button>
+                                                </td> 
+                                                @endif
+                                               
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -127,6 +138,50 @@
                     }
         })
     }
+
+    function ConsultarActivar(id){
+        Swal.fire({
+                    title: '¿Está seguro?',
+                    text: "Se activara el registro!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: '¡Sí, activalo!',
+                    cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        Activar(id);
+                    }
+        })
+    }
+
+    function Activar(id){
+
+        $.ajax({
+        method: "PUT",
+        url: "../../api/ventaR/delete/"+id,
+        headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+        },
+        data: { "estado":1}
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['Data_Respuesta'])
+
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
+
+        });
+
+    }
+
+
 
     function Eliminar(id){
         	var headers = {

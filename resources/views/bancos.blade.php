@@ -53,7 +53,9 @@
                                             <tr>
                                                 <td>{{ $valor->id }}</td>
                                                 <td>{{ $valor->banco_nombre }}</td>
-                                                <td>{{$valor->valor }}</td>
+                                                @if($valor->valor=="ACTIVO")
+                                                <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
+                                                @endif
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>                                                           

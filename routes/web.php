@@ -107,6 +107,8 @@ Route::group(["middleware" => "auth"], function () {
 
     //CRUD USUARIO//
     Route::get('usuarios', 'App\Http\Controllers\UsuarioController@getUsuario')->name('Usuarios');
+    Route::get('usuariosAll', 'App\Http\Controllers\UsuarioController@getUsuarioAll')->name('UsuariosAll');
+
     Route::get('usuarios/addusuario', 'App\Http\Controllers\UsuarioController@addUsuario')->name('AddUsuario');
 
     //CRUD CLIENTE//
@@ -123,6 +125,8 @@ Route::group(["middleware" => "auth"], function () {
 
     //CRUD VENTAS//
     Route::get('ventas', 'App\Http\Controllers\VentaController@getVentas')->name('Ventas');
+    Route::get('ventasAll', 'App\Http\Controllers\VentaController@getVentasAll')->name('VentasAll');
+
     Route::get('ventas/addventa', 'App\Http\Controllers\VentaController@addVentas')->name('AddVenta');
 
     //CRUD POS//
@@ -138,6 +142,8 @@ Route::group(["middleware" => "auth"], function () {
 
     Route::get('tipomonedas', 'App\Http\Controllers\MonedaController@getVentas')->name('TipoMonedas');
     Route::get('tipotransaccion', 'App\Http\Controllers\TransaccionController@getTipoTransaccion')->name('TipoTransaccion');
+    Route::get('tipotransaccionAll', 'App\Http\Controllers\TransaccionController@getTipoTransaccionAll')->name('TipoTransaccionAll');
+
     Route::get('tipotransaccion/addtipotransaccion', 'App\Http\Controllers\TransaccionController@addTipoTransaccion')->name('AddTipoTransaccion');
      
    

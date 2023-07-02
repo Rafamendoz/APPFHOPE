@@ -94,16 +94,20 @@
             </li>
 
               <!-- Nav Item - Pages Collapse Menu -->
-              <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+            @role('ADMINISTRADOR')
+   
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+                    aria-expanded="true" aria-controls="collapseThree">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Configuracion</span>
                 </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingPages" data-parent="#collapseThree">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tablas Dependientes:</h6>
-                        <a class="collapse-item" href="{{route('Usuarios')}}">Usuarios</a>
+                        <a class="collapse-item" href="{{route('VentasAll')}}">Resumen Ventas</a>
+                        <a class="collapse-item" href="{{route('UsuariosAll')}}">Usuarios</a>
                         <a class="collapse-item" href="{{route('Colaboradores')}}">Colaboradores</a>
                  
                         <h6 class="collapse-header">Tablas Independientes</h6> 
@@ -111,17 +115,18 @@
                         <a class="collapse-item" href="{{route('Puestos')}}">Puestos</a>
                         <a class="collapse-item" href="{{route('TipoCuentas')}}">Tipo Cuentas Bancarias</a>
                         <a class="collapse-item" href="{{route('Monedas')}}">Tipo Monedas</a>
-                        <a class="collapse-item" href="{{route('TipoTransaccion')}}">Tipo Transaccion</a>
+                        <a class="collapse-item" href="{{route('TipoTransaccionAll')}}">Tipo Transaccion</a>
                     </div>
                 </div>
             </li>
+            @endrole
            
             <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Addons
+                Reportes
             </div>
 
           
@@ -131,6 +136,8 @@
                 <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-chart-area"></i>
                     <span>Charts</span></a>
+             
+                    
             </li>
 
             <!-- Nav Item - Tables -->
