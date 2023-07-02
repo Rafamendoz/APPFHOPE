@@ -7,6 +7,6 @@ begin
 	set totalEntradas =(select Funcion_obtener_total_entradas(new.id_cuentaBancaria));
 	set totalSalidas = (select Funcion_obtener_total_salidas(new.id_cuentaBancaria));
 	update cuentabancaria set cBancaria_total =  (totalEntradas - totalSalidas);
-end
+end//
 DELIMITER //
 

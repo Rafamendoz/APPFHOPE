@@ -89,7 +89,7 @@ DELIMITER //
 
 create procedure Obtener_detalleBancarios_entradas_by_cuentabancaria(in CuentaB int)
 begin
-	 select d.referencia, d.id_cuentaBancaria, d.monto, d.descripcion, d.fecha, t.trans_nombre from detallebanco d
+	 select d.referencia, d.id_cuentaBancaria, d.monto, d.descripcion, date_format(d.fecha, '%Y-%m-%d') as 'fecha', t.trans_nombre from detallebanco d
 	 inner join transaccion t on t.id = d.id_tipoTransaccion 
 	 where d.estado =1 and d.id_tipoTransaccion =1  and d.id_cuentaBancaria = CuentaB
 	order by d.fecha ASC;
@@ -100,7 +100,7 @@ DELIMITER //
 
 create procedure Obtener_detalleBancarios_salidas_by_cuentabancaria(in CuentaB int)
 begin
-	 select d.referencia,d.id_cuentaBancaria, d.monto, d.descripcion,d.fecha, t.trans_nombre from detallebanco d
+	 select d.referencia,d.id_cuentaBancaria, d.monto, d.descripcion, date_format(d.fecha, '%Y-%m-%d') as 'fecha', t.trans_nombre from detallebanco d
 	 inner join transaccion t on t.id = d.id_tipoTransaccion 
 	 where d.estado =1 and d.id_tipoTransaccion =2  and d.id_cuentaBancaria = CuentaB
 	order by d.fecha ASC;

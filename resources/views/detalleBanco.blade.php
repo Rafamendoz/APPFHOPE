@@ -13,7 +13,7 @@
 
 
                     <!-- DataTales Example -->
-                    <div class="container">
+               
                         <div class="row">
                             @foreach ($datosCuenta as $valor)
                                             <div class="col-md-12 mb-3">
@@ -170,7 +170,7 @@
                             </div>
 
                         <div class="row">
-                            <div class=" col-md-6">
+                            <div class=" col-6">
                                 <div class="card shadow mb-4">
                                     <div class="card-header  bg-primary   py-2">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -182,8 +182,8 @@
                                     
                                         <div class="row p-2">
                                             <div class="table-responsive">
-                                                <table class="table table-bordered " id="tableEntradas" width="100%" cellspacing="0">
-                                                    <thead class="text-center">
+                                                <table class="align-middle text-center" id="tableEntradas" width="100%" cellspacing="0">
+                                                    <thead class="table">
                                                         <tr>
                                                             <th>Referencia</th>
                                                             <th>Monto</th>
@@ -194,9 +194,9 @@
                                                         </tr>
                                                     </thead>
                                             
-                                                    <tbody class="text-center" id="tbodyEntradas">  
+                                                    <tbody class="text-center align-middle" id="tbodyEntradas">  
                                                         @foreach ($entradasBancarias as $valor)
-                                                        <tr>
+                                                        <tr style="font-size:0.7vmax;">
                                                             <td>{{$valor->referencia}}</td>
                                                             <td>{{$valor->monto}}</td>
                                                             <td>{{$valor->descripcion}}</td>
@@ -214,7 +214,7 @@
                                 </div>
                             </div>
 
-                            <div class=" col-md-6">
+                            <div class=" col-6">
                                 <div class="card shadow mb-4">
                                     <div class="card-header text-white  bg-danger py-2">
                                         <div class="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -226,8 +226,8 @@
                                     
                                         <div class="row p-2">
                                             <div class="table-responsive">
-                                                <table class="table table-bordered " id="tableSalidas" width="100%" cellspacing="0">
-                                                    <thead class="text-center">
+                                                <table class="align-middle text-center" id="tableSalidas" width="100%" cellspacing="0">
+                                                    <thead class="table">
                                                         <tr>
                                                             <th>Referencia</th>
                                                             <th>Monto</th>
@@ -240,7 +240,7 @@
                                             
                                                     <tbody id="tbodySalidas" class="text-center">  
                                                     @foreach ($salidasBancarias as $valor)
-                                                        <tr>
+                                                        <tr style="font-size:0.7vmax;text-align: center;">
                                                             <td>{{$valor->referencia}}</td>
                                                             <td>{{$valor->monto}}</td>
                                                             <td>{{$valor->descripcion}}</td>
@@ -259,8 +259,7 @@
 
 
                         </div>
-                    </div>
-                  
+                   
 
                     
              
