@@ -141,9 +141,12 @@ Route::group(["middleware" => "auth"], function () {
      
    
       
-   
+    Route::get('logout', 'App\Http\Controllers\LoginController@logout')->name('Logout');
+
  
-    
+ 
+    Route::get('detalleBancario/{id}/adddetallebanco', 'App\Http\Controllers\DetalleBancoController@addDetalleBanco')->name('AddDetalleBanco');
+
    
    
    
@@ -179,7 +182,6 @@ Route::post('validate', 'App\Http\Controllers\LoginController@login')->name('Val
 
 
 
-Route::get('logout', 'App\Http\Controllers\LoginController@logout')->name('Logout');
 
 
 

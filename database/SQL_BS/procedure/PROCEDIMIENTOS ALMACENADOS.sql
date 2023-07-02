@@ -75,7 +75,7 @@ DELIMITER //
 
 create procedure Obtener_cuentaBancaria_vista(in CuentaB int)
 begin
-	select cb.id,cb.cBancaria_nCuenta , b.banco_nombre, c.cuenta_nombre, m.moneda_nombre, cb.cBancaria_total , e.valor, cb.created_at, cb.updated_at  from cuentaBancaria cb
+	select cb.id,cb.cBancaria_nCuenta , b.banco_nombre, c.cuenta_nombre, m.moneda_nombre, ifnull(cb.cBancaria_total ,0.00) as '	cBancaria_total' , e.valor, cb.created_at, cb.updated_at  from cuentaBancaria cb
 	inner join cuenta c on c.id = cb.cBancaria_tipoCuenta 
 	inner join moneda m on m.id = cb.cBancaria_tipoMoneda 
 	inner join banco b on b.id = cb.cBancaria_idBanco 
@@ -89,9 +89,10 @@ DELIMITER //
 
 create procedure Obtener_detalleBancarios_entradas_by_cuentabancaria(in CuentaB int)
 begin
-	 select d.id, d.id_cuentaBancaria, d.monto, d.descripcion, d.fecha, t.trans_nombre from detallebanco d
+	 select d.referencia, d.id_cuentaBancaria, d.monto, d.descripcion, d.fecha, t.trans_nombre from detallebanco d
 	 inner join transaccion t on t.id = d.id_tipoTransaccion 
-	 where d.estado =1 and d.id_tipoTransaccion =1  and d.id_cuentaBancaria = CuentaB;
+	 where d.estado =1 and d.id_tipoTransaccion =1  and d.id_cuentaBancaria = CuentaB
+	order by d.fecha ASC;
 end//
 DELIMITER ;
 
@@ -99,18 +100,18 @@ DELIMITER //
 
 create procedure Obtener_detalleBancarios_salidas_by_cuentabancaria(in CuentaB int)
 begin
-	 select d.id,d.id_cuentaBancaria, d.monto, d.descripcion,d.fecha, t.trans_nombre from detallebanco d
+	 select d.referencia,d.id_cuentaBancaria, d.monto, d.descripcion,d.fecha, t.trans_nombre from detallebanco d
 	 inner join transaccion t on t.id = d.id_tipoTransaccion 
-	 where d.estado =1 and d.id_tipoTransaccion =2  and d.id_cuentaBancaria = CuentaB;
+	 where d.estado =1 and d.id_tipoTransaccion =2  and d.id_cuentaBancaria = CuentaB
+	order by d.fecha ASC;
 end//
 DELIMITER ;
 
 DELIMITER //
 
-
 create procedure Obtener_detalleBancarios_entradas_by_fecha(in FechaIni varchar(12), in FechaFina varchar(12), in CuentaB int)
 begin
-	select d.id, d.id_cuentaBancaria, d.monto, d.descripcion, d.fecha, t.trans_nombre from detallebanco d
+	select d.referencia, d.id_cuentaBancaria, d.monto, d.descripcion, d.fecha, t.trans_nombre from detallebanco d
 	inner join transaccion t on t.id = d.id_tipoTransaccion 
 	where date_format(d.fecha, '%Y-%m-%d')  between FechaIni  and  FechaFina and d.estado =1 and d.id_tipoTransaccion =1 and d.id_cuentaBancaria = CuentaB
 	order by d.fecha asc;
@@ -121,15 +122,15 @@ DELIMITER //
 
 create procedure Obtener_detalleBancarios_salidas_by_fecha(in FechaIni varchar(12), in FechaFina  varchar(12),in CuentaB int)
 begin
-	 select d.id,d.id_cuentaBancaria, d.monto, d.descripcion,d.fecha, t.trans_nombre from detallebanco d
+	 select d.referencia,d.id_cuentaBancaria, d.monto, d.descripcion,d.fecha, t.trans_nombre from detallebanco d
 	 inner join transaccion t on t.id = d.id_tipoTransaccion 
 	 where date_format(d.fecha, '%Y-%m-%d')  between FechaIni  and  FechaFina and d.estado =1 and d.id_tipoTransaccion =2  and d.id_cuentaBancaria = CuentaB
 	order by d.fecha asc;
 end//
 DELIMITER ;
 
-
 DELIMITER //
+
 
 create procedure Obtener_detalleBancarios_totalEntradas_by_cuentabancaria(in CuentaB int )
 begin
@@ -140,7 +141,6 @@ DELIMITER ;
 
 
 DELIMITER //
-
 create procedure Obtener_detalleBancarios_totalSalidas_by_cuentabancaria(in CuentaB int )
 begin
 	select ifnull(SUM(d.monto),0.00) as 'totalSalidas' from detallebanco d

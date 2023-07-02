@@ -19,6 +19,8 @@
                                             <div class="col-md-12 mb-3">
                                                 <button onclick="Buscar()" class="btn btn-primary">Editar Cuenta</button>
                                                 <button onclick="ConsultarEliminar({{$valor->id}})" class="btn btn-danger">Desactivar Cuenta</button>
+                                                <a href="../detalleBancario/{{$valor->id}}/adddetallebanco" class="btn btn-primary">Registrar Transaccion</a>
+
                                             </div>
                             @endforeach
                         </div>
@@ -183,7 +185,7 @@
                                                 <table class="table table-bordered " id="tableEntradas" width="100%" cellspacing="0">
                                                     <thead class="text-center">
                                                         <tr>
-                                                            <th>Codigo Transaccion</th>
+                                                            <th>Referencia</th>
                                                             <th>Monto</th>
                                                             <th>Concepto</th>
                                                             <th>Fecha</th>
@@ -195,7 +197,7 @@
                                                     <tbody class="text-center" id="tbodyEntradas">  
                                                         @foreach ($entradasBancarias as $valor)
                                                         <tr>
-                                                            <td>{{$valor->id}}</td>
+                                                            <td>{{$valor->referencia}}</td>
                                                             <td>{{$valor->monto}}</td>
                                                             <td>{{$valor->descripcion}}</td>
                                                             <td>{{$valor->fecha}}</td>
@@ -227,7 +229,7 @@
                                                 <table class="table table-bordered " id="tableSalidas" width="100%" cellspacing="0">
                                                     <thead class="text-center">
                                                         <tr>
-                                                            <th>Codigo Transaccion</th>
+                                                            <th>Referencia</th>
                                                             <th>Monto</th>
                                                             <th>Concepto</th>
                                                             <th>Fecha</th>
@@ -239,7 +241,7 @@
                                                     <tbody id="tbodySalidas" class="text-center">  
                                                     @foreach ($salidasBancarias as $valor)
                                                         <tr>
-                                                            <td>{{$valor->id}}</td>
+                                                            <td>{{$valor->referencia}}</td>
                                                             <td>{{$valor->monto}}</td>
                                                             <td>{{$valor->descripcion}}</td>
                                                             <td>{{$valor->fecha}}</td>
@@ -337,9 +339,9 @@
             let response = JSON.parse(JSON.stringify(data));
             if(response.Data_Respuesta.Codigo ==200){
                 $("#tbodyEntradas").empty();
-                response.SalidasBancarias.forEach(function callback(value, index) {
+                response.EntradasBancarias.forEach(function callback(value, index) {
 
-                $("#tableEntradas tbody").append("<tr><td>"+`${value.id_cuentaBancaria}`+"</td>"+
+                $("#tableEntradas tbody").append("<tr><td>"+`${value.referencia}`+"</td>"+
                "<td>"+`${value.monto}`+"</td>"+
                "<td>"+`${value.descripcion}`+"</td>"+
                "<td>"+`${value.fecha}`+"</td></tr>");
@@ -383,7 +385,7 @@
                 $("#tbodySalidas").empty();
                 response.SalidasBancarias.forEach(function callback(value, index) {
 
-                $("#tbodySalidas").append("<tr><td>"+`${value.id_cuentaBancaria}`+"</td>"+
+                $("#tbodySalidas").append("<tr><td>"+`${value.referencia}`+"</td>"+
                "<td>"+`${value.monto}`+"</td>"+
                "<td>"+`${value.descripcion}`+"</td>"+
                "<td>"+`${value.fecha}`+"</td></tr>");

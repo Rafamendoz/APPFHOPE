@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('id_cuentaBancaria');
             $table->unsignedBigInteger('id_tipoTransaccion');
+            $table->string('referencia')->unique();
             $table->float('monto')->nullable($value = false);
             $table->timestamp('fecha')->nullable($value = false);
             $table->string('descripcion');

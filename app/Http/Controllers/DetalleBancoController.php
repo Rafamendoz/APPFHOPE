@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DetalleBanco;
 use App\Models\CuentaBancaria;
+use App\Models\Estado;
+use App\Models\Transaccion;
 
 use App\Models\Error;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +15,23 @@ use Illuminate\Support\Facades\DB;
 class DetalleBancoController extends Controller
 {
     
+    public function addDetalleBanco($id){
+        try {
+            $idCuentaBancaria = $id;
+            $transacciones = Transaccion::all();
+            $estados = Estado::all();
+            return view('adddetallebanco', compact('estados','transacciones','idCuentaBancaria'));
+
+          
+           
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+    }
+
+
     public function getDetalleBancario($id){
         try {
             $estado = CuentaBancaria::where('id',$id)->select('estado')->get();
@@ -123,14 +142,14 @@ class DetalleBancoController extends Controller
     public function getEntradasBancariasRestByFecha(Request $request, $id){
         try {
             log::info("REQUEST: ".$request);
-            $salidasBancarias = DB::select('call Obtener_detalleBancarios_entradas_by_fecha(?,?,?)',array($request->fechaInicial,$request->fechaFinal, $id));
-            if(sizeof($salidasBancarias)<1){
+            $entradasBancarias = DB::select('call Obtener_detalleBancarios_entradas_by_fecha(?,?,?)',array($request->fechaInicial,$request->fechaFinal, $id));
+            if(sizeof($entradasBancarias)<1){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
                 $response =  response()->json([
-                    "SalidasBancarias"=>$salidasBancarias, "Data_Respuesta"=>[
+                    "EntradasBancarias"=>$entradasBancarias, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);

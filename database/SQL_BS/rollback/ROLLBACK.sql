@@ -7,7 +7,7 @@ drop procedure if exists Obtener_detalleBancarios_salidas_by_fecha;
 
 
 drop procedure if exists Obtener_detalleBancarios_totalEntradas_by_cuentabancaria;
-
+	
 
 drop procedure if exists Obtener_cuentasBancarias_vista;
 drop procedure if exists Obtener_cuentaBancaria_vista;
@@ -27,3 +27,12 @@ drop procedure if exists ObtenerCabeceraVentas;
 drop procedure if exists ObtenerCabeceraVenta;
 drop procedure if exists Obtener_monedas_vista;
 drop procedure if exists Obtener_tipo_cuenta_vista;
+
+
+/* ------------------------------------------------------------------- */
+
+drop function if exists Funcion_obtener_total_entradas;
+drop function if exists Funcion_obtener_total_salidas;
+
+/* ------------------------------------------------------------------- */
+drop trigger if exists Actualiza_monto_total_cuentaBancaria;
