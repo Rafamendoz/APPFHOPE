@@ -32,7 +32,7 @@ DELIMITER //
             FROM venta v
             INNER JOIN cliente c on c.id = v.cliente_id
             INNER JOIN users u on u.id = v.usuario_id
-            inner join estado e on e.id = v.estado 
+            inner join estado e on e.id = v.estado;
         end//
 DELIMITER ;
         
