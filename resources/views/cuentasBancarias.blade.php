@@ -14,6 +14,7 @@
                     <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Data de Cuentas</h6>
+                                    @hasanyrole('ADMINISTRADOR|MANAGER')
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -21,14 +22,16 @@
                                         </a>
 
                                        
-
+                                       
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
                                             <a class="dropdown-item" href="{{route('addCuentaBancaria')}}">Agregar Cuenta Bancaria</a>
                                           
                                         </div>
+                                     
                                     </div>
+                                    @endhasanyrole
                                 </div>
 
                         <div class="card-body">

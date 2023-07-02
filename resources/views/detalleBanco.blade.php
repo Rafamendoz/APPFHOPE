@@ -13,7 +13,7 @@
 
 
                     <!-- DataTales Example -->
-               
+                        @hasanyrole('ADMINISTRADOR|MANAGER')
                         <div class="row">
                             @foreach ($datosCuenta as $valor)
                                             <div class="col-md-12 mb-3">
@@ -24,6 +24,9 @@
                                             </div>
                             @endforeach
                         </div>
+                        @endhasanyrole
+
+                        
 
                         <div class="row">
                             <div class=" col-md-7">
