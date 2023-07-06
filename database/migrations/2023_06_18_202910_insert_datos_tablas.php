@@ -36,6 +36,7 @@ return new class extends Migration
         Error::create(['codigo_error'=>2002,'descripcion'=>'Error de conexion hacia la BD']);
         Error::create(['codigo_error'=>22007,'descripcion'=>'El tipo de dato ingresado no es el que se esperaba, revisar datos']);
         Error::create(['codigo_error'=>'01000','descripcion'=>'Hay un valor que excede el limite permitido de tamaño del campo']);
+        Error::create(['codigo_error'=>'HY000','descripcion'=>'Se estan enviando campos con valor null']);
 
 
     }

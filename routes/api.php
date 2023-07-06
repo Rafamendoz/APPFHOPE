@@ -205,8 +205,29 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
   Route::put('detalleVentaR/delete/{id}', 'App\Http\Controllers\DetalleVentaController@deleteDetalleVenta');
 
  
- 
+ //RUTAS PARA ENTIDAD COLOR//
 
+ Route::get('colorR', 'App\Http\Controllers\ColorController@getColorsRest');
+ Route::get('colorR/{id}', 'App\Http\Controllers\ColorController@getColorRestById');
+ Route::post('colorR/add', 'App\Http\Controllers\ColorController@setColor');
+ Route::put('colorR/update/{id}', 'App\Http\Controllers\ColorController@putColor');
+ Route::put('colorR/delete/{id}', 'App\Http\Controllers\ColorController@deleteColor');
+
+
+ //RUTAS PARA ENTIDAD SIZE//
+ Route::get('sizeR', 'App\Http\Controllers\SizeController@getSizesRest');
+ Route::get('sizeR/{id}', 'App\Http\Controllers\SizeController@getSizeRestById');
+ Route::post('sizeR/add', 'App\Http\Controllers\SizeController@setSize');
+ Route::put('sizeR/update/{id}', 'App\Http\Controllers\SizeController@putSize');
+ Route::put('sizeR/delete/{id}', 'App\Http\Controllers\SizeController@deleteSize');
+
+
+ //RUTAS PARA ENTIDAD INVENTARIO//
+ Route::get('inventoryR', 'App\Http\Controllers\InventoryController@getInventoriesRest');
+ Route::get('inventoryR/{id}', 'App\Http\Controllers\InventoryController@getInventoryRestById');
+ Route::post('inventoryR/add', 'App\Http\Controllers\InventoryController@setInventory');
+ Route::put('inventoryR/update/{id}', 'App\Http\Controllers\InventoryController@putInventory');
+ Route::put('inventoryR/delete/{id}', 'App\Http\Controllers\InventoryController@deleteInventory');
 
 
 

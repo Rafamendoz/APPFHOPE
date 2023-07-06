@@ -6,7 +6,7 @@ begin
 	declare totalSalidas double;
 	set totalEntradas =(select Funcion_obtener_total_entradas(new.id_cuentaBancaria));
 	set totalSalidas = (select Funcion_obtener_total_salidas(new.id_cuentaBancaria));
-	update cuentaBancaria set cBancaria_total =  (totalEntradas - totalSalidas);
+	update cuentaBancaria set cBancaria_total =  (totalEntradas - totalSalidas) where id=new.id_cuentaBancaria;
 end//
 DELIMITER //
 

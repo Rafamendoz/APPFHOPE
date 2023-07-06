@@ -31,6 +31,9 @@ drop procedure if exists Obtener_tipo_transaccion_vista_all;
 drop procedure if exists Obtener_bancos_vista;
 drop procedure if exists Obtener_usuarios_vista_all;
 drop procedure if exists ObtenerCabeceraVentasAll;
+drop procedure if exists Obtener_total_cuentas_bancarias;
+drop procedure if exists Obtener_total_detalles_cuentas_bancarias;
+drop procedure if exists Obtener_inventories_vista;
 
 /* ------------------------------------------------------------------- */
 

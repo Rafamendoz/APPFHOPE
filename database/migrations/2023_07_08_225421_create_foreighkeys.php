@@ -89,7 +89,30 @@ return new class extends Migration
         Schema::table('banco', function(Blueprint $table){
             $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
         });
+
+        Schema::table('color', function(Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
         
+        Schema::table('size', function(Blueprint $table){
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+        });
+        
+        Schema::table('inventory', function(Blueprint $table){
+            $table->foreign('id_producto')->references('id')->on('producto')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('id_color')->references('id')->on('color')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('id_size')->references('id')->on('size')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+            
+        
+        });
+
+        Schema::table('inventory_header', function(Blueprint $table){
+            $table->foreign('id_producto')->references('id')->on('producto')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+            
+        
+        });
     }
 
     /**

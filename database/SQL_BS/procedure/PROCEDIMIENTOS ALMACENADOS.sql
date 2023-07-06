@@ -263,3 +263,18 @@ begin
 	where e.valor = estado;
 end//
 DELIMITER ;
+
+
+
+
+DELIMITER //
+create procedure Obtener_inventories_vista (in idProducto int )
+begin
+	select i.id,i.id_producto, p.producto_nom, c.name_color, s.name_size, i.stock, e.valor ,i.created_at, i.updated_at  from inventory i
+	inner join color c ON i.id_color = c.id
+	inner join `size` s on i.id_size = s.id
+	inner join producto p on p.id = i.id_producto
+	inner join estado e on e.id  = i.estado 
+	where i.id_producto = idProducto and i.estado=1;
+end//
+DELIMITER ;
