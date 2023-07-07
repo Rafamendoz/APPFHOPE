@@ -12,7 +12,7 @@ DELIMITER //
 
 
 
-select * from detalleventa d 
+select * from inventory i  d 
 
 DELIMITER //
 create trigger Actualiza_inventario_venta_estado after update on detalleventa
@@ -43,5 +43,19 @@ for each row
 		set totalStock =(select Funcion_obtener_total_stock_by_producto(new.producto_id));
 		set newtotalStock =totalStock-new.cantidad;
 		update inventory_header  set total_stock  = newtotalStock where id=new.producto_id;
+	end//
+DELIMITER //
+
+select * from inventory ih 
+
+DELIMITER //
+create trigger Actualiza_inventario_venta_nueva_by_detalles after insert on detalle_producto_venta
+for each row 
+	begin 
+		declare totalStock int;
+		declare newtotalStock int;
+		set totalStock =(select Funcion_obtener_total_stock_by_producto_size_color(new.producto_id, new.color_id,new.size_id));
+		set newtotalStock =totalStock-new.cantidad;
+		update inventory  set stock  = newtotalStock where id_producto = new.producto_id and id_size = new.size_id and id_color =new.color_id;
 	end//
 DELIMITER //

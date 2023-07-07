@@ -47,9 +47,4 @@ end//
 
 DELIMITER ;
 
-select Funcion_obtener_total_stock_by_producto_size_color(1,1,1)
-
-select Funcion_obtener_total_stock_by_producto(1)
-
-	
 

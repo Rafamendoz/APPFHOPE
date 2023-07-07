@@ -113,6 +113,16 @@ return new class extends Migration
             
         
         });
+
+        Schema::table('detalle_producto_venta', function(Blueprint $table){
+            $table->foreign('venta_id')->references('id')->on('venta')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('color_id')->references('id')->on('color')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('size_id')->references('id')->on('size')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('producto_id')->references('id')->on('producto')->onDelete('Cascade')->onUpdate('Cascade');
+            $table->foreign('estado')->references('id')->on('estado')->onDelete('Cascade')->onUpdate('Cascade');
+            
+        
+        });
     }
 
     /**

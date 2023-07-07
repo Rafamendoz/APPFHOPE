@@ -46,4 +46,4 @@ drop function if exists Funcion_obtener_total_salidas;
 drop trigger if exists Actualiza_monto_total_cuentaBancaria;
 drop trigger if exists Actualiza_inventario_venta_estado;
 drop trigger if exists Actualiza_inventario_venta_nueva;
-
+drop trigger if exists Actualiza_inventario_venta_nueva_by_detalles;

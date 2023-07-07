@@ -129,6 +129,37 @@
                                                             <label for="inputAddress" class="form-label">Descripcion:</label>
                                                             <input readonly type="text" class="form-control" id="descripcion">
                                                         </div>
+
+                                                        <div class="col-12 mb-3"  id="CapaDetalleProducto">
+                                                     
+                                                            <div class="input-group mb-3">
+                                                                <div class="input-group-prepend">
+                                                                    <label class="input-group-text" for="color">Colores</label>
+                                                                </div>
+                                                                <select class="custom-select" id="color">
+                                                                    <option selected value="0">Seleccione...</option>
+                                                                    @foreach ($colors as $valor )
+                                                                        <option value="{{$valor->id}}">{{$valor->name_color}}</option>
+                                                                    @endforeach
+                                                                
+                                                                </select>
+
+                                                                <div class="input-group-prepend">
+                                                                    <label class="input-group-text" for="size">Tallas</label>
+                                                                </div>
+                                                                <select class="custom-select" id="size">
+                                                                    <option selected value="0">Seleccione...</option>
+                                                                    @foreach ($sizes as $valor )
+                                                                        <option value="{{$valor->id}}">{{$valor->name_size}}</option>
+                                                                    @endforeach
+                                                                
+                                                                </select>
+                                                            </div>
+
+                                            
+                                                        </div>
+
+
                                                         <div class="col-12 mb-3" hidden id="CapaDescuento">
                                                             <div class="form-check">
                                                             <input class="form-check-input" type="checkbox" id="gridCheck" onclick="MostrarDescuento()">
@@ -192,10 +223,14 @@
                                             <th>Codigo Producto</th>
                                             <th>Nombre</th>
                                             <th>Precio</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
                                             <th>Cantidad</th>
                                             <th>Descuento</th>
                                             <th>Isv</th>
                                             <th>Subtotal</th>
+                                            <th hidden>valorTalla</th>
+                                            <th hidden>valorColor</th>
                                             <th>Acciones</th>
 
 
@@ -241,6 +276,7 @@
 <script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
 
 <script>
+    var disparadorMensaje = 0;
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var authorization ="";
     (function(){
@@ -277,7 +313,7 @@
                 const index =event.target.parentNode.parentNode.rowIndex;
                 let tabla = document.getElementById("table2");
                 tabla.deleteRow(index);
-               total();
+                total();
             }
          
         });
@@ -449,6 +485,10 @@
         let descuentounitario = $("#descuento").val();
         let descuentot = descuentounitario*cantidad;
         let isv = 0.00;
+        let talla =document.getElementById("size");
+        let selectedTalla = talla.options[talla.selectedIndex].text;
+        let color =document.getElementById("color");
+        let selectedColor = color.options[color.selectedIndex].text;
         let subtotal = (precio*cantidad)-descuentot;
         if(contadorf ==0){
             $("#tbody tr").remove();
@@ -456,10 +496,14 @@
             $("#tbody").append("<tr><td>"+productoactual["Producto"].id+"</td>"+
             "<td>"+productoactual["Producto"].producto_nom+"</td>"+
             "<td>"+precio+"</td>"+
+            "<td>"+selectedTalla+"</td>"+
+            "<td>"+selectedColor+"</td>"+
             "<td>"+cantidad+"</td>"+
             "<td>"+descuentot+"</td>"+
             "<td>"+isv+"</td>"+
             "<td>"+subtotal+"</td>"+
+            "<td hidden>"+talla.value+"</td>"+
+            "<td hidden>"+color.value+"</td>"+
             "<td><button class=\"btn btn-danger btn-sm eliminarRow\" type=\"button\"><i class=\"fas fa-trash\"></i></button></td>"+
             "</tr>");
             $("#capaTotal").attr("hidden", false);
@@ -470,10 +514,14 @@
             $("#tbody").append("<tr><td>"+productoactual["Producto"].id+"</td>"+
             "<td>"+productoactual["Producto"].producto_nom+"</td>"+
             "<td>"+precio+"</td>"+
+            "<td>"+selectedTalla+"</td>"+
+            "<td>"+selectedColor+"</td>"+
             "<td>"+cantidad+"</td>"+
             "<td>"+descuentot+"</td>"+
             "<td>"+isv+"</td>"+
             "<td>"+subtotal+"</td>"+
+            "<td hidden>"+talla.value+"</td>"+
+            "<td hidden >"+color.value+"</td>"+
             "<td><button class=\"btn btn-danger btn-sm eliminarRow\" type=\"button\"><i class=\"fas fa-trash\"></i></button></td>"+
             "</tr>");
             contadorf+=1;
@@ -600,14 +648,17 @@
                         if(count>0){
                             var codigo = $(this).find("td").eq(0).html();
                             var precio = $(this).find("td").eq(2).html();
-                            var cantidad = $(this).find("td").eq(3).html();
-                            var descuento = $(this).find("td").eq(4).html();
-                            var isv = $(this).find("td").eq(5).html();
-                            var subtotal = $(this).find("td").eq(6).html();
+                            var cantidad = $(this).find("td").eq(5).html();
+                            var descuento = $(this).find("td").eq(6).html();
+                            var isv = $(this).find("td").eq(7).html();
+                            var subtotal = $(this).find("td").eq(8).html();
+                            var talla = $(this).find("td").eq(9).html();
+                            var color = $(this).find("td").eq(10).html();
+
                             var request = {"codigo":codigo, "nombre":nombre, "precio":precio, "cantidad":cantidad, "descuento":descuento, "isv":isv, "subtotal":subtotal};
                             console.log(request);
                             GuardarDetalleVenta(codigo,precio,cantidad, descuento, subtotal, count, pos);
-                            
+                            GuardarDetalleProducto(codigo,cantidad, talla, color, count, pos);
 
                         }
                         count+=1;
@@ -624,7 +675,7 @@
 
                         if(count>0){
                
-                             subtotal += parseFloat($(this).find("td").eq(6).html());
+                             subtotal += parseFloat($(this).find("td").eq(8).html());
                         
 
                         }
@@ -662,9 +713,10 @@
         .done(function( data ) {
             let response = JSON.parse(JSON.stringify(data));
             if(response['Data_Respuesta'].Codigo==200){
+
                 if(count==pos){
-                            response = {"Codigo":200, "Estado":"Exitoso", "Descripcion": "Venta Registrada"};
-                            mostrarMensajeRecibo(response);
+                            disparadorMensaje = 1;
+                           
 
                 }
             }
@@ -676,6 +728,48 @@
         });
 
     }
+
+    function GuardarDetalleProducto(producto_id, cantidad, size_id, color_id, count, pos){
+        let idorden = $("#orden").val();
+
+        $.ajax({
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+            },
+            url: "../../api/detalleProductoR/add",
+            data: {
+                "venta_id": idorden,
+                "producto_id": producto_id,
+                "size_id": size_id,
+                "cantidad": cantidad,
+                "color_id": color_id,
+                "estado":1
+            }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            if(response['Data_Respuesta'].Codigo==200){
+                if(count==pos){
+                            disparadorMensaje+=1;
+                            if(disparadorMensaje==2){
+                                response = {"Codigo":200, "Estado":"Exitoso", "Descripcion": "Venta Registrada"};
+                                mostrarMensajeRecibo(response);
+                            }
+                        
+
+                }
+            }
+            
+        
+        }).fail(function(data){
+            return 2;
+
+        });
+
+    }
+
 
     function Guardar(){
         let idorden = $("#orden").val();
