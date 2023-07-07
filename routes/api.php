@@ -204,7 +204,7 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
   Route::put('detalleVentaR/delete/{id}', 'App\Http\Controllers\DetalleVentaController@deleteDetalleVenta');
 
-  Route::get('detalleProductoR', 'App\Http\Controllers\DetalleProductoController@getDetallesVentaRest');
+  Route::get('detalleProductoR', 'App\Http\Controllers\DetalleProductoController@getDetallesProductoRest');
 
   Route::get('detalleProductoR/{id}', 'App\Http\Controllers\DetalleProductoController@getDetalleProductoRestByVentaId');
    /* RUTA PARA METODO DE AGREGAR UN USUARIO*/

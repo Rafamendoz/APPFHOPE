@@ -62,6 +62,15 @@ begin
 end//
 DELIMITER ;  
 
+
+DELIMITER //
+create procedure Actualizar_detallesproductos_estado(in idVenta int, in estado int)
+begin
+	update detalle_producto_venta  db set db.estado  = estado
+	where db.venta_id = idVenta;
+end//
+DELIMITER ; 
+
 DELIMITER //
 
 create procedure Actualizar_detallesVenta_estado(in VentaId int, in estado int)

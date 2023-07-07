@@ -12,9 +12,9 @@ class DetalleProductoController extends Controller
     
     public function setDetalleProducto(Request $request){
         try {
-            $dventa = DetalleProducto::create($request->all());
+            $dproducto = DetalleProducto::create($request->all());
             Log::info("REQUEST: ".$request);
-           $response = response()->json(["Data_Respuesta"=>["Orden"=>$dventa->venta_id,"Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+           $response = response()->json(["Data_Respuesta"=>["Orden"=>$dproducto->venta_id,"Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
            Log::info("RESPONSE: ".$response);
            return $response;
         } catch (\Illuminate\Database\QueryException $th) {
@@ -36,7 +36,7 @@ class DetalleProductoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "DetalleV"=>$detalleP, "Response"=>[
+                    "DetalleP"=>$detalleP, "Response"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -52,7 +52,7 @@ class DetalleProductoController extends Controller
      
     }
 
-    public function getDetallesVentaRest(Request $request){
+    public function getDetallesProductoRest(Request $request){
         try {
             log::info('REQUEST '.$request);
             $detallesP = DetalleProducto::all();
@@ -62,7 +62,7 @@ class DetalleProductoController extends Controller
                 return $response;
             }else{
                 $response =  response()->json([
-                    "DetallesV"=>$detallesP, "Response"=>[
+                    "DetallesProducto"=>$detallesP, "Response"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
