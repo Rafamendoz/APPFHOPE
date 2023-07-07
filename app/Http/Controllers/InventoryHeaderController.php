@@ -8,15 +8,15 @@ use App\Models\Error;
 use App\Models\Estado;
 use App\Models\Size;
 use App\Models\Color;
-use App\Models\Inventory;
+use App\Models\InventoryHeader;
 
 use Illuminate\Support\Facades\DB;
 
 
-class InventoryController extends Controller
+class InventoryHeaderController extends Controller
 {
-    
-    public function addInventory(Request $request){
+
+    public function addInventoryHeader(Request $request){
         try {
             log::info("REQUEST: ".$request);
             $estados = Estado::all();
@@ -34,13 +34,10 @@ class InventoryController extends Controller
 
 
 
-    public function getInventories($id){
+    public function getInventoriesHeader(){
         try {
-            $colors = DB::select('CALL Obtener_colors_vista()');
-            $inventories = DB::select('CALL Obtener_inventories_vista(?)',array($id));
-           
-
-            return view('inventory', compact('inventories'));
+            $inventoriesHeader = DB::select('CALL Obtener_inventoriesHeader_vista()');
+            return view('inventoryHeader', compact('inventoriesHeader'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
@@ -50,10 +47,10 @@ class InventoryController extends Controller
     }
 
 
-    public function setInventory(Request $request){
+    public function setInventoryHeader(Request $request){
         try {
             log::info("REQUEST: ".$request);
-            $color = Inventory::create($request->all());
+            $color = InventoryHeader::create($request->all());
             $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
             Log::info("RESPONSE: ".$response);
             return $response;  
@@ -64,17 +61,17 @@ class InventoryController extends Controller
         }
       }
 
-    public function getInventoriesRest(Request $request){
+    public function getInventoriesHeaderRest(Request $request){
         try {
             log::info("REQUEST: ".$request);
-            $inventories = Inventory::all();
-            if(sizeof($inventories)<1){
+            $inventoriesHeader = InventoryHeader::all();
+            if(sizeof($inventoriesHeader)<1){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Inventories"=>$inventories, "Data_Respuesta"=>[
+                    "InventoriesHeader"=>$inventoriesHeader, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -92,17 +89,17 @@ class InventoryController extends Controller
        
     }
 
-    public function getInventoryRestById(Request $request,$id){
+    public function getInventoryHeaderRestById(Request $request,$id){
         try {
             log::info('REQUEST '.$request);
-            $color = Inventory::find($id);
+            $color = InventoryHeader::find($id);
             if(is_null($color)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
                 $response =  response()->json([
-                    "Inventories"=>$color, "Data_Respuesta"=>[
+                    "InventoriesHeader"=>$color, "Data_Respuesta"=>[
                     "Codigo"=>"200",
                     "Estado"=>"Exitoso"]
                 ], 200);
@@ -119,10 +116,10 @@ class InventoryController extends Controller
 
     }
 
-    public function putInventory(Request $request, $id){
+    public function putInventoryHeader(Request $request, $id){
         try {
             Log::info("REQUEST: ".$request);
-            $color = Inventory::find($id);
+            $color = InventoryHeader::find($id);
             if(is_null($color)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
                 Log::info("RESPONSE: ".$response);
@@ -142,10 +139,10 @@ class InventoryController extends Controller
         }
     }
     
-    public function deleteInventory(Request $request, $id){
+    public function deleteInventoryHeader(Request $request, $id){
         try {
             Log::info("REQUEST: ".$request);
-            $color = Inventory::find($id);
+            $color = InventoryHeader::find($id);
             if(is_null($color)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
                 Log::info("RESPONSE: ".$response);
@@ -183,4 +180,6 @@ class InventoryController extends Controller
  
        
     }
+
+ 
 }

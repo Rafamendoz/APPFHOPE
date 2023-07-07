@@ -222,12 +222,20 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
  Route::put('sizeR/delete/{id}', 'App\Http\Controllers\SizeController@deleteSize');
 
 
- //RUTAS PARA ENTIDAD INVENTARIO//
+ //RUTAS PARA ENTIDAD DETALLE INVENTARIO//
  Route::get('inventoryR', 'App\Http\Controllers\InventoryController@getInventoriesRest');
  Route::get('inventoryR/{id}', 'App\Http\Controllers\InventoryController@getInventoryRestById');
  Route::post('inventoryR/add', 'App\Http\Controllers\InventoryController@setInventory');
  Route::put('inventoryR/update/{id}', 'App\Http\Controllers\InventoryController@putInventory');
  Route::put('inventoryR/delete/{id}', 'App\Http\Controllers\InventoryController@deleteInventory');
+
+  //RUTAS PARA ENTIDAD CABECERA INVENTARIO//
+
+ Route::get('inventoryHeaderR', 'App\Http\Controllers\InventoryHeaderController@getInventoriesHeaderRest');
+ Route::get('inventoryHeaderR/{id}', 'App\Http\Controllers\InventoryHeaderController@getInventoryHeaderRestById');
+ Route::post('inventoryHeaderR/add', 'App\Http\Controllers\InventoryHeaderController@setInventoryHeader');
+ Route::put('inventoryHeaderR/update/{id}', 'App\Http\Controllers\InventoryHeaderController@putInventoryHeader');
+ Route::put('inventoryHeaderR/delete/{id}', 'App\Http\Controllers\InventoryHeaderController@deleteInventoryHeader');
 
 
 

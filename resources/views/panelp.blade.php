@@ -93,6 +93,25 @@
                 </div>
             </li>
 
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+                    aria-expanded="true" aria-controls="collapseFour">
+                    <i class="fas fa-fw fa-boxes"></i>
+                    <span>Inventario</span>
+                </a>
+                <div id="collapseFour" class="collapse" aria-labelledby="headingPages" data-parent="#collapseFour">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Componentes de <br>Inventario:</h6>
+                        <a class="collapse-item" href="{{route('InventariosHeader')}}">Ver Inventario</a>
+                        <a class="collapse-item" href="#">Generar Inventario</a>
+                        <a class="collapse-item" href="#">A</a>
+                    </div>
+                </div>
+            </li>
+
+
+
               <!-- Nav Item - Pages Collapse Menu -->
             @role('ADMINISTRADOR')
    

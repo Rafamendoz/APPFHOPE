@@ -270,11 +270,33 @@ DELIMITER ;
 DELIMITER //
 create procedure Obtener_inventories_vista (in idProducto int )
 begin
-	select i.id,i.id_producto, p.producto_nom, c.name_color, s.name_size, i.stock, e.valor ,i.created_at, i.updated_at  from inventory i
+	select i.id,i.id_producto, p.producto_nom, c.name_color,c.`hex`, s.name_size, i.stock, e.valor ,i.created_at, i.updated_at  from inventory i
 	inner join color c ON i.id_color = c.id
 	inner join `size` s on i.id_size = s.id
 	inner join producto p on p.id = i.id_producto
 	inner join estado e on e.id  = i.estado 
-	where i.id_producto = idProducto and i.estado=1;
+	where i.id_producto = idProducto and i.estado=1
+	order by c.name_color, c.name_color  ;
+end//
+DELIMITER ;
+
+
+DELIMITER //
+create procedure Obtener_inventoriesHeader_vista ()
+begin
+	select ih.id, ih.id_producto, p.producto_nom , ih.total_stock, e.valor, ih.created_at, ih.updated_at  from inventory_header ih 
+	inner join producto p on p.id = ih.id_producto
+	inner join estado e on e.id  = ih.estado 
+	where ih.estado = 1;
+end//
+DELIMITER ;
+
+
+DELIMITER //
+create procedure Obtener_colors_vista ()
+begin
+	select c.id, c.name_color,c.`hex`, e.valor, c.created_at, c.updated_at  from color c
+	inner join estado e on e.id = c.estado 
+	where c.estado = 1;
 end//
 DELIMITER ;

@@ -137,7 +137,8 @@ Route::group(["middleware" => "auth"], function () {
 
     Route::get('bancos/addbanco', 'App\Http\Controllers\BancoController@addBanco')->name('AddBanco');
 
-    Route::get('inventarios', 'App\Http\Controllers\InventoryController@getInventories')->name('Inventarios');
+    Route::get('inventarios/{id}', 'App\Http\Controllers\InventoryController@getInventories')->name('Inventarios');
+    Route::get('inventariosHeader', 'App\Http\Controllers\InventoryHeaderController@getInventoriesHeader')->name('InventariosHeader');
 
     Route::get('inventario/addinventario', 'App\Http\Controllers\InventoryController@addInventory')->name('AddInventario');
 

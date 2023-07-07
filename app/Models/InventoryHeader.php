@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Color extends Model
+class InventoryHeader extends Model
 {
-    public $table = 'color';
+    public $table = 'inventory_header';
     public $timestamp = true;
-    protected $fillable = ['id', 'name_color','hex','estado'];
+    protected $fillable = ['id', 'id_producto','total_stock','estado'];
 }

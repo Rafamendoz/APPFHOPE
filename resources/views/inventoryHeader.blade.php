@@ -5,9 +5,7 @@
  <!-- Page Heading -->
  <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
   <ol class="bg-white breadcrumb shadow p-3 mb-4 rounded">
-    <li class="breadcrumb-item"><a href="{{route('InventariosHeader')}}">Inventario</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Inventario por Producto</li>
-
+    <li class="breadcrumb-item active" aria-current="page">Inventario</li>
   </ol>
 </nav>
 
@@ -16,7 +14,6 @@
                     <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Data de Inventario</h6>
-                                    
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -40,9 +37,7 @@
                                         <tr>
                                             <th>Codigo Producto.</th>
                                             <th>Nombre del Producto</th>
-                                            <th>Color</th>
-                                            <th>Talla</th>
-                                            <th>Stock</th>
+                                            <th>Total en Stock</th>
                                             <th>Estado</th>
                                             <th>Registro de Creacion</th>
                                             <th>Registro de Modificacion</th>
@@ -54,33 +49,21 @@
                                     </thead>
                             
                                  <tbody class="text-center">
-                                        @foreach ($inventories as $valor)
+                                        @foreach ($inventoriesHeader as $valor)
                                             <tr>
                                                 <td>{{ $valor->id_producto }}</td>
                                                 <td>{{$valor->producto_nom }}</td>
-
-                                        
                                                 <td>
-                                                    
-                                                <div class="p-2 mr-1 d-inline-flex rounded-circle text-center" style="background:#{{$valor->hex}}"></div><div class="d-inline-flex">{{$valor->name_color}}</b></div></td>
-
-                            
-
-                                                <td>{{$valor->name_size }}</td>
-                                                <td>{{$valor->stock }}</td>
-
+                                                    {{$valor->total_stock }}
+                                                </td>
                                                 @if($valor->valor=="ACTIVO")
                                                 <td><div class="rounded-pill bg-success text-white"><b>{{$valor->valor}}</b></div></td>
                                                 @endif
                                                 <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>
-                                                            <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{ $valor->id }})"><i class="fas fa-trash"></i></button>
-                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>
-                                                        
-                        
-                                                      
-                                                    
+                                                        <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{ $valor->id }})"><i class="fas fa-trash"></i></button>
+                                                        <button class="btn btn-primary btn-sm" type="button" onclick="VerInventario({{ $valor->id_producto }})"><i class="fas fa-eye"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -199,6 +182,10 @@
                  })
          }
               
+    }
+
+    function VerInventario(id){
+        location.href = '../inventarios/'+id;
     }
 
     

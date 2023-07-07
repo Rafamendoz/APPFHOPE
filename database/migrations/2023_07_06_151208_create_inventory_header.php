@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('inventory_header', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_producto');
+            $table->unsignedBigInteger('id_producto')->unique();
             $table->integer('total_stock');
             $table->unsignedBigInteger('estado');
             $table->timestamps();
