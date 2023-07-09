@@ -93,6 +93,8 @@
                 </div>
             </li>
 
+            @hasanyrole('ADMINISTRADOR|GERENTE GENERAL|GERENTE COMERCIAL')
+
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
@@ -104,13 +106,11 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de <br>Inventario:</h6>
                         <a class="collapse-item" href="{{route('InventariosHeader')}}">Ver Inventario</a>
-                        <a class="collapse-item" href="#">Generar Inventario</a>
-                        <a class="collapse-item" href="#">A</a>
                     </div>
                 </div>
             </li>
 
-
+            @endhasanyrole
 
               <!-- Nav Item - Pages Collapse Menu -->
             @role('ADMINISTRADOR')

@@ -235,6 +235,34 @@ class UsuarioController extends Controller
 
     }
 
+
+    public function setAssingRoleUserRest(Request $request, $id){
+        try {
+            Log::info("REQUEST: ".$request);
+            $user = User::find($id);
+            if(is_null($user)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede asignar un rol"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $rol = $request->name_rol;
+                $user->assignRole($rol);
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Role Asignado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+
+                }
+            
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+    }
+
  
 
 

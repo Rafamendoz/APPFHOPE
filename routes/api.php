@@ -30,6 +30,8 @@ Route::group(["middleware" => "auth.basic1"], function () {
 Route::get('usuarioR/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestById');
 
 Route::get('usuarioR/user/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestByUsuario');
+Route::get('usuarioR/assingRole/{id}', 'App\Http\Controllers\UsuarioController@setAssingRoleUserRest');
+
 
  /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
 Route::post('usuarioR/add', 'App\Http\Controllers\UsuarioController@setUsuario');

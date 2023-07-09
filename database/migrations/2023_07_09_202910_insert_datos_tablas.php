@@ -24,6 +24,9 @@ return new class extends Migration
         Estado::create(['valor' => 'ACTIVO']);
         Estado::create(['valor' => 'INACTIVO']);
         Role::create(['name' => 'ADMINISTRADOR']);
+        Role::create(['name' => 'GERENTE GENERAL']);
+        Role::create(['name' => 'GERENTE COMERCIAL']);
+
         $contra =   Hash::make('admin12345');
         $baseapi = base64_encode("admin@fhope.online:admin12345");
         $ApiToken =  Crypt::encrypt($baseapi);
