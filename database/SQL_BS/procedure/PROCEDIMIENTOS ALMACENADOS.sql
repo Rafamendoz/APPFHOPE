@@ -364,12 +364,13 @@ DELIMITER ;
 DELIMITER //
 create procedure Obtener_stock_disponible_by_size_product_color (in idProducto int, in idColor int, in idSize int)
 begin
-	select sum(i.stock) as 'Stock_Disponible' from inventory i 
-	where i.id_producto= idProducto and i.id_color=idColor and i.id_size=1 and i.estado =1;
+	select ifnull(sum(i.stock),0) as 'Stock_Disponible' from inventory i 
+	where i.id_producto= idProducto and i.id_color=idColor and i.id_size=idSize and i.estado =1;
 end//
 DELIMITER ;
 
 
-
+select  * from inventory i 
+	where i.id_producto= 1 and i.id_color=1 and i.id_size=3 and i.estado =1;
 
 call Obtener_stock_disponible_by_size_product_color(1,1,3);

@@ -119,7 +119,7 @@
                                                         </div>
                                                         <div class="col-md-6 mb-3">
                                                             <label for="inputCity" class="form-label">Cantidad:</label>
-                                                            <input type="text" class="form-control" id="cantidad" readonly>
+                                                            <input type="number" class="form-control" id="cantidad" readonly>
                                                         </div>
                                                         <div class="col-md-12 mb-3">
                                                             <label for="inputPassword4" class="form-label">Nombre:</label>
@@ -184,7 +184,7 @@
                                                     </div>
 
                                                     <div class="col-12" id="CapaBotonAgregar" hidden>
-                                                        <button onclick="ValidarInventario()" class="btn btn-warning">Agregar</button>
+                                                        <button onclick="ValidarDatos()" class="btn btn-warning">Agregar</button>
                                                         <button onclick="ResetFormProductos()" class="btn btn-danger">Cancelar</button>
 
                                                     </div>
@@ -485,6 +485,21 @@
         }
     }
 
+    function ValidarDatos(){
+        let codigoproducto = $("#producto_codigo").val();
+        let cantidad = $("#cantidad").val();
+        let talla = $("#size").val();
+        let color = $("#color").val();
+        let mensaje = "";
+        if(codigoproducto=="" || cantidad =="" || talla=="" || color=="" || cantidad <=0 || talla <=0 || color <=0){
+            mensaje = {"Codigo":"202","Estado":"Aceptado", "Descripcion":"Los campos ingresados no son permitidos, favor revisar"};
+            mostrarMensaje(mensaje);
+        }else{
+            ValidarInventario();
+        }
+
+    }
+
     function ValidarInventario(){
         let codigoproducto = $("#producto_codigo").val();
         let cantidad = $("#cantidad").val();
@@ -509,11 +524,9 @@
                    
                         inventarioDisponible = response['InventoryDisponible'][0].Stock_Disponible;
                         if(cantidad>inventarioDisponible){
-                            console.log('Inv Dispo'+inventarioDisponible+ ' '+ 'Cantidad I '+cantidad);
                             let mensaje = {"Codigo":"202","Estado":"Aceptado", "Descripcion":"La cantidad ingresada supera el inventario disponible"};
                             mostrarMensaje(mensaje);
                         }else{
-                            console.log('Inv Dispo'+inventarioDisponible+ ' '+ 'Cantidad I '+cantidad);
                             AdicionarProducto();
 
                         }
