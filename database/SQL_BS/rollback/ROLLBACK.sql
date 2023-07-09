@@ -39,6 +39,8 @@ drop procedure if exists Obtener_colors_vista;
 drop procedure if exists Actualizar_detallesproductos_estado;
 drop procedure if exists  Obtener_sizes_without_stock;
 drop procedure if exists Actualizar_inventory_estado;
+drop procedure if exists Obtener_sizes_with_stock;
+drop procedure if exists Obtener_stock_disponible_by_size_product_color;
 /* ------------------------------------------------------------------- */
 
 drop function if exists Funcion_obtener_total_entradas;

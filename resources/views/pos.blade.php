@@ -130,7 +130,7 @@
                                                             <input readonly type="text" class="form-control" id="descripcion">
                                                         </div>
 
-                                                        <div class="col-12 mb-3"  id="CapaDetalleProducto">
+                                                        <div class="col-12 mb-3" hidden  id="CapaDetalleProducto">
                                                      
                                                             <div class="input-group mb-3">
                                                                 <div class="input-group-prepend">
@@ -149,9 +149,6 @@
                                                                 </div>
                                                                 <select class="custom-select" id="size">
                                                                     <option selected value="0">Seleccione...</option>
-                                                                    @foreach ($sizes as $valor )
-                                                                        <option value="{{$valor->id}}">{{$valor->name_size}}</option>
-                                                                    @endforeach
                                                                 
                                                                 </select>
                                                             </div>
@@ -187,7 +184,9 @@
                                                     </div>
 
                                                     <div class="col-12" id="CapaBotonAgregar" hidden>
-                                                        <button onclick="AdicionarProducto()" class="btn btn-warning">Agregar</button>
+                                                        <button onclick="ValidarInventario()" class="btn btn-warning">Agregar</button>
+                                                        <button onclick="ResetFormProductos()" class="btn btn-danger">Cancelar</button>
+
                                                     </div>
                                     
                                             </div>
@@ -277,6 +276,11 @@
 
 <script>
     var disparadorMensaje = 0;
+    $('#color').change(function(){ 
+            var value = $(this).val();
+            let codigoproducto = $("#producto_codigo").val();
+            ObtenerTallas(value,codigoproducto);
+    });
     var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var authorization ="";
     (function(){
@@ -443,6 +447,8 @@
                     $("#CapaBotonAgregar").attr('hidden',false);
                     $("#CapaDescuento").attr('hidden',false);
                     $("#cantidad").attr('readonly',false);
+                    $("#CapaDetalleProducto").attr('hidden',false);
+
 
                 }else{
                     mostrarMensaje(response['Data_Respuesta']);
@@ -477,6 +483,58 @@
         }else{
             $('#id_label').html("Codigo Cliente:")
         }
+    }
+
+    function ValidarInventario(){
+        let codigoproducto = $("#producto_codigo").val();
+        let cantidad = $("#cantidad").val();
+        let talla = $("#size").val();
+        let color = $("#color").val();
+        let inventarioDisponible = 0;
+
+        $.ajax({
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization':'Basic '+authorization
+            
+
+            },
+            url: "../../api/inventoryR/stockDisponible/"+codigoproducto+"/"+color+"/"+talla
+            })
+            .done(function( data ) {
+                let response = JSON.parse(JSON.stringify(data));
+                switch (response['Data_Respuesta'].Codigo) {
+                    case '200':
+                   
+                        inventarioDisponible = response['InventoryDisponible'][0].Stock_Disponible;
+                        if(cantidad>inventarioDisponible){
+                            console.log('Inv Dispo'+inventarioDisponible+ ' '+ 'Cantidad I '+cantidad);
+                            let mensaje = {"Codigo":"202","Estado":"Aceptado", "Descripcion":"La cantidad ingresada supera el inventario disponible"};
+                            mostrarMensaje(mensaje);
+                        }else{
+                            console.log('Inv Dispo'+inventarioDisponible+ ' '+ 'Cantidad I '+cantidad);
+                            AdicionarProducto();
+
+                        }
+                        break;
+
+                    case '202':
+                        mostrarMensaje(response['Data_Respuesta']);
+                        break;
+
+                
+                    default:
+                        break;
+                }
+                    
+            }).fail(function(data){
+                let response = JSON.parse(JSON.stringify(data));
+                console.log(response);
+                mostrarMensaje(response['responseJSON']);
+
+            });
+
     }
 
     function AdicionarProducto(){
@@ -620,6 +678,11 @@
  
 
     function ResetFormProductos(){
+        $("#CapaDetalleProducto").attr('hidden',true);
+        $('#color').val(0);
+        $("#size").find('option').not(':first').remove();
+
+
         $("#CapaBotonBuscarProducto").attr('hidden',false);
         $("#gridCheck").prop("checked",false);
         $("#CapaCantidadDescuento").attr('hidden',true);
@@ -833,6 +896,54 @@
         }
         })
     }
+
+    function Cancelar(){
+        
+    }
+
+
+    function ObtenerTallas(idcolor, idproducto){
+    $.ajax({
+        method: "GET",
+        url: '../../api/inventoryR/sizesWithStock/'+idproducto+"/"+idcolor,
+        headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization':'Basic '+authorization
+
+         }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            switch (response['Data_Respuesta'].Codigo) {
+                case '200':
+                    var value ="<option value=\"0\">Seleccione...</option>";
+                    var nameSize="";
+                    response['Sizes'].forEach(element => {
+                    nameSize=element.id;
+                    value = value + "<option value="+nameSize+">"+element.name_size+"</option>"
+                    });
+                    $('#size').empty();
+                    $('#size').append(value);
+                    break;
+
+                case '202':
+                    $("#size").find('option').not(':first').remove();
+                    mostrarMensaje(response['Data_Respuesta']);
+                    break;
+            
+            }
+           
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
+
+            
+
+        });
+
+ }
     
     
 </script>

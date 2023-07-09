@@ -345,6 +345,31 @@ begin
 end//
 DELIMITER ;
 
-call Obtener_sizes_without_stock(1,1)
+
+DELIMITER //
+create procedure Obtener_sizes_with_stock (in idProducto int, in idColor int)
+begin
+	select s2.id,s2.name_size  from `size` s2 
+	where s2.name_size in(
+	select s.name_size  from inventory i
+	inner join color c on i.id_color = c.id 
+	inner join `size` s on s.id = i.id_size 
+	where i.id_producto =idProducto and i.id_color =idColor and i.estado =1)
+	order by s2.id asc;
+end//
+DELIMITER ;
 
 
+
+DELIMITER //
+create procedure Obtener_stock_disponible_by_size_product_color (in idProducto int, in idColor int, in idSize int)
+begin
+	select sum(i.stock) as 'Stock_Disponible' from inventory i 
+	where i.id_producto= idProducto and i.id_color=idColor and i.id_size=1 and i.estado =1;
+end//
+DELIMITER ;
+
+
+
+
+call Obtener_stock_disponible_by_size_product_color(1,1,3);

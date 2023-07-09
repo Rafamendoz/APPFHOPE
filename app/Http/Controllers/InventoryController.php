@@ -17,13 +17,41 @@ use Illuminate\Support\Facades\DB;
 
 class InventoryController extends Controller
 {
+
+     
+    public function getInventoryByProductColorSizeRest(Request $request,$idproducto, $idcolor, $idsize){
+        try {
+            log::info('REQUEST '.$request);
+            $inventoryDisponible = DB::select('CALL Obtener_stock_disponible_by_size_product_color(?,?,?)', array($idproducto, $idcolor, $idsize));
+            if(is_null($inventoryDisponible)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No hay inventario disponible"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "InventoryDisponible"=>$inventoryDisponible, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+
+    }
     
     public function getSizesWithoutStockRest(Request $request,$idproducto, $idcolor){
         try {
             log::info('REQUEST '.$request);
             $sizes = DB::select('CALL Obtener_sizes_without_stock(?,?)', array($idproducto, $idcolor));
             if(is_null($sizes)){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El producto ya contiene todas las tallas en inventario"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -45,6 +73,32 @@ class InventoryController extends Controller
 
     }
 
+    public function getSizesWithStockRest(Request $request,$idproducto, $idcolor){
+        try {
+            log::info('REQUEST '.$request);
+            $sizes = DB::select('CALL Obtener_sizes_with_stock(?,?)', array($idproducto, $idcolor));
+            if(is_null($sizes) || sizeof($sizes)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No hay inventario disponible"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Sizes"=>$sizes, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+
+    }
 
 
     public function addInventory(Request $request, $id){

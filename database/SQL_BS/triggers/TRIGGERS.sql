@@ -76,7 +76,6 @@ for each row
 	end//
 DELIMITER //	
 
-select * from inventory_header ih 
 DELIMITER //
 create trigger Actualiza_inventario_size_color after insert on inventory
 for each row 

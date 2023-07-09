@@ -16,8 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_producto')->unique();
             $table->integer('total_stock');
             $table->unsignedBigInteger('estado');
-            $table->string('test')->nullable();
-            $table->string('test1')->nullable();
+          
             $table->timestamps();
         });
     }

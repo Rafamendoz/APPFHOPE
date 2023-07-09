@@ -239,6 +239,9 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
  Route::put('inventoryR/update/{id}', 'App\Http\Controllers\InventoryController@putInventory');
  Route::put('inventoryR/delete/{id}', 'App\Http\Controllers\InventoryController@deleteInventory');
  Route::get('inventoryR/sizesWithOutStock/{idproducto}/{idcolor}', 'App\Http\Controllers\InventoryController@getSizesWithoutStockRest');
+ Route::get('inventoryR/sizesWithStock/{idproducto}/{idcolor}', 'App\Http\Controllers\InventoryController@getSizesWithStockRest');
+ Route::get('inventoryR/stockDisponible/{idproducto}/{idcolor}/{idsize}', 'App\Http\Controllers\InventoryController@getInventoryByProductColorSizeRest');
+
 
   //RUTAS PARA ENTIDAD CABECERA INVENTARIO//
 
