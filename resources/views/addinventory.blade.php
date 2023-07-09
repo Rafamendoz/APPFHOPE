@@ -25,75 +25,74 @@
                                 </div>
 
                                 <div class="card-body">
-                                <form class="row g-3" id="formInventory">
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="inputEmail4" class="form-label">Codigo Producto:</label>
-                                                            <input type="number" class="form-control" id="producto_codigo">
-                                                        </div>
-                                                        <div class="col-md-6 mb-3">
-                                                            <label for="inputCity" class="form-label">Stock:</label>
-                                                            <input type="text" class="form-control" id="stock" readonly>
-                                                        </div>
-                                                        <div class="col-md-12 mb-3">
-                                                            <label for="inputPassword4" class="form-label">Nombre:</label>
-                                                            <input readonly type="text" class="form-control" id="nombre">
-                                                        </div>
-                                                        <div class="col-12 mb-4">
-                                                            <label for="inputAddress" class="form-label">Descripcion:</label>
-                                                            <input readonly type="text" class="form-control" id="descripcion">
-                                                        </div>
-
-                                                        <div class="col-12 mb-3"  id="CapaDetalleProducto">
-                                                     
-                                                            <div class="input-group mb-3">
-                                                                <div class="input-group-prepend">
-                                                                    <label class="input-group-text" for="color">Colores</label>
+                                        <form class="row g-3" id="formInventory">
+                                            @foreach($producto as $valor)
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="inputEmail4" class="form-label">Codigo Producto:</label>
+                                                                    <input type="number" class="form-control" id="idproducto" readonly value="{{$valor->id}}">
                                                                 </div>
-                                                                <select class="custom-select" id="color">
-                                                                    <option selected value="0">Seleccione...</option>
-                                                                    @foreach ($colors as $valor )
-                                                                        <option value="{{$valor->id}}">{{$valor->name_color}}</option>
-                                                                    @endforeach
-                                                                
-                                                                </select>
-
-                                                                <div class="input-group-prepend">
-                                                                    <label class="input-group-text" for="size">Tallas</label>
+                                                                <div class="col-md-6 mb-3">
+                                                                    <label for="inputCity" class="form-label">Stock:</label>
+                                                                    <input type="text" class="form-control" id="stock" >
                                                                 </div>
-                                                                <select class="custom-select" id="size">
-                                                                    <option selected value="0">Seleccione...</option>
-                                                                    @foreach ($sizes as $valor )
-                                                                        <option value="{{$valor->id}}">{{$valor->name_size}}</option>
-                                                                    @endforeach
-                                                                
-                                                                </select>
-                                                            </div>
+                                                                <div class="col-md-12 mb-3">
+                                                                    <label for="inputPassword4" class="form-label">Nombre:</label>
+                                                                    <input readonly type="text" class="form-control" id="nombre" value="{{$valor->producto_nom}}">
+                                                                </div>
+                                                                <div class="col-12 mb-4">
+                                                                    <label for="inputAddress" class="form-label">Descripcion:</label>
+                                                                    <input readonly type="text" class="form-control" id="descripcion" value="{{$valor->producto_des}}">
+                                                                </div>
+                                            @endforeach 
+
+                                            <div class="col-12 mb-3"  id="CapaDetalleProducto">
+                                                            
+                                                <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                            <label class="input-group-text" for="color">Colores</label>
+                                                        </div>
+                                                        <select class="custom-select" id="color" >
+                                                            <option selected value="0" onclick="alert();" >Seleccione...</option>
+                                                                @foreach ($colors as $valor )
+                                                                    <option value="{{$valor->id}}" >{{$valor->name_color}}</option>
+                                                                @endforeach
+                                                                        
+                                                        </select>
+
+                                                                        <div class="input-group-prepend">
+                                                                            <label class="input-group-text" for="size">Tallas</label>
+                                                                        </div>
+                                                                        <select class="custom-select" id="size">
+                                                                            <option selected value="0">Seleccione...</option>
+                                                                        
+                                                                        
+                                                                        </select>
+                                                                    </div>
+
+                                                
+                                                                </div>
+
 
                                             
-                                                        </div>
-
-
-                                          
 
 
 
-                                                
-                                                
-                                                
+                                                    
+                                                    
+                                             
                                         </form>
 
-                                        <div class="col-12" id="CapaBotonBuscarProducto">
-                                                        <button onclick="BuscarProducto()" class="btn btn-primary">Buscar</button>
-                                        </div>
+                                       
 
-                                        <div class="col-12" id="CapaBotonAgregar" hidden>
-                                                        <button onclick="Guardar()" class="btn btn-warning">Agregar</button>
+                                        <div class="col-12" id="CapaBotonAgregar">
+                                                        <button onclick="Guardar()" class="btn btn-warning">Guardar</button>
                                                         <button onclick="Cancelar()" class="btn btn-danger">Cancelar</button>
 
                                                     </div>
                             
 
-                                </div>
+                                
+                                                </div>
                             </div>
                         </div>
 
@@ -142,6 +141,11 @@
 <script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
 
 <script>
+
+    $('#color').change(function(){ 
+            var value = $(this).val();
+            ObtenerTallas(value);
+    });
      var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var authorization ="";
     (function(){
@@ -169,9 +173,10 @@
 
 
     function Guardar(){
-        let nombreTipoCuenta = $("#nombreTipoCuenta").val().toUpperCase();
-        let estado = $("#estado").val();
-        const valueEntry = 'YWRtaW5AZmhvcGUub25saW5lOmFkbWluMTIzNDU=';
+        let id_producto = $("#idproducto").val();
+        let id_size = $("#size").val();
+        let id_color = $("#color").val();
+        let stock = $("#stock").val();
 
       
 		
@@ -181,11 +186,14 @@
                 'X-CSRF-TOKEN': csrfToken,
                 'Authorization': 'Basic '+ authorization
         },
-        url: "../../api/cuentaR/add",
+        url: "../../api/inventoryR/add",
         data: {
-            "cuenta_nombre": nombreTipoCuenta,
-            "estado": estado,
-        }
+            "id_producto":id_producto,
+            "estado":1,
+            "id_size":id_size,
+            "id_color":id_color,
+            "stock":stock
+        }   
         })
         .done(function( data ) {
             let response = JSON.parse(JSON.stringify(data));
@@ -230,79 +238,55 @@
              
     }
 
-     
-    function BuscarProducto(){
-
-let codigoproducto = $("#producto_codigo").val();
-
-if(codigoproducto==""){
-    
-    const Toast = Swal.mixin({
-    toast: true,
-    position: 'top-end',
-    showConfirmButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer)
-        toast.addEventListener('mouseleave', Swal.resumeTimer)
-    },
-
-    })
-
-    Toast.fire({
-            icon: 'warning',
-            title: 'No ha completado los datos requeridos' 
-            })
-
-
-}else{
-    
-    $.ajax({
-    method: "GET",
-    headers: {
-        'X-CSRF-TOKEN': csrfToken,
-        'Authorization':'Basic '+authorization
-    
-
-    },
-    url: "../../api/productoR/"+codigoproducto,
-    })
-    .done(function( data ) {
-        let response = JSON.parse(JSON.stringify(data));
-        if(response['Data_Respuesta'].Codigo==200){
-            productoactual = response;
-            $("#nombre").val(response['Producto'].producto_nom);
-            $("#descripcion").val(response['Producto'].producto_des);
-            mostrarMensaje(response['Data_Respuesta']);
-            $("#CapaBotonBuscarProducto").attr('hidden',true);
-            $("#CapaBotonAgregar").attr('hidden',false);
-            $("#stock").attr('readonly',false);
-
-        }else{
-            mostrarMensaje(response['Data_Respuesta']);
-        }
-        
-    }).fail(function(data){
-        let response = JSON.parse(JSON.stringify(data));
-        console.log(response);
-        mostrarMensaje(response['responseJSON']);
-
-    });
-
-}
+  
 
 
 
-}
+
+
+
 
 function Cancelar(){
-    $("#CapaBotonBuscarProducto").attr('hidden',false);
-    $("#CapaBotonAgregar").attr('hidden',true);
-    $("#stock").attr('readonly',true);
     $("#formInventory").trigger('reset');
 
 }    
+
+
+ function ObtenerTallas(idcolor){
+    $.ajax({
+        method: "GET",
+        url: '../../api/inventoryR/sizesWithOutStock/'+{{$id}}+"/"+idcolor,
+        headers: {
+        'X-CSRF-TOKEN': csrfToken,
+        'Authorization':'Basic '+authorization
+
+         }
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            if(response['Data_Respuesta'].Codigo==200){
+                var value ="<option value=\"0\">Seleccione...</option>";
+                var nameSize="";
+                response['Sizes'].forEach(element => {
+                    nameSize=element.id;
+                    value = value + "<option value="+nameSize+">"+element.name_size+"</option>"
+                });
+                $('#size').empty();
+                $('#size').append(value);
+            }else{
+                mostrarMensaje(response['Data_Respuesta']);
+            }
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
+
+            
+
+        });
+
+ }
     
 </script>
 @endsection

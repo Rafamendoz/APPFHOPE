@@ -8,6 +8,8 @@ use App\Models\Error;
 use App\Models\Estado;
 use App\Models\Size;
 use App\Models\Color;
+use App\Models\Producto;
+
 use App\Models\Inventory;
 
 use Illuminate\Support\Facades\DB;
@@ -16,13 +18,41 @@ use Illuminate\Support\Facades\DB;
 class InventoryController extends Controller
 {
     
+    public function getSizesWithoutStockRest(Request $request,$idproducto, $idcolor){
+        try {
+            log::info('REQUEST '.$request);
+            $sizes = DB::select('CALL Obtener_sizes_without_stock(?,?)', array($idproducto, $idcolor));
+            if(is_null($sizes)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Sizes"=>$sizes, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+
+    }
+
+
+
     public function addInventory(Request $request, $id){
         try {
             log::info("REQUEST: ".$request);
-            $estados = Estado::all();
             $colors = DB::select('CALL Obtener_colors_vista()');
-            $sizes = DB::select('CALL Obtener_sizes_vista()');
-            $vista = view("addinventory", compact('estados','id','colors','sizes'));
+            $producto = Producto::where('id',$id)->get();
+            $vista = view("addinventory", compact('id','colors', 'producto'));
             log::info("RESPONSE: VISTA addinventory devuelta");
             return $vista;
         } catch (\Throwable $th) {

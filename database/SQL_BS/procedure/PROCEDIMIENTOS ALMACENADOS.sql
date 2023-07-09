@@ -66,7 +66,11 @@ DELIMITER ;
 DELIMITER //
 create procedure Actualizar_inventory_estado(in idProducto int, in estado int)
 begin
-		update inventory i set i.estado  = estado where id_producto =idProducto;	
+		if(estado =1) then
+		update inventory i set i.estado  = estado, i.estadoSQL=1 where id_producto =idProducto;	
+		elseif(estado =2) then
+		update inventory i set i.estado  = estado, i.estadoSQL=0 where id_producto =idProducto;	
+		end if;
 end//
 DELIMITER ;  
 

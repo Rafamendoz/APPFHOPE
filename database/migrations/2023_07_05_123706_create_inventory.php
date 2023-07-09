@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_color');
             $table->integer('stock');
             $table->unsignedBigInteger('estado');
+    
 
             $table->timestamps();
         });

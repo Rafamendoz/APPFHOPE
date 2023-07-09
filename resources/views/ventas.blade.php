@@ -71,7 +71,7 @@
                                                     @endrole
                                                     <td>
                                                             <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{$valor->id}})"><i class="fas fa-trash"></i></button>
-                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>              
+                                                            <a class="btn btn-primary btn-sm" href="../ver/recibo/{{$valor->id}}"><i class="fas fa-eye"></i></button>              
                                                     </td>
                                                 @endif                                                  
                                                 @if($valor->valor=="INACTIVO")

@@ -9,5 +9,5 @@ class Inventory extends Model
 {
     public $table = 'inventory';
     public $timestamp = true;
-    protected $fillable = ['id', 'id_color','id_size','stock','id_producto','estado'];
+    protected $fillable = ['id', 'id_color','id_size','stock','id_producto','estado','estadoSQL'];
 }

@@ -23,11 +23,11 @@ for each row
 		Then 	
 				set totalStock =(select Funcion_obtener_total_stock_by_producto(new.producto_id));
 				set newtotalStock =totalStock-new.cantidad;
-				update inventory_header  set total_stock  = newtotalStock where id=new.producto_id;
+				update inventory_header  set total_stock  = newtotalStock where id_producto=new.producto_id;
 		elseif (new.estado = 2) then 
 				set totalStock =(select Funcion_obtener_total_stock_by_producto(new.producto_id));
 				set newtotalStock =totalStock+new.cantidad;
-				update inventory_header  set total_stock  = newtotalStock where id=new.producto_id;
+				update inventory_header  set total_stock  = newtotalStock where id_producto=new.producto_id;
 		end if;
 	end//
 DELIMITER //
@@ -52,18 +52,6 @@ for each row
 	end//
 DELIMITER //
 
-
-DELIMITER //
-create trigger Actualiza_inventario_venta_nueva after insert on detalleventa
-for each row 
-	begin 
-		declare totalStock int;
-		declare newtotalStock int;
-		set totalStock =(select Funcion_obtener_total_stock_by_producto(new.producto_id));
-		set newtotalStock =totalStock-new.cantidad;
-		update inventory_header  set total_stock  = newtotalStock where id=new.producto_id;
-	end//
-DELIMITER //
 
 
 DELIMITER //
@@ -94,15 +82,18 @@ for each row
 	begin 
 		declare totalStockProducto int;
 		declare newtotalStock int;
-		if (new.estado = 1) 
-		Then 	
-				set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
-				set newtotalStock =totalStockProducto+new.stock;
-				update inventory_header  set total_stock  = newtotalStock where id_producto=new.id_producto;
-		elseif (new.estado = 2) then 
-				set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
-				set newtotalStock =totalStockProducto-new.stock;
-				update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
+		if (new.estado = old.estado) then
+			set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+			set newtotalStock =totalStockProducto - abs(old.stock-new.stock);
+			update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
+		elseif(new.estado = 1) then 	
+					set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+					set newtotalStock =totalStockProducto+abs(old.stock-new.stock);
+					update inventory_header  set total_stock  = newtotalStock where id_producto=new.id_producto;
+			elseif (new.estado = 2) then 
+					set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+					set newtotalStock =totalStockProducto - abs(old.stock-new.stock);
+					update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
 		end if;
 	end//
 DELIMITER //	
