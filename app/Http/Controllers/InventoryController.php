@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\DB;
 class InventoryController extends Controller
 {
     
-    public function addInventory(Request $request){
+    public function addInventory(Request $request, $id){
         try {
             log::info("REQUEST: ".$request);
             $estados = Estado::all();
-            $vista = view("addcolor", compact('estados'));
-            log::info("RESPONSE: VISTA addcolor devuelta");
+            $colors = DB::select('CALL Obtener_colors_vista()');
+            $sizes = DB::select('CALL Obtener_sizes_vista()');
+            $vista = view("addinventory", compact('estados','id','colors','sizes'));
+            log::info("RESPONSE: VISTA addinventory devuelta");
             return $vista;
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
@@ -40,7 +42,7 @@ class InventoryController extends Controller
             $inventories = DB::select('CALL Obtener_inventories_vista(?)',array($id));
            
 
-            return view('inventory', compact('inventories'));
+            return view('inventory', compact('inventories', 'id'));
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();

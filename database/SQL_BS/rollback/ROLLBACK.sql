@@ -37,7 +37,8 @@ drop procedure if exists Obtener_inventories_vista;
 drop procedure if exists Obtener_inventoriesHeader_vista;
 drop procedure if exists Obtener_colors_vista;
 drop procedure if exists Actualizar_detallesproductos_estado;
-
+drop procedure if exists  Obtener_sizes_without_stock;
+drop procedure if exists Actualizar_inventory_estado;
 /* ------------------------------------------------------------------- */
 
 drop function if exists Funcion_obtener_total_entradas;
@@ -48,4 +49,7 @@ drop trigger if exists Actualiza_monto_total_cuentaBancaria;
 drop trigger if exists Actualiza_inventario_venta_estado;
 drop trigger if exists Actualiza_inventario_venta_nueva;
 drop trigger if exists Actualiza_inventario_venta_nueva_by_detalles;
-drop trigger if exists Actualiza_inventario_detalle_producto_venta_estado
+drop trigger if exists Actualiza_inventario_detalle_producto_venta_estado;
+drop trigger if exists Actualiza_inventario_size_color;
+drop trigger if exists Actualiza_inventario_size_color_estado;
+drop trigger if exists Inserta_nuevo_inventario_after_producto;

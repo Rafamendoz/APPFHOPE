@@ -64,6 +64,13 @@ DELIMITER ;
 
 
 DELIMITER //
+create procedure Actualizar_inventory_estado(in idProducto int, in estado int)
+begin
+		update inventory i set i.estado  = estado where id_producto =idProducto;	
+end//
+DELIMITER ;  
+
+DELIMITER //
 create procedure Actualizar_detallesproductos_estado(in idVenta int, in estado int)
 begin
 	update detalle_producto_venta  db set db.estado  = estado
@@ -309,5 +316,31 @@ begin
 	where c.estado = 1;
 end//
 DELIMITER ;
+
+DELIMITER //
+create procedure Obtener_sizes_vista ()
+begin
+	select s.id, s.name_size, e.valor, s.created_at, s.updated_at  from `size` s 
+	inner join estado e on e.id = s.estado 
+	where s.estado = 1;
+end//
+DELIMITER ;
+
+
+	
+DELIMITER //
+create procedure Obtener_sizes_without_stock (in idProducto int, in idColor int)
+begin
+	select s2.id,s2.name_size  from `size` s2 
+	where s2.name_size not in(
+	select s.name_size  from inventory i
+	inner join color c on i.id_color = c.id 
+	inner join `size` s on s.id = i.id_size 
+	where i.id_producto =idProducto and i.id_color =idColor and i.estado =1)
+	order by s2.id asc;
+end//
+DELIMITER ;
+
+call Obtener_sizes_without_stock(1,1)
 
 

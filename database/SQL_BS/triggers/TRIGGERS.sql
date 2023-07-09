@@ -65,7 +65,6 @@ for each row
 	end//
 DELIMITER //
 
-select * from inventory ih 
 
 DELIMITER //
 create trigger Actualiza_inventario_venta_nueva_by_detalles after insert on detalle_producto_venta
@@ -78,3 +77,47 @@ for each row
 		update inventory  set stock  = newtotalStock where id_producto = new.producto_id and id_size = new.size_id and id_color =new.color_id;
 	end//
 DELIMITER //
+
+
+DELIMITER //
+create trigger Inserta_nuevo_inventario_after_producto after insert on producto
+for each row 
+	begin 
+		insert into inventory_header(id_producto, total_stock, estado,created_at ,updated_at) values(new.id, 0, 1, curdate(), curdate());
+	end//
+DELIMITER //
+
+
+DELIMITER //
+create trigger Actualiza_inventario_size_color_estado after update on inventory
+for each row 
+	begin 
+		declare totalStockProducto int;
+		declare newtotalStock int;
+		if (new.estado = 1) 
+		Then 	
+				set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+				set newtotalStock =totalStockProducto+new.stock;
+				update inventory_header  set total_stock  = newtotalStock where id_producto=new.id_producto;
+		elseif (new.estado = 2) then 
+				set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+				set newtotalStock =totalStockProducto-new.stock;
+				update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
+		end if;
+	end//
+DELIMITER //	
+
+
+DELIMITER //
+create trigger Actualiza_inventario_size_color after insert on inventory
+for each row 
+	begin 
+		declare totalStockProducto int;
+		declare total int;
+		set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+		set total = totalStockProducto +new.stock;
+		update inventory_header  set total_stock  = total where id_producto =new.id_producto;	
+		end//
+DELIMITER //
+
+

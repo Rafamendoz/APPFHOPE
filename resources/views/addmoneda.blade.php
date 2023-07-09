@@ -33,22 +33,20 @@
 
                                                                             
                                         <div class="row mb-3">
-                                        <label for="inputEmail3" class="col-sm-2 col-form-label">Estado de la moneda:</label>
-                                        <div class="col-sm-10">
-                                            <div class="input-group mb-3">
-                                            <div class="input-group-prepend">
-                                                    <label class="input-group-text" for="estado">Opciones</label>
-                                                </div>
-                                                <select class="custom-select" id="estado">
-                                                    <option selected value="0">Seleccione un estado...</option>
-                                                    @foreach ($estados as $estado )
-                                                        <option value="{{$estado->id}}">{{$estado->valor}}</option>
-                                                    @endforeach
-                                                
-                                                </select>
-                                            </div>
-
-                                        
+                                            <label for="inputEmail3" class="col-sm-2 col-form-label">Estado de la moneda:</label>
+                                            <div class="col-sm-10">
+                                                    <div class="input-group mb-3">
+                                                        <div class="input-group-prepend">
+                                                                <label class="input-group-text" for="estado">Opciones</label>
+                                                        </div>
+                                                            <select class="custom-select" id="estado">
+                                                                <option selected value="0">Seleccione un estado...</option>
+                                                                @foreach ($estados as $estado )
+                                                                    <option value="{{$estado->id}}">{{$estado->valor}}</option>
+                                                                @endforeach
+                                                            
+                                                            </select>
+                                                    </div>
                                             </div>
 
                                         </div>

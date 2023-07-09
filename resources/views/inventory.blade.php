@@ -28,7 +28,7 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
-                                            <a class="dropdown-item" href="{{route('AddInventario')}}">Agregar Inventario</a>
+                                            <a class="dropdown-item" href="{{route('AddInventario',$id)}}">Agregar Inventario</a>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
 
         $.ajax({
         method: "PUT",
-        url: "../../api/clienteR/delete/"+id,
+        url: "../../api/inventoryR/delete/"+id,
         headers:headers,
         data: { "estado":2}
         })

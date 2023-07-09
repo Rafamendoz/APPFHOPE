@@ -151,13 +151,16 @@ class InventoryHeaderController extends Controller
             }else{
                 switch($request->estado){
                     case 1:
-                        $color->update($request->all());
+                        $color->update(['estado'=>$request->estado]);
+                        DB::select('call Actualizar_inventory_estado(?,?) ', array($id,1));
+
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
                         Log::info("RESPONSE: ".$response);
                         return $response;
                         break;
                     case 2:
-                        $color->update($request->all());
+                        $color->update(['estado'=>$request->estado]);
+                        DB::select('call Actualizar_inventory_estado(?,?) ', array($id,2));
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
                         Log::info("RESPONSE: ".$response);
                         return $response;
