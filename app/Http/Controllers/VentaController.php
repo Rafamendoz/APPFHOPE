@@ -133,7 +133,6 @@ class VentaController extends Controller
                         $venta->update(['estado'=>$request->estado]);
                         DB::select('call Actualizar_detallesVenta_estado(?,?) ', array($id,1));
                         DB::select('call Actualizar_detallesproductos_estado(?,?) ', array($id,1));
-                        DB::select('call Actualizar_detallesproductos_estado(?,?) ', array($id,1));
 
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Activado"]], 200);
                         Log::info("RESPONSE: ".$response);
@@ -143,7 +142,6 @@ class VentaController extends Controller
                         $venta->update(['estado'=>$request->estado]);
                         DB::select('call Actualizar_detallesVenta_estado(?,?) ', array($id,2));
                         DB::select('call Actualizar_detallesproductos_estado(?,?) ', array($id,2));
-                        DB::select('call Actualizar_detallesproductos_estado(?,?) ', array($id,1));
 
                         $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Desactivado"]], 200);
                         Log::info("RESPONSE: ".$response);

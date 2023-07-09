@@ -13,24 +13,6 @@ DELIMITER //
 
 
 
-DELIMITER //
-create trigger Actualiza_inventario_venta_estado after update on detalleventa
-for each row 
-	begin 
-		declare totalStock int;
-		declare newtotalStock int;
-		if (new.estado = 1) 
-		Then 	
-				set totalStock =(select Funcion_obtener_total_stock_by_producto(new.producto_id));
-				set newtotalStock =totalStock-new.cantidad;
-				update inventory_header  set total_stock  = newtotalStock where id_producto=new.producto_id;
-		elseif (new.estado = 2) then 
-				set totalStock =(select Funcion_obtener_total_stock_by_producto(new.producto_id));
-				set newtotalStock =totalStock+new.cantidad;
-				update inventory_header  set total_stock  = newtotalStock where id_producto=new.producto_id;
-		end if;
-	end//
-DELIMITER //
 
 
 DELIMITER //
@@ -82,23 +64,19 @@ for each row
 	begin 
 		declare totalStockProducto int;
 		declare newtotalStock int;
-		if (new.estado = old.estado) then
+		if (new.stock < old.stock) then
 			set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
-			set newtotalStock =totalStockProducto - abs(old.stock-new.stock);
+			set newtotalStock = totalStockProducto -(old.stock-new.stock);
 			update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
-		elseif(new.estado = 1) then 	
-					set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
-					set newtotalStock =totalStockProducto+abs(old.stock-new.stock);
-					update inventory_header  set total_stock  = newtotalStock where id_producto=new.id_producto;
-			elseif (new.estado = 2) then 
-					set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
-					set newtotalStock =totalStockProducto - abs(old.stock-new.stock);
-					update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
+		elseif(new.stock > old.stock) then 	
+			set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
+			set newtotalStock = totalStockProducto +(new.stock-old.stock);
+			update inventory_header  set total_stock  = newtotalStock,test =totalStockProducto, test1=new.stock where id_producto =new.id_producto;
 		end if;
 	end//
 DELIMITER //	
 
-
+select * from inventory_header ih 
 DELIMITER //
 create trigger Actualiza_inventario_size_color after insert on inventory
 for each row 
