@@ -369,8 +369,3 @@ begin
 end//
 DELIMITER ;
 
-
-select  * from inventory i 
-	where i.id_producto= 1 and i.id_color=1 and i.id_size=3 and i.estado =1;
-
-call Obtener_stock_disponible_by_size_product_color(1,1,3);
