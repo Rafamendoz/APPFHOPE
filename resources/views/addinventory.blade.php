@@ -108,8 +108,8 @@
                                         <div class="row p-2">
                                             
                                                 <div class="col-sm-12">
-                                                 <h4 class="text-center font-weight-bold text-primary">Panel de Moneda</h4>
-                                                  <p class="text-justify">El siguiente panel esta destinado a registrar la informacion de las monedas, por favor introduzca la informacion solicitada.
+                                                 <h4 class="text-center font-weight-bold text-primary">Panel de Creacion de Inventario</h4>
+                                                  <p class="text-justify">El siguiente panel esta destinado a registrar la informacion del inventario por producto y detalles del mismo, por favor introduzca la informacion solicitada.
                                                   </p>
                                                 </div>
                                                

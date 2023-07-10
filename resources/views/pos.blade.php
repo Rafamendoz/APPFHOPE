@@ -523,7 +523,7 @@
                     case '200':
                    
                         inventarioDisponible = response['InventoryDisponible'][0].Stock_Disponible;
-                        if(cantidad>inventarioDisponible){
+                        if(parseInt(cantidad)>parseInt(inventarioDisponible)){
                             let mensaje = {"Codigo":"202","Estado":"Aceptado", "Descripcion":"La cantidad ingresada supera el inventario disponible"};
                             mostrarMensaje(mensaje);
                         }else{
