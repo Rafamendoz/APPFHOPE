@@ -33,6 +33,15 @@ Route::get('usuarioR/user/{id}', 'App\Http\Controllers\UsuarioController@getUsua
 Route::get('usuarioR/assingRole/{id}', 'App\Http\Controllers\UsuarioController@setAssingRoleUserRest');
 
 
+/*RUTAS PARA ENTIDAD */
+
+Route::post('rolR/add', 'App\Http\Controllers\RolController@setRol');
+
+Route::get('rolR', 'App\Http\Controllers\RolController@getRolsRest');
+Route::get('rolR/{id}', 'App\Http\Controllers\RolController@getRolRestById');
+
+
+
  /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
 Route::post('usuarioR/add', 'App\Http\Controllers\UsuarioController@setUsuario');
  /* RUTA PARA METODO DE ACTUALIZAR UN USUARIO POR ID*/
