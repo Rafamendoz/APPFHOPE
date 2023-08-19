@@ -16,7 +16,7 @@
                     <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h6 class="m-0 font-weight-bold text-primary">Data de Inventario</h6>
-                                    @hasanyrole("Administrador|GERENTE GENERAL")
+                                    @hasanyrole("ADMINISTRADOR|GERENTE GENERAL")
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

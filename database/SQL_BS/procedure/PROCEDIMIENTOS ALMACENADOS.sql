@@ -369,3 +369,15 @@ begin
 end//
 DELIMITER ;
 
+
+DELIMITER //
+
+create procedure Obtener_detalleBancarios_by_referencia(in idReferencia text)
+begin
+	select * from detallebanco db where db.referencia=idReferencia;
+end;//
+DELIMITER ;
+
+
+
+

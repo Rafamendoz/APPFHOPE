@@ -157,6 +157,7 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::get('dbancoR/entradas/{id}', 'App\Http\Controllers\DetalleBancoController@getEntradasBancariasRestByCuenta');
    Route::post('dbancoR/salidas/date/{id}', 'App\Http\Controllers\DetalleBancoController@getSalidasBancariasRestByFecha');
    Route::post('dbancoR/entradas/date/{id}', 'App\Http\Controllers\DetalleBancoController@getEntradasBancariasRestByFecha');
+   Route::get('dbancoR/referencia/{id}', 'App\Http\Controllers\DetalleBancoController@getDetalleBancariasRestByReferencia');
 
 
   
