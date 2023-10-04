@@ -89,6 +89,8 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de Finanzas:</h6>
                         <a class="collapse-item" href="{{route('cuentasBancarias')}}">Cuentas Bancarias</a>
+                        <a class="collapse-item" href="{{route('DetalleGlobal')}}">Resumen Operativo</a>
+
                     </div>
                 </div>
             </li>
@@ -409,7 +411,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Faith Hope 2023 - Version 1.1.3</span>
+                        <span>Copyright &copy; Faith Hope 2023 - Version 1.1.4</span>
                     </div>
                 </div>
             </footer>

@@ -1,5 +1,32 @@
 DELIMITER //
 
+create function Funcion_obtener_total_entradas_global() returns double
+begin
+	declare total double;
+	select ifnull(SUM(d.monto),0.00) into total from detallebanco d where d.id_tipoTransaccion = 1 and d.estado=1;
+	return total;
+end//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+create function Funcion_obtener_total_salidas_global() returns double
+begin
+	declare total double;
+	select ifnull(SUM(d.monto),0.00) into total from detallebanco d where d.id_tipoTransaccion = 2 and d.estado=1;
+	return total;
+end//
+
+DELIMITER ;
+
+
+
+
+
+DELIMITER //
+
 create function Funcion_obtener_total_entradas(cuentaB int) returns double
 begin
 	declare total double;

@@ -264,6 +264,11 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
  Route::put('inventoryHeaderR/delete/{id}', 'App\Http\Controllers\InventoryHeaderController@deleteInventoryHeader');
 
 
+ //RUTAS PARA REPORTES DE FINANZAS//
+
+ Route::get('finanzas/estadoResultado', 'App\Http\Controllers\DetalleBancoController@getEstadoResultado');
+
+
 
 });
 

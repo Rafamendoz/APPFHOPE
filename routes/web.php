@@ -159,7 +159,8 @@ Route::group(["middleware" => "auth"], function () {
  
     Route::get('detalleBancario/{id}/adddetallebanco', 'App\Http\Controllers\DetalleBancoController@addDetalleBanco')->name('AddDetalleBanco');
 
-   
+    Route::get('detalleGlobal', 'App\Http\Controllers\DetalleBancoController@getDetalleGlobal')->name('DetalleGlobal');
+
    
    
    

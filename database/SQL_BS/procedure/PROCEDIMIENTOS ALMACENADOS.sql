@@ -1,4 +1,13 @@
 DELIMITER //
+ CREATE procedure ObtenerEstadoResultado ()
+        BEGIN 
+            SELECT Funcion_obtener_total_entradas_global() as 'entradas', Funcion_obtener_total_salidas_global() as 'salidas', (Funcion_obtener_total_entradas_global() - Funcion_obtener_total_salidas_global()) as 'utilidades' 
+           
+        end//
+DELIMITER ;
+
+
+DELIMITER //
 CREATE procedure ObtenerCabeceraVenta (IN idventa INT )
         BEGIN 
             SELECT 
@@ -372,11 +381,12 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_detalleBancarios_by_referencia(in idReferencia text)
+create procedure Obtener_detalleBancarios_by_referencia(in idReferencia text collate utf8mb4_unicode_ci)
 begin
 	select * from detallebanco db where db.referencia=idReferencia;
 end;//
 DELIMITER ;
+
 
 
 

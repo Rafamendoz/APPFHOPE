@@ -7,6 +7,7 @@ use App\Models\DetalleBanco;
 use App\Models\CuentaBancaria;
 use App\Models\Estado;
 use App\Models\Transaccion;
+use Illuminate\Support\Facades\Response;
 
 use App\Models\Error;
 use Illuminate\Support\Facades\Log;
@@ -58,6 +59,26 @@ class DetalleBancoController extends Controller
         }
     }
 
+    
+    public function getDetalleGlobal(){
+        try {
+            $totalEntradas = DB::select('Select Funcion_obtener_total_entradas_global() as total');
+            $totalSalidas = DB::select('Select Funcion_obtener_total_salidas_global() as total');
+            $totalneto = $totalEntradas[0]->total - $totalSalidas[0]->total;
+            $result = DB::select('call ObtenerEstadoResultado()');
+
+          
+            return view('detalleGlobales', compact('totalEntradas','totalSalidas','totalneto'));
+
+            
+           
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+    }
+
     public function getSalidasBancariasRestByCuenta(Request $request, $id){
         try {
             log::info("REQUEST: ".$request);
@@ -83,6 +104,26 @@ class DetalleBancoController extends Controller
         }
 
 
+    }
+
+    public function getEstadoResultado(Request $request){
+        try {
+            log::info("REQUEST: ".$request);
+            $result = DB::select('call ObtenerEstadoResultado()');
+                $response =  response()->json([
+                    "EstadoResultado"=>$result, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;  
+    
+            
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
     }
 
     public function getEntradasBancariasRestByCuenta(Request $request, $id){
