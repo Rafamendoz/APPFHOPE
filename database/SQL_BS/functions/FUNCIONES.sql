@@ -9,6 +9,21 @@ end//
 
 DELIMITER ;
 
+DELIMITER //
+
+create function Funcion_obtenerFlujo_porMes(mes int) returns double
+begin
+	declare totalE double;
+	declare totalS double;
+	declare total double;
+	select ifnull(SUM(d.monto),0.00) into totalE from detallebanco d where month(d.fecha)=mes and d.id_tipoTransaccion =1 and d.estado=1;
+	select ifnull(SUM(d.monto),0.00) into totalS from detallebanco d where month(d.fecha)=mes and d.id_tipoTransaccion =2 and d.estado=1;
+	total = totalE - totalS;
+	return total;
+end//
+
+DELIMITER ;
+
 
 DELIMITER //
 

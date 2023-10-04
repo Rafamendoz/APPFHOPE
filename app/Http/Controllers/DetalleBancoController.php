@@ -62,14 +62,21 @@ class DetalleBancoController extends Controller
     
     public function getDetalleGlobal(){
         try {
+            $acumulador=0;
             $totalEntradas = DB::select('Select Funcion_obtener_total_entradas_global() as total');
             $totalSalidas = DB::select('Select Funcion_obtener_total_salidas_global() as total');
             $totalneto = $totalEntradas[0]->total - $totalSalidas[0]->total;
             $result = DB::select('call ObtenerEstadoResultado()');
-
+            $flujosMensuales = array();
+            $date = date("n");
+            for ($i=1; $i <=$date; $i++) { 
+            
+                $totalMensual = DB::select('Select Funcion_obtenerFlujo_porMes(?) as total', array($i));
+                $acumulador = $acumulador +$totalMensual[0]->total;
+                $flujosMensuales[$i]= $acumulador;
+            }
           
-            return view('detalleGlobales', compact('totalEntradas','totalSalidas','totalneto'));
-
+            return view('detalleGlobales', compact('totalEntradas','totalSalidas','totalneto','flujosMensuales'));
             
            
         } catch (\Throwable $th) {
