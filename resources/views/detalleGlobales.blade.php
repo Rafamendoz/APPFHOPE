@@ -95,12 +95,12 @@
                     </div>
 
                     <div class="row">
-                    <div class="col-xl-4 col-lg-5">
+                    <div class="col-xl-8 col-lg-7" id="div-Flujo-Ventas" data-flujo-venta="{{ json_encode($ventasMensuales) }}">
                                 <div class="card shadow mb-4">
                                     <!-- Card Header - Dropdown -->
                                     <div
                                         class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                        <h6 class="m-0 font-weight-bold text-primary">Flujo de Efectivo</h6>
+                                        <h6 class="m-0 font-weight-bold text-primary">Flujo de Ventas</h6>
                                         <div class="dropdown no-arrow">
                                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -118,73 +118,105 @@
                                     </div>
                                     <!-- Card Body -->
                                     <div class="card-body">
+                                        <div class="chart-area">
+                                            <canvas id="myBarChart">
+                                                
+                                            </canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-5">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div
+                                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Flujo de Efectivo</h6>
+                                            <div class="dropdown no-arrow">
+                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                                    aria-labelledby="dropdownMenuLink">
+                                                    <div class="dropdown-header">Dropdown Header:</div>
+                                                    <a class="dropdown-item" href="#">Action</a>
+                                                    <a class="dropdown-item" href="#">Another action</a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item" href="#">Something else here</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
 
-                                
-                                                    <div id="dataElement" class="card text-white bg-primary shadow mb-4"  data-entradas="{{ $totalEntradas[0]->total }}" data-salidas="{{ $totalSalidas[0]->total }}" data-totat="{{ $totalneto}}">
-                                                        
+                                    
+                                                        <div id="dataElement" class="card text-white bg-primary shadow mb-4"  data-entradas="{{ $totalEntradas[0]->total }}" data-salidas="{{ $totalSalidas[0]->total }}" data-totat="{{ $totalneto}}">
+                                                            
 
-                                                        <div class="card-body">
-                                                        
-                                                            <div class="p-2">
-                                                                        <i class="fas fa-fw fa-arrow-down"></i>
-                                                                        <span>Ingresos Globales: </span>
-                                                                        <span><b>L.{{$totalEntradas[0]->total}}
+                                                            <div class="card-body">
+                                                            
+                                                                <div class="p-2">
+                                                                            <i class="fas fa-fw fa-arrow-down"></i>
+                                                                            <span>Ingresos Globales: </span>
+                                                                            <span><b>L.{{$totalEntradas[0]->total}}
+                                                                        
+
+                                                                            </b></span>
+
+                                                                </div>
+                                                                
+                                                            
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card text-white bg-primary shadow mb-4">
+                                                            
+
+                                                            <div class="card-body">
+                                                            
+                                                                    <div class="p-2">
+                                                                        <i class="fas fa-fw fa-arrow-up"></i>
+                                                                        <span>Egresos Globales:  </span>
+                                                                        <span><b>L.{{$totalSalidas[0]->total}}
                                                                     
 
-                                                                        </b></span>
-
+                                                                    </div>
+                                                                
+                                                            
                                                             </div>
-                                                            
-                                                        
                                                         </div>
-                                                    </div>
 
-                                                    <div class="card text-white bg-primary shadow mb-4">
-                                                        
-
-                                                        <div class="card-body">
-                                                        
-                                                                <div class="p-2">
-                                                                    <i class="fas fa-fw fa-arrow-up"></i>
-                                                                    <span>Egresos Globales:  </span>
-                                                                    <span><b>L.{{$totalSalidas[0]->total}}
-                                                                
-
-                                                                </div>
+                                                        <div class="card text-white bg-primary shadow mb-4">
                                                             
-                                                        
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="card text-white bg-primary shadow mb-4">
-                                                        
-
-                                                        <div class="card-body">
-                                                            
-                                                        
-                                                            <div class="row p-2">
-                                                                <div class="p-2">
-                                                                    <i class="fas fa-fw fa-equals"></i>
-                                                                    <span>Utilidades: </span>
-                                                                    <span><b>L.{{$totalneto}} </b></span>
-                                                                </div>
-                                                        
+                                                            <div class="card-body">
                                                                 
+                                                            
+                                                                <div class="row p-2">
+                                                                    <div class="p-2">
+                                                                        <i class="fas fa-fw fa-equals"></i>
+                                                                        <span>Utilidades: </span>
+                                                                        <span><b>L.{{$totalneto}} </b></span>
+                                                                    </div>
+                                                            
+                                                                    
+                                                                </div>
+
+
+                                                            
+                                                            
                                                             </div>
 
-
-                                                        
-                                                        
+                                                            
                                                         </div>
+                                        </div>
+                                                            
+                                    
 
-                                                        
-                                                    </div>
                                     </div>
-                                                        
-                                
-
-                                </div>
-                            </div>
+                        </div>
+                       
                     </div>
 
                     
@@ -203,6 +235,8 @@
 <script src="build/vendor/jquery-easing/jquery.easing.min.js"></script>
 <script src="build/vendor/chart.js/Chart.min.js"></script>
 <script src="build/js/demo/chart-area-demo.js"></script>
+<script src="build/js/demo/chart-bar-demo.js"></script>
+
 
 
 

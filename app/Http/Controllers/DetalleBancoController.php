@@ -64,20 +64,25 @@ class DetalleBancoController extends Controller
         try {
             $acumulador=0;
             $totalEntradas = DB::select('Select Funcion_obtener_total_entradas_global() as total');
+            
             $totalSalidas = DB::select('Select Funcion_obtener_total_salidas_global() as total');
             $totalneto = $totalEntradas[0]->total - $totalSalidas[0]->total;
             $result = DB::select('call ObtenerEstadoResultado()');
+            $resultMensual = 
             $flujosMensuales = array();
+            $ventasMensuales = array();
             $date = date("n");
             for ($i=1; $i <=$date; $i++) { 
-            
+                $totalVentasMensuales = DB::select('Select Funcion_obtenerFlujoVentas_porMes(?) as total', array($i));
                 $totalMensual = DB::select('Select Funcion_obtenerFlujo_porMes(?) as total', array($i));
                 $acumulador = $acumulador +$totalMensual[0]->total;
                 $flujosMensuales[$i]= $acumulador;
+                $ventasMensuales[$i] = $totalVentasMensuales[0]->total;
             }
           
-            return view('detalleGlobales', compact('totalEntradas','totalSalidas','totalneto','flujosMensuales'));
+            return view('detalleGlobales', compact('totalEntradas','totalSalidas','ventasMensuales','totalneto','flujosMensuales'));
             
+           /* return response()->json(["ventasMensuales"=>$ventasMensuales]);*/
            
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());

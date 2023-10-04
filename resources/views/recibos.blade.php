@@ -106,6 +106,7 @@
   
 </head>
 <body>
+  
   <div class="header">
     <div class="title">Recibo de Compra</div>
     <hr>

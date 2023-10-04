@@ -18,11 +18,23 @@ begin
 	declare total double;
 	select ifnull(SUM(d.monto),0.00) into totalE from detallebanco d where month(d.fecha)=mes and d.id_tipoTransaccion =1 and d.estado=1;
 	select ifnull(SUM(d.monto),0.00) into totalS from detallebanco d where month(d.fecha)=mes and d.id_tipoTransaccion =2 and d.estado=1;
-	total = totalE - totalS;
+	set total = totalE - totalS;
 	return total;
 end//
 
 DELIMITER ;
+
+DELIMITER //
+
+create function Funcion_obtenerFlujoVentas_porMes(mes int) returns double
+begin
+	declare totalV double;
+	select ifnull(SUM(v.total),0.00) into totalV from venta v where month(v.fecha)=mes and v.estado=1;
+	return totalV;
+end//
+
+DELIMITER ;
+
 
 
 DELIMITER //

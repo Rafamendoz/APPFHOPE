@@ -1,13 +1,25 @@
 DELIMITER //
  CREATE procedure ObtenerEstadoResultado ()
         BEGIN 
-            SELECT Funcion_obtener_total_entradas_global() as 'entradas', Funcion_obtener_total_salidas_global() as 'salidas', (Funcion_obtener_total_entradas_global() - Funcion_obtener_total_salidas_global()) as 'utilidades' 
-           
+            SELECT Funcion_obtener_total_entradas_global() as 'entradas', Funcion_obtener_total_salidas_global() as 'salidas', (Funcion_obtener_total_entradas_global() - Funcion_obtener_total_salidas_global()) as 'utilidades';
         end//
-DELIMITER ;
+DELIMITER;
 
 
 DELIMITER //
+
+
+DELIMITER //
+ CREATE procedure ObtenerTotalesEnt ()
+        BEGIN 
+            SELECT Funcion_obtener_total_entradas_global() as 'entradas', Funcion_obtener_total_salidas_global() as 'salidas', (Funcion_obtener_total_entradas_global() - Funcion_obtener_total_salidas_global()) as 'utilidades';
+        end//
+DELIMITER;
+
+
+DELIMITER //
+
+
 CREATE procedure ObtenerCabeceraVenta (IN idventa INT )
         BEGIN 
             SELECT 
