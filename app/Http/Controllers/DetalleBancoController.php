@@ -349,6 +349,32 @@ class DetalleBancoController extends Controller
 
     }
 
+    public function putDetalleBanco(Request $request, $id){
+        try {
+            log::info("REQUEST: ".$request);
+            $detalleBanco = DetalleBanco::where("referencia", $id)->first();
+            if(is_null($detalleBanco)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $detalleBanco->fecha = $request->fecha;
+                $detalleBanco->save();
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Modificado"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+      
+
+    }
+
     
 
   

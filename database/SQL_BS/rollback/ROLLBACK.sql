@@ -34,6 +34,11 @@ drop procedure if exists Actualizar_inventory_estado;
 drop procedure if exists Obtener_sizes_vista;
 drop procedure if exists Obtener_sizes_with_stock;
 drop procedure if exists Obtener_stock_disponible_by_size_product_color;
+drop procedure if exists ObtenerEstadoResultado;
+drop procedure if exists ObtenerTotalesEnt;
+drop procedure if exists Obtener_detalleBancarios_by_referencia;
+drop procedure if exists Mapeo_Error;
+
 
 /* -------------------------ROLLBACK FUNCIONES------------------------------------------ */
 drop function if exists Funcion_obtener_total_entradas;

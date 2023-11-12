@@ -8,6 +8,7 @@ use App\Models\Error;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Estado;
+use App\Http\Controllers\ServiceGatewayController;
 
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -83,6 +84,50 @@ class UsuarioController extends Controller
 
     }
 
+
+    public function setUsuariosMasivosRest(Request $request){
+        set_time_limit(120);
+
+        app(LogController::class)->Info($request);
+
+     
+        try {
+
+            $items = $request->all();
+            $count=0;
+            foreach ($items as $key) {
+                $contra =   Hash::make($key['password']);
+                $apiToken = base64_encode($key['email'].":".$key['password']);
+                $key['ApiToken'] = $apiToken;
+                $key['password'] = $contra;
+                User::create($key);
+                $count++;
+    
+
+            }
+
+           
+
+            if($count==sizeof($items)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registros Agregados"]], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }
+       
+
+          
+        } catch (\Throwable $th) {
+            log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__);
+            $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
+            $response= response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            log::info('RESPONSE: '.$response);
+            return $response;
+        }
+
+    }
+
     public function getUsuarioRestById(Request $request, $id){
         try {
             log::info('REQUEST '.$request);
@@ -145,9 +190,12 @@ class UsuarioController extends Controller
             Log::info("RESPONSE: ".$response);
             return $response;  
         } catch (Throwable $th) {
-            log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+          log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__);
+            $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
+            $response= response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            log::info('RESPONSE: '.$response);
+            return $response;
         }
         
 

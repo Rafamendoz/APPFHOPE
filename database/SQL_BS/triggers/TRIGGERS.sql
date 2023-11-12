@@ -1,3 +1,4 @@
+-- Active: 1681235059242@@127.0.0.1@3306@proyecto_gestion_fhope
 DELIMITER //
 create trigger Actualiza_monto_total_cuentaBancaria after insert on detallebanco
 for each row 
@@ -71,7 +72,7 @@ for each row
 		elseif(new.stock > old.stock) then 	
 			set totalStockProducto =(select Funcion_obtener_total_stock_by_producto(new.id_producto));
 			set newtotalStock = totalStockProducto +(new.stock-old.stock);
-			update inventory_header  set total_stock  = newtotalStock,test =totalStockProducto, test1=new.stock where id_producto =new.id_producto;
+			update inventory_header  set total_stock  = newtotalStock where id_producto =new.id_producto;
 		end if;
 	end//
 DELIMITER //	

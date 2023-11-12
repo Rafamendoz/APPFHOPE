@@ -244,7 +244,7 @@
                                         </tbody>
                                         <tfoot>
                                             <div class="col-12 mb-2" id="CapaEnviarOrden" hidden>
-                                                            <button onclick="Guardar()" class="btn btn-warning">Generar Orden</button>
+                                                            <button onclick="ConfirmarPagar()" class="btn btn-warning">Generar Orden</button>
                                             </div>
                                         </tfoot>
                                      
@@ -799,7 +799,9 @@
             
         
         }).fail(function(data){
-            return 2;
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
 
         });
 
@@ -840,7 +842,9 @@
             
         
         }).fail(function(data){
-            return 2;
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
 
         });
 
@@ -887,6 +891,24 @@
             mostrarMensaje(response['responseJSON']);
 
         });
+    }
+
+    function ConfirmarPagar(){
+        Swal.fire({
+        title: 'Confirmacion',
+        text: "Desea pagar la orden?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí!'
+        }).then((result) => {
+        if (result.isConfirmed) {
+           Guardar();
+
+        }
+        })
+
     }
 
    

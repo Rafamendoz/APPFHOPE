@@ -23,6 +23,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //RUTAS PARA ENTIDAD USUARIO
 Route::group(["middleware" => "auth.basic1"], function () {
+
+  Route::get('error/', 'App\Http\Controllers\ErrorController@GetError')->name('ErrorMapeo');
+  
+
+
  /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
 
  Route::get('usuarioR', 'App\Http\Controllers\UsuarioController@getUsuarioRest');
@@ -30,7 +35,9 @@ Route::group(["middleware" => "auth.basic1"], function () {
 Route::get('usuarioR/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestById');
 
 Route::get('usuarioR/user/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestByUsuario');
-Route::get('usuarioR/assingRole/{id}', 'App\Http\Controllers\UsuarioController@setAssingRoleUserRest');
+Route::post('usuarioR/assingRole/{id}', 'App\Http\Controllers\UsuarioController@setAssingRoleUserRest');
+Route::post('usuarioR/addMasive', 'App\Http\Controllers\UsuarioController@setUsuariosMasivosRest');
+
 
 
 /*RUTAS PARA ENTIDAD */
@@ -147,6 +154,8 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::post('bancoR/add', 'App\Http\Controllers\BancoController@setBanco');
    Route::put('bancoR/update/{id}', 'App\Http\Controllers\BancoController@putBanco');
    Route::put('bancoR/delete/{id}', 'App\Http\Controllers\BancoController@deleteBanco');
+   Route::get('bancoEntity/{id}', 'App\Http\Controllers\BancoController@getBancoEntity');
+
 
    //RUTAS PARA ENTIDAD DetalleBanco
    Route::get('dbancoR', 'App\Http\Controllers\DetalleBancoController@getDetallesBancoRest');
@@ -158,6 +167,7 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::post('dbancoR/salidas/date/{id}', 'App\Http\Controllers\DetalleBancoController@getSalidasBancariasRestByFecha');
    Route::post('dbancoR/entradas/date/{id}', 'App\Http\Controllers\DetalleBancoController@getEntradasBancariasRestByFecha');
    Route::get('dbancoR/referencia/{id}', 'App\Http\Controllers\DetalleBancoController@getDetalleBancariasRestByReferencia');
+   Route::put('dbancoR/update/{id}', 'App\Http\Controllers\DetalleBancoController@putDetalleBanco');
 
 
   

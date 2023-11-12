@@ -400,6 +400,15 @@ end;//
 DELIMITER ;
 
 
+DELIMITER //
+
+create procedure Mapeo_Error(in codigo varchar(250))
+begin
+	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = codigo;
+end;//
+DELIMITER ;
+
+
 
 
 
