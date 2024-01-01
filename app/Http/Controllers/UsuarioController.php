@@ -119,7 +119,7 @@ class UsuarioController extends Controller
           
         } catch (\Throwable $th) {
             log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__);
+            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__, $th->getCode());
             $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
             $response= response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
             log::info('RESPONSE: '.$response);

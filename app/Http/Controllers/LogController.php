@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class LogController extends Controller
 {
-    public function Request($request){
+    public function Info($request){
         $metodo = $request->method(); // Método de la solicitud (GET, POST, etc.)
         $ruta = $request->path(); // Ruta de la solicitud
         $headers = $request->headers->all(); // Encabezados de la solicitud
