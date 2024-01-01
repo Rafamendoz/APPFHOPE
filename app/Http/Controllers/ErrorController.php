@@ -20,6 +20,28 @@ class ErrorController extends Controller
         return $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
     }
 
+    public function setError(Request $request){
+
+        try {
+            $error = Error::create($request->all());
+            return response()->json(["Data_Respuesta"=>["Codigo"=>200, "Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"], "Error"=>$error]);
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            
+            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__, $th->getCode());
+            log::info("GETTING DATA SERVICE: ".json_encode($data));
+            $error = DB::select("CALL ERROR(?)", array($data['CodeError']));
+            log::info("GETTING DATA SP: ".json_encode($error));
+            return response()->json(["Mapping_Error"=>$error],$error[0]->errorApp);
+        
+        }
+
+        
+       
+    }
+
+
+
     public function GetErrorRest(Request $request){
         try {
             $data = DB::select('CALL Mapeo_Error(?)',array('CP-E1-T01'));

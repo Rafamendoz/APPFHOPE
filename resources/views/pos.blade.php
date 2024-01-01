@@ -802,6 +802,33 @@
             let response = JSON.parse(JSON.stringify(data));
             console.log(response);
             mostrarMensaje(response['responseJSON']);
+      
+
+        });
+
+    }
+
+    function rollback(venta_id) {
+
+        $.ajax({
+            method: "GET",
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Authorization': 'Basic '+ authorization
+            },
+            url: "../../api/ventaR/rollback/"+venta_id,
+           
+        })
+        .done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            if(response['Data_Respuesta'].Codigo==200){
+                mostrarMensaje(response['Data_Respuesta']);       
+            } 
+        
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
 
         });
 
@@ -844,7 +871,7 @@
         }).fail(function(data){
             let response = JSON.parse(JSON.stringify(data));
             console.log(response);
-            mostrarMensaje(response['responseJSON']);
+            rollback(idorden);
 
         });
 
@@ -869,6 +896,7 @@
             },
             url: "../../api/ventaR/add",
             data: {
+                "id":idorden,
                 "fecha": strDate,
                 "cliente_id": cliente_id,
                 "usuario_id": idusuario,
@@ -889,6 +917,7 @@
         }).fail(function(data){
             let response = JSON.parse(JSON.stringify(data));
             mostrarMensaje(response['responseJSON']);
+            rollback(idorden);
 
         });
     }

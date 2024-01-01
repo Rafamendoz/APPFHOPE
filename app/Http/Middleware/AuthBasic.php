@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ServiceGatewayController;
+
+use App\Models\Error;
 
 class AuthBasic
 {
@@ -16,7 +19,20 @@ class AuthBasic
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next)
-    {
+
+    {   
+
+        $authorizationHeader = $request->header('Authorization');
+        if( is_null($authorizationHeader) ){
+            log::warning($request." ACCESO NO AUTORIZADO");
+            $data = app(ServiceGatewayController::class)->Enrutar(101, "UNAUTHORIZED", __METHOD__, 401);
+            $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
+            return response()->json(["Mapping_Error"=>$error],401);
+        }else{
+
+        
+        
+
         if(Auth::onceBasic()){
             log::warning($request." ACCESO NO AUTORIZADO");
             return response()->json(['Codigo'=>401, 'Estado'=>'No Autorizado', 'Descripcion'=>'Acceso No Autorizado'],401);
@@ -31,6 +47,7 @@ class AuthBasic
 
             }
 
+        }
         }
     }
 }

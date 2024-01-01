@@ -13,7 +13,7 @@ class ServiceGatewayController extends Controller
     public function Enrutar($id, $message, $from, $codeError){
         
 
-        Log:info("DATA RECIBIDA ".$message);
+        Log:info("DATA RECIBIDA ".$message." CODIGO: ".$codeError);
 
         $service = Services::where('id', $id)->get();
         Log::info('ServiceGatewayController [LOADING] : REALIZANDO LLAMADO DESDE '.$from.' HACIA '.$service[0]['service_name']);

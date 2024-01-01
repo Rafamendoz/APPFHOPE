@@ -393,7 +393,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_detalleBancarios_by_referencia(in idReferencia text collate utf8mb4_unicode_ci)
+create procedure Obtener_detalleBancarios_by_referencia(in idReferencia text)
 begin
 	select * from detallebanco db where db.referencia=idReferencia;
 end;//
@@ -405,6 +405,29 @@ DELIMITER //
 create procedure Mapeo_Error(in codigo varchar(250))
 begin
 	SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = codigo;
+end;//
+DELIMITER ;
+
+
+DELIMITER //
+
+create procedure Error(in codigo text)
+begin
+	select e.codigo_error, e.subcodigo, e.descripcion ,he.Status, e.errorApp, he.httpCodeTraslate  from errores e
+	inner join httperrors he on e.errorApp = he.httpCode
+	where e.subcodigo COLLATE utf8mb4_0900_ai_ci =codigo COLLATE utf8mb4_0900_ai_ci;
+end;//
+DELIMITER ;
+
+
+
+
+DELIMITER //
+
+create procedure generateRollback(in codigo int)
+begin
+	delete from detalle_producto_venta dv where dv.venta_id  = codigo; 
+	delete from venta v where v.id  = codigo; 
 end;//
 DELIMITER ;
 

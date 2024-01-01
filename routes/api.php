@@ -23,9 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 //RUTAS PARA ENTIDAD USUARIO
 Route::group(["middleware" => "auth.basic1"], function () {
-
-  Route::get('error/', 'App\Http\Controllers\ErrorController@GetError')->name('ErrorMapeo');
   
+  
+  Route::post('error/add', 'App\Http\Controllers\ErrorController@setError')->name('SetError');
 
 
  /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
@@ -215,6 +215,8 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::put('ventaR/update/{id}', 'App\Http\Controllers\VentaController@putVenta');
     /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
    Route::put('ventaR/delete/{id}', 'App\Http\Controllers\VentaController@deleteVenta');
+   Route::get('ventaR/rollback/{id_venta}', 'App\Http\Controllers\VentaController@generateRollback');
+
 
 
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/

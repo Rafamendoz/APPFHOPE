@@ -18,8 +18,8 @@ class CredencialesConsumoController extends Controller
             $decrypted = Crypt::decrypt(Auth()->user()->ApiToken);
             return response()->json(["Token"=>$decrypted]);
 
-        } catch (Exception $e) {
-            echo $e;
+        } catch (DecryptException  $e) {
+            return response()->json(['error' => 'Error al descifrar los datos'], 500);
         }
 
        

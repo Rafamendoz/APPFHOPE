@@ -10,5 +10,5 @@ class Error extends Model
     public $table = 'errores';
    public $timestamp = true;
     public $incrementing = false;
-    public $fillable = ['codigo_error', 'descripcion'];
+    public $fillable = ['codigo_error', 'descripcion','subcodigo','errorApp'];
 }

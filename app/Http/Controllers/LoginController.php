@@ -43,7 +43,7 @@ class LoginController extends Controller
     
             }
             
-        } catch (\Throwable $th) {
+        } catch (DecryptException  $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);

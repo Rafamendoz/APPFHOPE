@@ -38,6 +38,20 @@ DELIMITER //
 
 
 DELIMITER //
+create trigger Actualiza_inventario_detalle_producto_venta_delete before delete on detalle_producto_venta
+for each row 
+	begin 
+		declare totalStock int;
+		declare newtotalStock int;
+		set totalStock =(select Funcion_obtener_total_stock_by_producto_size_color(old.producto_id, old.color_id,old.size_id));
+		set newtotalStock =totalStock+old.cantidad;
+		update inventory  set stock  = newtotalStock where id_producto = old.producto_id and id_size = old.size_id and id_color =old.color_id;
+	end//
+DELIMITER //
+
+
+
+DELIMITER //
 create trigger Actualiza_inventario_venta_nueva_by_detalles after insert on detalle_producto_venta
 for each row 
 	begin 
@@ -45,7 +59,11 @@ for each row
 		declare newtotalStock int;
 		set totalStock =(select Funcion_obtener_total_stock_by_producto_size_color(new.producto_id, new.color_id,new.size_id));
 		set newtotalStock =totalStock-new.cantidad;
-		update inventory  set stock  = newtotalStock where id_producto = new.producto_id and id_size = new.size_id and id_color =new.color_id;
+		if newtotalStock >=0 then
+				update inventory  set stock  = newtotalStock where id_producto = new.producto_id and id_size = new.size_id and id_color =new.color_id;
+		else 
+				call Mapeo_Error('CP-E1-T01');
+		end if;
 	end//
 DELIMITER //
 
@@ -87,6 +105,17 @@ for each row
 		set total = totalStockProducto +new.stock;
 		update inventory_header  set total_stock  = total where id_producto =new.id_producto;	
 		end//
+DELIMITER //
+
+
+DELIMITER //
+	create Trigger Parsea_Id_T_Error AFTER INSERT on errores
+	FOR EACH ROW
+		BEGIN
+		DECLARE parseId VARCHAR;
+		SET parseId = CONCAT("E0",new.id);
+		UPDATE errores set id=parseId where id=new.id;
+		END//
 DELIMITER //
 
 

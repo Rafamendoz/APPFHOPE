@@ -59,7 +59,8 @@ class VentaController extends Controller
             return $response;  
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
+            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__, $th->getCode());
+            $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
             return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
     }
@@ -181,6 +182,20 @@ class VentaController extends Controller
                 return $response;
             }
 
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+    }
+
+
+    public function generateRollback(Request $request, $id_venta){
+        try {
+            $rollback = DB::select("CALL generateRollback(?)", array($id_venta));
+            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Rollback ejecutado"]], 200);
+            Log::info("RESPONSE: ".$response);
+            return $response;
         } catch (\Throwable $th) {
             Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
             $error = Error::where('codigo_error',$th->getCode())->get();
