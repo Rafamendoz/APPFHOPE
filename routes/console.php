@@ -43,7 +43,7 @@ Artisan::command("export:database", function(){
     // Ruta donde se almacenará el archivo de respaldo
     $backupPath =  '';
 
-    $mysqlExecutable = '"C:\Program Files\MySQL\MySQL Server 8.2\bin\mysqldump.exe"';
+    $mysqlExecutable = 'mysqldump';
 
 
     // Nombre del archivo de respaldo
