@@ -2,6 +2,9 @@
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
+use Carbon\Carbon;
+use Illuminate\Console\Command;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +31,45 @@ Artisan::command('logs:clear', function() {
    
     
 })->describe('Clear log files');
+
+
+Artisan::command("export:database", function(){
+    $host = config('database.connections.mysql.host');
+    $port = config('database.connections.mysql.port');
+    $database = config('database.connections.mysql.database');
+    $username = config('database.connections.mysql.username');
+    $password = config('database.connections.mysql.password');
+
+    // Ruta donde se almacenará el archivo de respaldo
+    $backupPath =  '';
+
+    $mysqlExecutable = '"C:\Program Files\MySQL\MySQL Server 8.2\bin\mysqldump.exe"';
+
+
+    // Nombre del archivo de respaldo
+    $backupFileName = '\dump.sql';
+
+    // Comando mysqldump
+    $command = sprintf(
+        '%s -h%s -P%s -u%s -p%s --no-create-info --skip-triggers --complete-insert --skip-extended-insert  %s > %s',
+        $mysqlExecutable,
+        $host,
+        $port,
+        $username,
+        $password,
+        $database,
+        '/APPFHOPE/app/backups' .$backupFileName
+    );
+
+    
+    // Ejecutar el comando mysqldump
+    exec($command, $output, $resultCode);
+
+    if ($resultCode === 0) {
+        $this->comment('Backup created successfully');
+
+    } else {
+        $this->error('Error creating backup');
+    }
+   
+});

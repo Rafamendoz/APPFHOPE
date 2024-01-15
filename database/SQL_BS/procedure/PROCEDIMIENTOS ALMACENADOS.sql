@@ -415,7 +415,7 @@ create procedure Error(in codigo text)
 begin
 	select e.codigo_error, e.subcodigo, e.descripcion ,he.Status, e.errorApp, he.httpCodeTraslate  from errores e
 	inner join httperrors he on e.errorApp = he.httpCode
-	where e.subcodigo COLLATE utf8mb4_0900_ai_ci =codigo COLLATE utf8mb4_0900_ai_ci;
+	where e.subcodigo  =codigo;
 end;//
 DELIMITER ;
 
@@ -424,14 +424,155 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure generateRollback(in codigo int)
-begin
-	delete from detalle_producto_venta dv where dv.venta_id  = codigo; 
-	delete from venta v where v.id  = codigo; 
-end;//
+CREATE PROCEDURE generateRollback(IN codigo INT)
+BEGIN
+    DELETE FROM detalle_producto_venta WHERE venta_id = codigo; 
+    DELETE FROM venta WHERE id = codigo; 
+END//
 DELIMITER ;
 
 
+DELIMITER //
+
+CREATE PROCEDURE ExecuteClosure(databaseNameFrom VARCHAR(250),databaseNameTo VARCHAR(250), tableName VARCHAR(250))
+begin
+    SET @sql = CONCAT('INSERT INTO ', databaseNameTo, '.', tableName, ' SELECT * FROM ',databaseNameFrom, '.',tableName,';');
+	prepare stmt from @sql;
+	execute stmt;
+    DEALLOCATE PREPARE stmt;
+
+
+END//
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE RollbackClosure(databaseNameFrom VARCHAR(250),databaseNameTo VARCHAR(250), tableName VARCHAR(250))
+begin
+    SET @sql = CONCAT('delete from ', databaseNameTo, '.', tableName,';');
+	prepare stmt from @sql;
+	execute stmt;
+    DEALLOCATE PREPARE stmt;
+
+
+END//
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE ReportClosure(databaseName VARCHAR(250), tableName VARCHAR(250))
+BEGIN
+    SET @sql = CONCAT('SELECT COUNT(id) FROM ', databaseName, '.', tableName);
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END// 
+DELIMITER ;
+
+DELIMITER //
+create procedure createTempTable()
+begin
+	drop table if exists tablesEntity;
+    create temporary table tablesEntity( tableName varchar(40), priority int, id int NOT NULL AUTO_INCREMENT, PRIMARY KEY (`id`));
+	call insertTempTable();
+	select * from tablesEntity;
+end// 
+DELIMITER ;
+
+call createTempTable();
+
+DELIMITER //
+create procedure insertTempTable()
+begin
+	insert into tablesEntity(tableName, priority)
+	select TABLE_NAME, case
+	when TABLE_NAME = TABLE_NAME then 1
+	end as 'priority'
+	from(
+	select distinct  TABLE_NAME  FROM information_schema.KEY_COLUMN_USAGE
+	WHERE TABLE_SCHEMA = 'fhopeonl_gestion_fhope' and TABLE_NAME not IN (
+	select distinct  t1.TABLE_NAME  from (
+	SELECT TABLE_NAME, REFERENCED_TABLE_NAME
+	FROM information_schema.KEY_COLUMN_USAGE
+	WHERE TABLE_SCHEMA = 'fhopeonl_gestion_fhope'
+	  AND REFERENCED_TABLE_NAME IS NOT null) as t1)) as t2;
+ 
+ 
+ 	insert into tablesEntity(tableName, priority)
+ 	select t3.TABLE_NAME, sum(t3.priority) as 'priority'  from(
+ 	select TABLE_NAME, case
+		when TABLE_NAME = TABLE_NAME then 1
+		end as 'priority'
+	from(
+	select   TABLE_NAME  FROM information_schema.KEY_COLUMN_USAGE
+	WHERE TABLE_SCHEMA = 'fhopeonl_gestion_fhope' and TABLE_NAME  IN (
+	select   t1.TABLE_NAME  from (
+	SELECT TABLE_NAME, REFERENCED_TABLE_NAME
+	FROM information_schema.KEY_COLUMN_USAGE
+	WHERE TABLE_SCHEMA = 'fhopeonl_gestion_fhope'
+	  AND REFERENCED_TABLE_NAME IS NOT null) as t1)) as t2) as t3
+	 group by 1
+	 order by 2 asc;
+end//
+DELIMITER ;
+
+create procedure getTableRelations(tableName varchar(50), databaseName varchar(250))
+begin
+	SELECT
+    TABLE_NAME,
+    COLUMN_NAME,
+    REFERENCED_TABLE_NAME,
+    REFERENCED_COLUMN_NAME
+FROM
+    information_schema.KEY_COLUMN_USAGE
+WHERE
+    TABLE_SCHEMA = databaseName
+    AND TABLE_NAME = tableName
+    AND REFERENCED_TABLE_NAME IS NOT NULL;
+end
+GRANT SELECT, LOCK TABLES, SHOW VIEW ON *.* TO 'DEVAPPFHOPE'@'localhost';
+
+
+call getTableRelations('detalleventa','fhopeonl_gestion_fhope') 
+
+mysqldump -u tu_usuario -p tu_base_de_datos > dump.sql
+
+
+create table testTemp(id int, tableName varchar(40));
+select * from testTemp
+
+
+
+DELIMITER //
+CREATE PROCEDURE procesar_tabla()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE nombre_columna VARCHAR(255);
+
+    -- Cursor para recorrer la tabla
+    DECLARE cur CURSOR FOR SELECT tableName FROM testTemp;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+
+    OPEN cur;
+
+    read_loop: LOOP
+        FETCH cur INTO nombre_columna;
+
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+
+        -- Realizar alguna operación con la columna
+        SELECT nombre_columna;
+
+    END LOOP;
+
+    CLOSE cur;
+END //
+DELIMITER ;
+
+-- Llamar al procedimiento
+CALL procesar_tabla();
 
 
 

@@ -109,13 +109,16 @@ DELIMITER //
 
 
 DELIMITER //
-	create Trigger Parsea_Id_T_Error AFTER INSERT on errores
+	create Trigger Parsea_Id_T_Error BEFORE INSERT on errores
 	FOR EACH ROW
 		BEGIN
-		DECLARE parseId VARCHAR;
-		SET parseId = CONCAT("E0",new.id);
-		UPDATE errores set id=parseId where id=new.id;
-		END//
+		DECLARE parseId varchar(10);
+		declare lastValue int;
+		set lastValue = (select e.identificador  from errores e 
+			order by e.identificador desc limit 1);
+		SET parseId = CONCAT("E0",lastValue+1);
+		set NEW.id = parseId;
+		end//
 DELIMITER //
 
 

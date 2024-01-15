@@ -14,6 +14,10 @@ use App\Http\Controllers;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('config/getTablesNames', 'App\Http\Controllers\ClosureController@getTableNames');
+Route::get('config/executeClosure', 'App\Http\Controllers\ClosureController@executeClosure');
+Route::get('config/rollbackClosure', 'App\Http\Controllers\ClosureController@makeRollbackClosure');
+
 
 Route::get('ventaR', 'App\Http\Controllers\VentaController@getVentasRest')->middleware('auth.guest');
 
@@ -216,6 +220,9 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
     /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
    Route::put('ventaR/delete/{id}', 'App\Http\Controllers\VentaController@deleteVenta');
    Route::get('ventaR/rollback/{id_venta}', 'App\Http\Controllers\VentaController@generateRollback');
+
+
+
 
 
 
