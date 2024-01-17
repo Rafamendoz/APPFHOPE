@@ -17,6 +17,8 @@ use App\Http\Controllers;
 Route::get('config/getTablesNames', 'App\Http\Controllers\ClosureController@getTableNames');
 Route::get('config/executeClosure', 'App\Http\Controllers\ClosureController@executeClosure');
 Route::get('config/rollbackClosure', 'App\Http\Controllers\ClosureController@makeRollbackClosure');
+Route::post('config/executeDebugTables', 'App\Http\Controllers\ClosureController@deleteTablePostClosure');
+Route::post('config/sendGetClosure', 'App\Http\Controllers\ClosureController@sendClosure');
 
 
 Route::get('ventaR', 'App\Http\Controllers\VentaController@getVentasRest')->middleware('auth.guest');

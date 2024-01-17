@@ -196,7 +196,7 @@ Route::post('validate', 'App\Http\Controllers\LoginController@login')->name('Val
 
 
 
-
+Route::get('config/getTablesNames', 'App\Http\Controllers\ClosureController@getTableNames');
 
 
 Route::get('/startApp/12106', function(){

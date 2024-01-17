@@ -95,6 +95,10 @@ begin
 end//
 DELIMITER ;  
 
+
+DELIMITER //
+create 
+
 DELIMITER //
 create procedure Actualizar_detallesproductos_estado(in idVenta int, in estado int)
 begin
@@ -479,8 +483,6 @@ begin
 end// 
 DELIMITER ;
 
-call createTempTable();
-
 DELIMITER //
 create procedure insertTempTable()
 begin
@@ -516,6 +518,7 @@ begin
 end//
 DELIMITER ;
 
+DELIMITER //
 create procedure getTableRelations(tableName varchar(50), databaseName varchar(250))
 begin
 	SELECT
@@ -531,48 +534,17 @@ WHERE
     AND REFERENCED_TABLE_NAME IS NOT NULL;
 end
 GRANT SELECT, LOCK TABLES, SHOW VIEW ON *.* TO 'DEVAPPFHOPE'@'localhost';
-
-
-call getTableRelations('detalleventa','fhopeonl_gestion_fhope') 
-
-mysqldump -u tu_usuario -p tu_base_de_datos > dump.sql
-
-
-create table testTemp(id int, tableName varchar(40));
-select * from testTemp
-
+//
+DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE procesar_tabla()
-BEGIN
-    DECLARE done INT DEFAULT 0;
-    DECLARE nombre_columna VARCHAR(255);
-
-    -- Cursor para recorrer la tabla
-    DECLARE cur CURSOR FOR SELECT tableName FROM testTemp;
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
-
-    OPEN cur;
-
-    read_loop: LOOP
-        FETCH cur INTO nombre_columna;
-
-        IF done THEN
-            LEAVE read_loop;
-        END IF;
-
-        -- Realizar alguna operación con la columna
-        SELECT nombre_columna;
-
-    END LOOP;
-
-    CLOSE cur;
-END //
+create procedure debugTables(tableName varchar(50), databaseName varchar(250))
+begin
+	 SET @sql = CONCAT('DELETE FROM ', databaseName, '.', tableName);
+    PREPARE stmt FROM @sql;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+end//
 DELIMITER ;
-
--- Llamar al procedimiento
-CALL procesar_tabla();
-
-
-
+	

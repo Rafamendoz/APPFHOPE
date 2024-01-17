@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Error;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Config;
+use App\Jobs\ExecuteClosure;
 
 
 
@@ -17,9 +19,36 @@ class ClosureController extends Controller
 {
 
    
+
+    public function deleteTablePostClosure(Request $request){
+        try {
+            $db = $request->databaseName;
+            $create = DB::select('call createTempTable()');
+            foreach ($create as $key) {
+                DB::select('call debugTables(?,?)', array($key->tableName,$db));
+            }
+            return response()->json(["Status"=>"Success", "Description"=>"Tabla Depurada"],200);
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__, $th->getCode());
+            $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+           
+        }
+      
+
+    }
+
+    public function sendClosure(Request $request){
+        ExecuteClosure::dispatch()->onConnection('database');
+        return response()->json(["Status"=>"Success", "Description"=>"Servicio ejecutado y enviado a la cola"],200);
+
+    }
     
 
-    public function getTableNames(){
+    public function getTableNames(Request $request){
+        $db = $request->databaseName1;
+        $db2 = $request->databaseName2;
 
         $coleccionHistorica = collect();
         $coleccionActual = collect();
@@ -28,9 +57,9 @@ class ClosureController extends Controller
         $tableNames = DB::select('SELECT * from tablesEntity');
         $cont = 0;
         foreach ($create as $key) {
-            $reportActual = DB::select('call ReportClosure(?,?)', array('fhopeonl_gestion_fhope',$key->tableName ));
-            $reportHistorica = DB::select('call ReportClosure(?,?)', array('fhopeonl_gestion_fhope_historica',$key->tableName ));
-            $reporteFinal->push(["TableName"=>$key->tableName, "HistoricaTotal"=>$reportHistorica[0]->total, "ActualTotal"=>$reportActual[0]->total]);
+            $reportDb1 = DB::select('call ReportClosure(?,?)', array($db,$key->tableName ));
+            $reportDb2 = DB::select('call ReportClosure(?,?)', array($db2,$key->tableName ));
+            $reporteFinal->push(["TableName"=>$key->tableName, "HistoricaTotal"=>$reportDb2[0]->total, "ActualTotal"=>$reportDb1[0]->total]);
         }
 
         
@@ -41,7 +70,8 @@ class ClosureController extends Controller
 
     }
 
-    public function makeRollbackClosure(){
+    public function makeRollbackClosure(Request $request){
+
         try {
             $create = DB::select('call createTempTable()');
             $tableNames = DB::select('SELECT * from tablesEntity');
@@ -116,7 +146,7 @@ class ClosureController extends Controller
 
             }
 
-        } catch (\Exception $e) {
+        } catch (QueryException $e) {
             // Captura cualquier excepción y maneja el error
             return response()->json(['message' => 'Error al ejecutar el dump: ' . $e->getMessage()], 500);
         }

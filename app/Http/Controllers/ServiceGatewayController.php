@@ -12,8 +12,17 @@ class ServiceGatewayController extends Controller
 {
     public function Enrutar($id, $message, $from, $codeError){
         
+        $numeroLetras = strlen(preg_replace('/\s+/', '', $message));
+        $finallyMessage = "";
+        if($numeroLetras>100){
+            $finallyMessage = "DATA RECIBIDA PERO LA LECTURA ESTA DESACTIVADA ";
 
-        Log:info("DATA RECIBIDA ".$message." CODIGO: ".$codeError);
+        }else{
+            $finallyMessage = "DATA RECIBIDA: ".$message;
+        }
+        Log:info($finallyMessage.$codeError);
+
+        
 
         $service = Services::where('id', $id)->get();
         Log::info('ServiceGatewayController [LOADING] : REALIZANDO LLAMADO DESDE '.$from.' HACIA '.$service[0]['service_name']);
