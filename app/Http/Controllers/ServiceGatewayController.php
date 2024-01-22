@@ -10,17 +10,28 @@ use Illuminate\Support\Facades\Log;
 
 class ServiceGatewayController extends Controller
 {
-    public function Enrutar($id, $message, $from, $codeError){
-        
-        $numeroLetras = strlen(preg_replace('/\s+/', '', $message));
-        $finallyMessage = "";
-        if($numeroLetras>100){
-            $finallyMessage = "DATA RECIBIDA PERO LA LECTURA ESTA DESACTIVADA ";
+    public function Enrutar($id, $config, $from){
+        if(isset($config["forms_params"]->message)){
+            $numeroLetras = strlen(preg_replace('/\s+/', '', $config["forms_params"]->message));
+            $finallyMessage = "";
+            if($numeroLetras>100){
+                $finallyMessage = "DATA RECIBIDA PERO LA LECTURA ESTA DESACTIVADA ";
+    
+            }else{
+                $finallyMessage = "DATA RECIBIDA: ".$config["forms_params"]->message;
+                Log::info($finallyMessage.$config["forms_params"]->codeError);
+
+            }
 
         }else{
+            $message = json_encode($config);
             $finallyMessage = "DATA RECIBIDA: ".$message;
+                Log::info($finallyMessage);
+
+
         }
-        Log:info($finallyMessage.$codeError);
+
+        
 
         
 
@@ -33,7 +44,7 @@ class ServiceGatewayController extends Controller
                 break;
             
             case 'POST':
-                $data =  $this->LlamarServicePost($service[0]['endpoint'],$message,$codeError);
+                $data =  $this->LlamarServicePost($service[0]['endpoint'],$config);
                 return $data;
                 break;
 
@@ -59,13 +70,11 @@ class ServiceGatewayController extends Controller
 
     }
 
-    public function LlamarServicePOST($urlServicio,$message, $codeError){
+    public function LlamarServicePOST($urlServicio, $configRequest){
         log::info('LLAMANDO SERVICIO POST: '.$urlServicio);
         $client = new Client();
-        $config = [  'form_params' => [
-            'message' => $message,
-            'codeError' => $codeError
-        ]];
+        Log::info("INFO REQUEST:".json_encode($configRequest));
+        $config = $configRequest;
         $response = $client->post($urlServicio, $config); 
 
         // Obtiene el cuerpo de la respuesta como JSON

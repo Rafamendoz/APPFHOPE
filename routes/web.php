@@ -23,9 +23,9 @@ Route::get('/', function () {
 
 Route::middleware('auth')->group( function() {
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name("Dashboard");
+    Route::get('/dashboard', 'App\Http\Controllers\DashboardController@getDashboard')->name("Dashboard");
+    Route::get('/dashboardOperativoTI', 'App\Http\Controllers\DashboardController@getDashboardOperativoTI')->name("DashboardOperativoTI");
+
 
     
 
@@ -91,6 +91,7 @@ Route::group(["middleware" => "auth"], function () {
       //RUTAS PARA ENTIDAD DetalleBanco
     Route::get('dbancoR', 'App\Http\Controllers\DetalleBancoController@getDetallesBancoRest');
      
+    Route::post('config/getTablesNames', 'App\Http\Controllers\ClosureController@getTableNames')->name('reportTables');
    
    
      
@@ -196,7 +197,6 @@ Route::post('validate', 'App\Http\Controllers\LoginController@login')->name('Val
 
 
 
-Route::get('config/getTablesNames', 'App\Http\Controllers\ClosureController@getTableNames');
 
 
 Route::get('/startApp/12106', function(){

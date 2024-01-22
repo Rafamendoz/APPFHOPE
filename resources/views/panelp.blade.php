@@ -137,6 +137,11 @@
                         <a class="collapse-item" href="{{route('TipoCuentas')}}">Tipo Cuentas Bancarias</a>
                         <a class="collapse-item" href="{{route('Monedas')}}">Tipo Monedas</a>
                         <a class="collapse-item" href="{{route('TipoTransaccionAll')}}">Tipo Transaccion</a>
+                        <h6 class="collapse-header">Configuracion Cierre</h6> 
+                        <a class="collapse-item" href="{{route('DashboardOperativoTI')}}">Dashboard Operativo TI</a>
+
+
+
                     </div>
                 </div>
             </li>

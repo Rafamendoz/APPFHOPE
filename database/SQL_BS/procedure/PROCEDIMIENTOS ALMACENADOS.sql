@@ -548,3 +548,12 @@ begin
 end//
 DELIMITER ;
 	
+DELIMITER //
+create procedure getMonthlyProfits(numberMonth int)
+begin
+	declare netSales float;
+	set netSales = select sum(v.total)  from venta v;
+end
+
+//
+DELIMITER ;

@@ -26,6 +26,39 @@ DELIMITER ;
 
 DELIMITER //
 
+create function Funcion_obtenerFlujoGanancias_porMes(mes int) returns double
+begin
+	declare totalE double;
+	declare totalS double;
+	declare total double;
+	select ifnull(SUM(d.total),0.00) into totalE from venta d where month(d.fecha)=mes and d.estado=1;
+	select ifnull(SUM(d.monto),0.00) into totalS from detallebanco d where month(d.fecha)=mes and d.id_tipoTransaccion =2 and d.estado=1;
+	set total = totalE - totalS;
+	return total;
+end//
+
+DELIMITER ;
+
+DELIMITER //
+
+create function Funcion_obtenerFlujoGanancias_porYear(yearNumber int) returns double
+begin
+	declare totalE double;
+	declare totalS double;
+	declare total double;
+	select ifnull(SUM(d.total),0.00) into totalE from venta d where year(d.fecha)=yearNumber and d.estado=1;
+	select ifnull(SUM(d.monto),0.00) into totalS from detallebanco d where year(d.fecha)=yearNumber and d.id_tipoTransaccion =2 and d.estado=1;
+	set total = totalE - totalS;
+	return total;
+end//
+
+DELIMITER ;
+
+
+
+
+DELIMITER //
+
 create function Funcion_obtenerFlujoVentas_porMes(mes int) returns double
 begin
 	declare totalV double;

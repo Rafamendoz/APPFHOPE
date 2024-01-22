@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 use App\Events\SendEmailPostClosure;
-
+use App\Events\DebugTables;
 class ExecuteClosure implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -28,9 +28,10 @@ class ExecuteClosure implements ShouldQueue
      */
 
     
-     protected $request;
-    public function __construct()
+     public $descripcion;
+    public function __construct($descripcion)
     {
+        $this->descripcion = $descripcion;
     }
 
     /**
@@ -83,7 +84,11 @@ class ExecuteClosure implements ShouldQueue
                         // Ejecuta las consultas SQL del dump
         
                         Log::info('message: Dump ejecutado con éxito');
+                        $conexionOtraBaseDatos = 'mysql';
+                        DB::setDefaultConnection($conexionOtraBaseDatos);
+                        Event(new DebugTables(env('DB_DATABASE')));
                         Event(new SendEmailPostClosure("SUCCESSFULLY"));
+                      
                   
                 } else {
                     Log::info('message: El archivo de dump no existe');

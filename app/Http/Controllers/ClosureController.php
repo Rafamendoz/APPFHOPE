@@ -40,7 +40,8 @@ class ClosureController extends Controller
     }
 
     public function sendClosure(Request $request){
-        ExecuteClosure::dispatch()->onConnection('database');
+        $date = date('Y-m-d H:i:s');
+        ExecuteClosure::dispatch('CIERRE DE BASE DE DATOS - '.$date)->onConnection('database');
         return response()->json(["Status"=>"Success", "Description"=>"Servicio ejecutado y enviado a la cola"],200);
 
     }
@@ -66,6 +67,62 @@ class ClosureController extends Controller
 
       
         return view("reportCierre", compact('reporteFinal'));
+
+
+    }
+
+    public function trasforJsonToArray($json){
+        $coleccionActual = [];
+
+        foreach ($json as $key ) {
+            array_push($coleccionActual,$key->name);
+        }
+        return $coleccionActual;
+
+    }
+
+    public function validateTableNoDebugables(Request $request){
+        $create = DB::select('call createTempTable()');
+        $expections = DB::select('call getTablesNoDebug()');
+
+        $expectionsArray = $this->trasforJsonToArray($expections);
+
+
+
+
+        foreach ($create as $key) {
+                    $valorP = $key->tableName;
+                    $valorCondicion = in_array($key->tableName,$expectionsArray);
+                    Log::info("VALOR DE LA CONDICION PARA TABLA ".$valorP." = ".$valorCondicion);
+
+/*
+                if(in_array($valorP,$expectionsArray)){
+                    log::info("ELIMINANDO ".$key->tableName);
+                    DB::select('call debugTables(?,?)', array($key->tableName,$db));
+                }*/
+            }
+
+        
+    }
+
+    public function getTableNamesRest(Request $request){
+        $db = $request->databaseName1;
+        $db2 = $request->databaseName2;
+
+        $coleccionHistorica = collect();
+        $coleccionActual = collect();
+        $reporteFinal = collect();
+        $create = DB::select('call createTempTable()');
+        $tableNames = DB::select('SELECT * from tablesEntity');
+        $cont = 0;
+        foreach ($create as $key) {
+            $reportDb1 = DB::select('call ReportClosure(?,?)', array($db,$key->tableName ));
+            $reportDb2 = DB::select('call ReportClosure(?,?)', array($db2,$key->tableName ));
+            $reporteFinal->push(["TableName"=>$key->tableName, "HistoricaTotal"=>$reportDb2[0]->total, "ActualTotal"=>$reportDb1[0]->total]);
+        }
+
+        $response = response()->json(["Status"=>"Success", "TablesInfo"=>$reporteFinal],200);
+        return $response;
 
 
     }

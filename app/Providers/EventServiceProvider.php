@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Events\SendEmailPostClosure;
+use App\Events\DebugTables;
 use App\Listeners\ClosureFinished;
+use App\Listeners\DebugTableListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         SendEmailPostClosure::class => [
             ClosureFinished::class,
+        ],
+
+        DebugTables::class => [
+            DebugTableListener::class,
         ],
     ];
 
