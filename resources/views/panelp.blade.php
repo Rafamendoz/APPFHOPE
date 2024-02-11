@@ -72,7 +72,7 @@
                         <a class="collapse-item" href="{{route('POS')}}">POS</a>
                         <a class="collapse-item" href="{{route('Clientes')}}">Clientes</a>
                         <a class="collapse-item" href="{{route('Productos')}}">Productos</a>
-
+                        <a class="collapse-item" href="{{route('Compras')}}">Compras</a>
                     </div>
                 </div>
             </li>

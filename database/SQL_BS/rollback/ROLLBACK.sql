@@ -38,13 +38,29 @@ drop procedure if exists ObtenerEstadoResultado;
 drop procedure if exists ObtenerTotalesEnt;
 drop procedure if exists Obtener_detalleBancarios_by_referencia;
 drop procedure if exists Mapeo_Error;
-
+drop procedure if exists createTempTable;
+drop procedure if exists debugTables;
+drop procedure if exists Error;
+drop procedure if exists ExecuteClosure;
+drop procedure if exists generateRollback;
+drop procedure if exists getTableRelations;
+drop procedure if exists getTablesNoDebug;
+drop procedure if exists insertTempTable;
+drop procedure if exists ReportClosure;
+drop procedure if exists RollbackClosure;
 
 /* -------------------------ROLLBACK FUNCIONES------------------------------------------ */
 drop function if exists Funcion_obtener_total_entradas;
 drop function if exists Funcion_obtener_total_salidas;
 drop function if exists Funcion_obtener_total_stock_by_producto;
 drop function if exists Funcion_obtener_total_stock_by_producto_size_color;
+drop function if exists Funcion_obtenerFlujoGanancias_porMes;
+drop function if exists Funcion_obtenerFlujoGanancias_porYear;
+drop function if exists Funcion_obtenerFlujoVentas_porMes;
+drop function if exists Funcion_obtener_total_entradas_global;
+drop function if exists Funcion_obtener_total_salidas_global;
+drop function if exists Funcion_obtenerFlujo_porMes;
+
 
 /* -----------------------ROLLBACK TRIGGERS-------------------------------------------- */
 drop trigger if exists Actualiza_monto_total_cuentaBancaria;

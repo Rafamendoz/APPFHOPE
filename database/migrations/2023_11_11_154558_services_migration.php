@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('service_name');
             $table->string('endpoint');
+            $table->string('method');
+
             $table->unsignedBigInteger('estado');
             $table->timestamps();
         });

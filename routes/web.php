@@ -162,7 +162,8 @@ Route::group(["middleware" => "auth"], function () {
 
     Route::get('detalleGlobal', 'App\Http\Controllers\DetalleBancoController@getDetalleGlobal')->name('DetalleGlobal');
 
-   
+    Route::get('compras', 'App\Http\Controllers\CompraHeaderController@getCompras')->name('Compras');
+
    
    
 });

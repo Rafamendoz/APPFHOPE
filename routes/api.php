@@ -291,6 +291,9 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
 
  Route::get('finanzas/estadoResultado', 'App\Http\Controllers\DetalleBancoController@getEstadoResultado');
 
+  //RUTAS PARA API COMPRAS //
+  Route::post('compraHeader/add', 'App\Http\Controllers\CompraHeaderController@makePurchaseHeader');
+  Route::get('compraHeaders', 'App\Http\Controllers\CompraHeaderController@getCompraHeadersRest');
 
 
 });

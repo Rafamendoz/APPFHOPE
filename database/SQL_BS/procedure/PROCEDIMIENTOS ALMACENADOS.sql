@@ -58,7 +58,7 @@ DELIMITER //
 DELIMITER ;
         
 DELIMITER //
- CREATE PROCEDURE Obtener_monedas_vista (in estado TEXT)
+ CREATE PROCEDURE Obtener_monedas_vista (in estado varchar (15))
         begin 
 	        select m.id, m.moneda_nombre,m.estado, e.valor, m.created_at, m.updated_at  from moneda m
 	        inner join estado e on m.estado = e.id 
@@ -67,7 +67,7 @@ DELIMITER //
 DELIMITER ;
         
 DELIMITER //
-        create procedure Obtener_tipo_cuenta_vista (in estado TEXT)
+        create procedure Obtener_tipo_cuenta_vista (in estado varchar (15))
         begin
             select c.id, c.cuenta_nombre, e.valor, c.created_at, c.updated_at from cuenta c
             inner join estado e on c.estado = e.id
@@ -211,7 +211,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_tipo_transaccion_vista (in estado TEXT )
+create procedure Obtener_tipo_transaccion_vista (in estado varchar (15) )
 begin
 	select t.id, t.trans_nombre, e.valor, t.created_at, t.updated_at from transaccion t
 	inner join estado e on t.estado = e.id
@@ -232,7 +232,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_bancos_vista (in estado TEXT )
+create procedure Obtener_bancos_vista (in estado varchar (15) )
 begin
 	select b.id, b.banco_nombre, e.valor, b.created_at, b.updated_at  from banco b
 	inner join estado e on b.estado = e.id
@@ -244,7 +244,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_clientes_vista (in estado TEXT )
+create procedure Obtener_clientes_vista (in estado varchar(10) )
 begin
 	select c.id, c.cliente_nom, c.cliente_tel, ifnull(c.cliente_correo, "N/A") as 'cliente_correo',ifnull(c.cliente_DNI, "N/A") as 'cliente_DNI', 
 	e.valor, c.created_at, c.updated_at from cliente c 
@@ -257,7 +257,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_productos_vista (in estado TEXT )
+create procedure Obtener_productos_vista (in estado varchar (15) )
 begin
 	select p.id, p.producto_nom, p.producto_des ,p.precio,e.valor, p.created_at, p.updated_at from producto p
 	inner join estado e on p.estado = e.id
@@ -267,7 +267,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_usuarios_vista (in estado TEXT )
+create procedure Obtener_usuarios_vista (in estado varchar (15) )
 begin
 	select u.id,u.email,u.`user`,u.intentos,e.valor,u.created_at, u.updated_at  from users u
 	inner join estado e on e.id = u.estado
@@ -288,7 +288,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_colaboradores_vista (in estado TEXT )
+create procedure Obtener_colaboradores_vista (in estado varchar (15) )
 begin
 	select c.id, c.colaborador_nombres, c.colaborador_apellidos, c.colaborador_DNI, p.puesto_nombre, u.`user`, e.valor, c.created_at, c.updated_at  from colaborador c 
 	inner join puesto p on p.id = c.colaborador_puesto 
@@ -301,7 +301,7 @@ DELIMITER ;
 DELIMITER //
 
 
-create procedure Obtener_puesto_vista (in estado TEXT )
+create procedure Obtener_puesto_vista (in estado varchar (15) )
 begin
 	select p.id, p.puesto_nombre, e.valor, p.created_at, p.updated_at  from puesto p 
 	inner join estado e ON e.id = p.estado
@@ -397,7 +397,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Obtener_detalleBancarios_by_referencia(in idReferencia text)
+create procedure Obtener_detalleBancarios_by_referencia(in idReferencia varchar (15))
 begin
 	select * from detallebanco db where db.referencia=idReferencia;
 end;//
@@ -415,7 +415,7 @@ DELIMITER ;
 
 DELIMITER //
 
-create procedure Error(in codigo text)
+create procedure Error(in codigo varchar (15))
 begin
 	select e.codigo_error, e.subcodigo, e.descripcion ,he.Status, e.errorApp, he.httpCodeTraslate  from errores e
 	inner join httperrors he on e.errorApp = he.httpCode
@@ -466,7 +466,7 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE ReportClosure(databaseName VARCHAR(250), tableName VARCHAR(250))
 BEGIN
-    SET @sql = CONCAT('SELECT COUNT(id) FROM ', databaseName, '.', tableName);
+    SET @sql = CONCAT('SELECT COUNT(id) as total FROM ', databaseName, '.', tableName);
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
@@ -533,7 +533,6 @@ WHERE
     AND TABLE_NAME = tableName
     AND REFERENCED_TABLE_NAME IS NOT NULL;
 end
-GRANT SELECT, LOCK TABLES, SHOW VIEW ON *.* TO 'DEVAPPFHOPE'@'localhost';
 //
 DELIMITER ;
 
@@ -541,19 +540,9 @@ DELIMITER ;
 DELIMITER //
 create procedure debugTables(tableName varchar(50), databaseName varchar(250))
 begin
-	 SET @sql = CONCAT('DELETE FROM ', databaseName, '.', tableName);
     PREPARE stmt FROM @sql;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 end//
 DELIMITER ;
 	
-DELIMITER //
-create procedure getMonthlyProfits(numberMonth int)
-begin
-	declare netSales float;
-	set netSales = select sum(v.total)  from venta v;
-end
-
-//
-DELIMITER ;

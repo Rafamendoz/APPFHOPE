@@ -32,12 +32,9 @@
                                                 </div>
                                                 
 
-                                                <div class="col-md-6 mb-3" id="capaTotal" >
-                                                    <label for="total" class="form-label">Total:</label>
-                                                    <input class="form-control" id="total" value=""   readonly></input>
-                                                </div>
+                                            
                                                 <div class="col-md-12 mb-1" id="capaTotal" >
-                                                <label for="orden" class="form-label">Tipo de Identificacion:</label>
+                                                    <label for="orden" class="form-label">Tipo de Identificacion:</label>
                                                 </div>
 
                                                 <div class="col-md-12 mb-2">
@@ -46,12 +43,12 @@
                                                         <label class="form-check-label" for="flexRadioDefault1">
                                                             DNI
                                                         </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  onclick="MostrarIdentificacion()">
-                                                        <label class="form-check-label" for="flexRadioDefault2">
-                                                            Codigo Cliente
-                                                        </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"  onclick="MostrarIdentificacion()">
+                                                            <label class="form-check-label" for="flexRadioDefault2">
+                                                                Codigo Cliente
+                                                            </label>
                                                     </div>
                                                 </div>
 
