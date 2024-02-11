@@ -32,7 +32,7 @@ return new class extends Migration
         $ApiToken =  Crypt::encrypt($baseapi);
         $usuario =User::create( ['email'=>"admin@fhope.online",'password'=>$contra,'user'=>'admin','intentos'=>100,'ApiToken'=>$ApiToken,'estado'=>1]);
         $usuario->assignRole('ADMINISTRADOR');
-
+/*
         Error::create(['codigo_error'=>23000,'descripcion'=>'Los datos ingresados no son permitidos para la solicitud, por favor revisar.']);
         Error::create(['codigo_error'=>404,'descripcion'=>'El registro solicitado no fue encontrado porque no existe.']);
         Error::create(['codigo_error'=>2002,'descripcion'=>'Error de conexion hacia la BD']);
@@ -40,7 +40,7 @@ return new class extends Migration
         Error::create(['codigo_error'=>'01000','descripcion'=>'Hay un valor que excede el limite permitido de tamaño del campo']);
         Error::create(['codigo_error'=>'HY000','descripcion'=>'Se estan enviando campos con valor null']);
 
-
+*/
         Color::create(['name_color'=>'ROJO','hex'=>'FF0000','estado'=>1]);
         Color::create(['name_color'=>'VERDE MILITAR','hex'=>'667c3e','estado'=>1]);
         Color::create(['name_color'=>'AZUL CLARO','hex'=>'E0FFFF','estado'=>1]);

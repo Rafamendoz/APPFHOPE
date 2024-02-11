@@ -32,7 +32,10 @@
                                                 </div>
                                                 
 
-                                            
+                                                <div class="col-md-6 mb-3" id="capaTotal" >
+                                                    <label for="total" class="form-label">Total:</label>
+                                                    <input class="form-control" id="total" value=""   readonly></input>
+                                                </div>
                                                 <div class="col-md-12 mb-1" id="capaTotal" >
                                                     <label for="orden" class="form-label">Tipo de Identificacion:</label>
                                                 </div>

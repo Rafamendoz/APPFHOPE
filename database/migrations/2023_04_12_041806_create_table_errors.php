@@ -12,8 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('errores', function (Blueprint $table) {
-            $table->string('codigo_error')->unique();
+            $table->id('identificador');
+            $table->string('id')->unique();
+            $table->string('codigo_error');
             $table->string("descripcion");
+            $table->string("subcodigo")->unique();
+            $table->integer("errorApp");
             $table->timestamps();
         });
     }
