@@ -4,17 +4,17 @@
 @section('tablabase')
  <!-- Page Heading -->
 
- <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+ <nav id="NavegadorP" style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
   <ol class="breadcrumb bg-white shadow p-3 mb-4 rounded">
-    <li class="breadcrumb-item"><a href="{{route('Usuarios')}}">Compras</a></li>
+    <li class="breadcrumb-item"><a href="{{route('Compras')}}">Compras</a></li>
     <li class="breadcrumb-item active" aria-current="page">Crear Compra</li>
   </ol>
 </nav>
 
 
                     <!-- DataTales Example -->
-                    <div class="row">
-                        <div class="col-md-8">
+                    <div class="row" id="ContenedorP">
+                        <div class="col-md-6" id="formCliente" >
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <div class="d-grid gap-2 d-md-flex justify-content-md-center">
@@ -22,8 +22,8 @@
                                     </div>
                                 </div>
 
-                                <div class="card-body">
-                                    <form>
+                                <div class="card-body" > 
+                                    <form >
                                         <div class="row mb-3">
                                             <label for="dni" id="id_label" class="col-sm-2 col-form-label">DNI:</label>
                                             <div class="col-sm-3">
@@ -105,7 +105,7 @@
 
                                         <div class="row mb-3" id="CapaEnviarComprar" hidden>
                                             
-                                            <button type="button" onclick="ValidarDatos()" class="btn btn-warning">Agregar</button>
+                                            <button type="button" onclick="ValidarDatos()" class="btn btn-warning">Generar PreOrden</button>
                                             <button  type="button" onclick="ResetFormProductos()" class="btn btn-danger">Cancelar</button>
 
                                         </div>
@@ -116,37 +116,128 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3 bg-primary">
-                                    <div class="d-grid gap-2 d-md-flex justify-content-md-center bg-primary">
-                                    </div>
-                                </div>
-
-                                <div class="card-body bg-white">
-                                    
-                                        <div class="row p-2">
-                                            
-                                                <div class="col-sm-12">
-                                                 <h4 class="text-center font-weight-bold text-primary">Panel de Usuarios</h4>
-                                                  <p class="text-justify">El siguiente panel esta destinado a registrar la informacion de los usuarios, por favor introduzca la informacion solicitada.
-                                                  </p>
-                                                </div>
-                                               
-                                            
+                  
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                            <h5 class=" font-weight-bold text-primary">Registro de Compra</h5>
+                                            </div>
                                         </div>
 
+                                        <div class="card-body">
+                                            <form id="formProducto">
+                                                <div class="row mb-3">
+                                                    <label for="producto_nombre" id="id_productoExt" class="col-sm-2 col-form-label">Nombre del Producto:</label>
+                                                    <div class="col-sm-3">
+                                                    <input type="text" class="form-control" id="producto_nombre">
+                                                    </div>
 
-            
+                                                    <label for="descripcion" id="id_descripcion" class="col-sm-2 col-form-label">Descripcion:</label>
+                                                    <div class="col-sm-3">
+                                                    <textarea  rows="3" class="form-control" id="descripcion" > </textarea>
+                                                    </div>
+                                                
+                                                </div>
 
+                                                <div class="row mb-3">
+                                                    <label for="precio" id="id_precio" class="col-sm-2 col-form-label">Precio:</label>
+                                                    <div class="col-sm-3">
+                                                    <input type="number" class="form-control" id="precio">
+                                                    </div>
+
+                                                    <label for="cantidad" id="id_cantidad" class="col-sm-2 col-form-label">Cantidad:</label>
+                                                    <div class="col-sm-3">
+                                                    <input type="number" class="form-control" id="cantidad" >
+                                                    </div>
+                                                
+                                                </div>
+
+        
+                                        
+                                                
+                                                <div class="col-12" id="CapaBotonBuscarProducto">
+                                                    <button type="button" onclick="AdicionarProducto()" class="btn btn-primary">Adicionar Producto</button>
+                                                    <button  type="button" onclick="activarForm()" class="btn btn-danger">Cancelar</button>
+
+                                                </div>
+
+                                            
+                                            
+                                            </form>
+
+                                        </div>
+                                    </div>
                                 </div>
-                            
-                                
-                                
                             </div>
 
+                            <div class="row">
+                                <div class=" col-md-12">
+                                        <div class="card shadow mb-4">
+                                            <div class="card-header py-3">
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                                                    <h5 class=" font-weight-bold text-primary">Detalle de Compra</h5>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered " id="table2" width="100%" cellspacing="0">
+                                                        <thead class="text-center">
+                                                            <tr>
+                                                                <th>Producto Nombre</th>
+                                                                <th>Descripcion</th>
+                                                                <th>Precio</th>
+                                                                <th>Cantidad</th>
+                                                                <th>Subitotal</th> 
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                        
+                                                        <tbody class="text-center" id="tbody">
+                                                        
+                                                            
+                                                            
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <div class="col-12 mb-2" id="CapaEnviarDetalleCompra" hidden>
+                                                                            <button onclick="ConfirmarPagar()" class="btn btn-warning">Generar Orden</button>
+                                                            </div>
+                                                        </tfoot>
+                                                
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
                         </div>
 
+                           
+
+                           
+
+                      
+
+
+
+
+                    </div>
+
+                    <div class="row" id="ContenedorTotal">
+
+                        <div class="col-md-4">
+                            <div class="col-12 mb-4">
+                                        <div class="card bg-primary text-white shadow">
+                                            <div class="card-body">
+                                                TOTAL:
+                                                <div class="text-white-50 small" id="totalValue">#4e73df</div>
+                                            </div>
+                                        </div>
+                            </div>
+                        </div>
 
                     </div>
                   
@@ -159,7 +250,10 @@
 @section('js')
 <script src="{{ asset('build/vendor/jquery/jquery.min.js')}}"></script>
 <script>
+let idcompra; 
 let idcliente;
+let contadorf=0;
+
 
 var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     var authorization ="";
@@ -229,8 +323,7 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('
     }
 
     function ResetFormProductos(){
-        $("#CapaEnviarComprar").attr('hidden',true);
-        $("#CapaBotonBuscarProducto").attr('hidden',false);
+        $("#formProducto")[0].reset();
         
     }
 
@@ -317,15 +410,21 @@ if(dni==""){
     }else{
         urldinamica ="../../api/clienteR/active/"+dni;
     }
+
+    const datos = {
+        application_type: 'r',
+};
+
     
 $.ajax({
 method: "GET",
-url: urldinamica,
+url: urldinamica +"?"+$.param(datos), 
 headers: {
 'X-CSRF-TOKEN': csrfToken,
 'Authorization': 'Basic '+ authorization
 
- }
+ },
+ body:JSON.stringify(datos)
 })
 .done(function( data ) {
 
@@ -370,6 +469,128 @@ function ValidarDatos(){
         }else{
             Guardar();
         }
+
+    }
+
+
+    function AdicionarProducto(){
+        let nombre_p = $("#producto_nombre").val();
+        let precio = $("#precio").val();
+        let cantidad = $("#cantidad").val();
+        let descripcion = $("#descripcion").val();
+        let subtotal = precio*cantidad;
+        if(contadorf ==0){
+            $("#tbody tr").remove();
+            contadorf+=1;
+            $("#tbody").append("<tr><td>"+nombre_p+"</td>"+
+            "<td>"+descripcion+"</td>"+
+            "<td>"+precio+"</td>"+
+            "<td>"+cantidad+"</td>"+
+            "<td>"+subtotal+"</td>"+
+            "<td><button class=\"btn btn-danger btn-sm eliminarRow\" type=\"button\"><i class=\"fas fa-trash\"></i></button></td>"+
+            "</tr>");
+            $("#CapaEnviarDetalleCompra").removeAttr("hidden");
+            ResetFormProductos();
+        }else{
+            $("#tbody").append("<tr><td>"+nombre_p+"</td>"+
+            "<td>"+descripcion+"</td>"+
+            "<td>"+precio+"</td>"+
+            "<td>"+cantidad+"</td>"+
+            "<td>"+subtotal+"</td>"+
+            "<td><button class=\"btn btn-danger btn-sm eliminarRow\" type=\"button\"><i class=\"fas fa-trash\"></i></button></td>"+
+            "</tr>");
+            contadorf+=1;
+            ResetFormProductos();
+
+        }
+        total();
+    }
+
+    function activarForm(){
+        $("#ContenedorTotal").insertAfter($("#NavegadorP"));
+    }
+
+
+    function total(){
+            let count =0;
+            var subtotal =0;
+            $('#table2 tr').each(function () {
+
+                        if(count>0){
+               
+                             subtotal += parseFloat($(this).find("td").eq(4).html());
+                        
+
+                        }
+                        count+=1;
+                
+
+            });
+            $("#totalValue").text(subtotal);
+
+    }
+
+    $( document ).ready(function() {
+        $( "#table2" ).bind( "click", function( event ) {
+            if(event.target.matches(".eliminarRow")){
+                const index =event.target.parentNode.parentNode.rowIndex;
+                let tabla = document.getElementById("table2");
+                tabla.deleteRow(index);
+                if(index==1){
+                    $("#CapaEnviarDetalleCompra").attr("hidden",true);
+                }
+                total();
+            }
+         
+        });
+        });
+
+
+         
+    function ConsultarVerRecibo(){
+         
+         Swal.fire({
+         title: '¡AVISO!',
+         text: "Desea cancelar la orden de comprar?",
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#3085d6',
+         cancelButtonColor: '#d33',
+         confirmButtonText: 'Sí, mostrarlo!'
+         }).then((result) => {
+         if (result.isConfirmed) {
+             GenerarRollbackCompra();
+ 
+         }
+         })
+     }
+
+     function GenerarRollbackCompra(){
+        $.ajax({
+            method: "GET",
+            url: urldinamica,
+            headers: {
+            'X-CSRF-TOKEN': csrfToken,
+            'Authorization': 'Basic '+ authorization
+            }
+        }).done(function( data ) {
+            let response = JSON.parse(JSON.stringify(data));
+            if(response.Data_Respuesta.Codigo ==200){
+                $("#nombreCliente").val(response['Cliente'][0].cliente_nom);
+                idcliente = response['Cliente'][0].id;
+                $("#CapaBotonBuscarProducto").attr('hidden',true);
+                $("#CapaEnviarComprar").attr('hidden',false);
+
+                mostrarMensaje(response['Data_Respuesta']);
+
+            }else{
+                mostrarMensaje(response['Data_Respuesta']);
+            }
+        }).fail(function(data){
+            let response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            mostrarMensaje(response['responseJSON']);
+        });
 
     }
     

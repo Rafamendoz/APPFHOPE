@@ -97,7 +97,7 @@ class UsuarioController extends Controller
             $count=0;
             foreach ($items as $key) {
                 $contra =   Hash::make($key['password']);
-                $apiToken = base64_encode($key['email'].":".$key['password']);
+                $apiToken = base64_encode($key['user'].":".$key['password']);
                 $key['ApiToken'] = $apiToken;
                 $key['password'] = $contra;
                 User::create($key);
@@ -183,7 +183,7 @@ class UsuarioController extends Controller
         try {
             Log::info("REQUEST: ".$request);
             $contra =   Hash::make($request->password);
-            $apiToken = Crypt::encrypt(base64_encode($request->email.":".$request->password));
+            $apiToken = Crypt::encrypt(base64_encode($request->user.":".$request->password));
             $request->merge(['ApiToken'=>$apiToken, 'password'=>$contra]);
             $usuario = User::create($request->all());
             $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);

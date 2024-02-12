@@ -215,44 +215,41 @@
                                     </div>
 
                                     <div class="card-body">
-                                    <div class="table-responsive">
-                                <table class="table table-bordered " id="table2" width="100%" cellspacing="0">
-                                    <thead class="text-center">
-                                        <tr>
-                                            <th>Codigo Producto</th>
-                                            <th>Nombre</th>
-                                            <th>Precio</th>
-                                            <th>Talla</th>
-                                            <th>Color</th>
-                                            <th>Cantidad</th>
-                                            <th>Descuento</th>
-                                            <th>Isv</th>
-                                            <th>Subtotal</th>
-                                            <th hidden>valorTalla</th>
-                                            <th hidden>valorColor</th>
-                                            <th>Acciones</th>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered " id="table2" width="100%" cellspacing="0">
+                                                <thead class="text-center">
+                                                    <tr>
+                                                        <th>Codigo Producto</th>
+                                                        <th>Nombre</th>
+                                                        <th>Precio</th>
+                                                        <th>Talla</th>
+                                                        <th>Color</th>
+                                                        <th>Cantidad</th>
+                                                        <th>Descuento</th>
+                                                        <th>Isv</th>
+                                                        <th>Subtotal</th>
+                                                        <th hidden>valorTalla</th>
+                                                        <th hidden>valorColor</th>
+                                                        <th>Acciones</th>
 
 
 
-                                        </tr>
-                                    </thead>
-                            
-                                        <tbody class="text-center" id="tbody">
-                                          
-                                            
-                                            
-                                        </tbody>
-                                        <tfoot>
-                                            <div class="col-12 mb-2" id="CapaEnviarOrden" hidden>
-                                                            <button onclick="ConfirmarPagar()" class="btn btn-warning">Generar Orden</button>
-                                            </div>
-                                        </tfoot>
-                                     
-                                </table>
-                            </div>
+                                                    </tr>
+                                                </thead>
+                                
+                                                <tbody class="text-center" id="tbody">
+                                                
+                                                    
+                                                    
+                                                </tbody>
+                                                <tfoot>
+                                                    <div class="col-12 mb-2" id="CapaEnviarOrden" hidden>
+                                                                    <button onclick="ConfirmarPagar()" class="btn btn-warning">Generar Orden</button>
+                                                    </div>
+                                                </tfoot>
                                         
-                                       
-
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

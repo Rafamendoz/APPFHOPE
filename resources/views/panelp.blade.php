@@ -68,11 +68,11 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de <br>Produccion:</h6>
-                        <a class="collapse-item" href="{{route('Ventas')}}">Resumen Ventas</a>
-                        <a class="collapse-item" href="{{route('POS')}}">POS</a>
-                        <a class="collapse-item" href="{{route('Clientes')}}">Clientes</a>
-                        <a class="collapse-item" href="{{route('Productos')}}">Productos</a>
-                        <a class="collapse-item" href="{{route('Compras')}}">Compras</a>
+                        <a class="collapse-item" href="{{route('Ventas',['destination' => 'ventas', 'value' => 'r'])}}">Resumen Ventas</a>
+                        <a class="collapse-item" href="{{route('POS',['destination' => 'pos', 'value' => 'r'])}}">POS</a>
+                        <a class="collapse-item" href="{{route('Clientes',['destination' => 'clientes', 'value' => 'r'])}}">Clientes</a>
+                        <a class="collapse-item" href="{{route('Productos',['destination' => 'productos', 'value' => 'r'])}}">Productos</a>
+                        <a class="collapse-item" href="{{route('Compras',['destination' => 'compras', 'value' => 'r'])}}">Compras</a>
                     </div>
                 </div>
             </li>

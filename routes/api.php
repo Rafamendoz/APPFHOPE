@@ -30,10 +30,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //RUTAS PARA ENTIDAD USUARIO
-Route::group(["middleware" => "auth.basic1"], function () {
+Route::group(["middleware" => "auth.basic.2.0"], function () {
   
   
-  Route::post('error/add', 'App\Http\Controllers\ErrorController@setError')->name('SetError');
+  
+  Route::group(["middleware" => "permissions.2.0"], function () {
+    Route::post('compraHeader/add', 'App\Http\Controllers\CompraHeaderController@makePurchaseHeader');
+    Route::post('error/add', 'App\Http\Controllers\ErrorController@setError')->name('SetError');
 
 
  /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
@@ -295,6 +298,14 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
   Route::post('compraHeader/add', 'App\Http\Controllers\CompraHeaderController@makePurchaseHeader');
   Route::get('compraHeaders', 'App\Http\Controllers\CompraHeaderController@getCompraHeadersRest');
 
+  //RUTAS PARA API PROFILE //
+
+  Route::post('profileR/add', 'App\Http\Controllers\ProfileUsersController@makeProfile');
+  Route::get('profilesR', 'App\Http\Controllers\ProfileUsersController@getProfilesRest');
+  Route::post('userprofileR/assign', 'App\Http\Controllers\UserHasProfilesController@AssignProfileToUser');
+  Route::get('userprofileR', 'App\Http\Controllers\UserHasProfilesController@getProfileFromUser');
+
+  });
 
 });
 

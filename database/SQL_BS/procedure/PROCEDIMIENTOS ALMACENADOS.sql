@@ -546,3 +546,64 @@ begin
 end//
 DELIMITER ;
 	
+
+DELIMITER //
+create procedure ObtenerCabeceraCompras(estado int)
+begin
+	select co.id,c.cliente_nom,tp.nombre,m.moneda_nombre, co.total, e.valor from compra_header co
+	inner join cliente c on c.id = co.id_cliente 
+	inner join tipoCompra tp on tp.id = co.id_tipoCompra
+	inner join moneda m on m.id = co.id_tipoMoneda
+	inner join estado e on e.id = co.estado
+	where co.estado = estado;
+end//
+DELIMITER ;
+	
+DELIMITER //
+create procedure ObtenerPerfilesPorUsuario(in usuario varchar (15))
+begin
+	select pu.name_profile  from `_user_has_profiles` uhp
+	inner join users u on u.id  = uhp.id_usuario 
+	inner join profile_users pu on uhp.id_profile = pu.id
+	where u.`user` = usuario and pu.estado=1;
+end//
+
+DELIMITER ;
+
+drop procedure if exists ObtenerPerfilesPorUsuario;
+
+DELIMITER //
+create procedure AsignarPerfilAUsuario(in usuario varchar (15), in profile varchar (15))
+begin
+	DECLARE idUsuario int;
+	DECLARE idProfile int;
+	select u.id into idUsuario from users u where u.user=usuario;
+	select pu.id into idProfile from profile_users pu where pu.name_profile=profile;
+	insert into `_user_has_profiles` (id_usuario,id_profile) values (idUsuario, idProfile);
+end//
+
+DELIMITER ;
+
+
+DELIMITER //
+create procedure ObtenerVistaPorProfile(in profile varchar (15))
+begin
+	DECLARE idProfileVar int;
+	select pu.id into idProfileVar from profile_users pu where pu.name_profile=profile;
+	select pu.view_name from profile_users_auth pu where pu.id_profile =idProfileVar;
+end//
+
+DELIMITER ;
+
+DELIMITER //
+create procedure ObtenerPermisosPorVistaPorProfile(in profile varchar (15) , in vista varchar(15))
+begin
+	DECLARE idProfileVar int;
+	select pu.id into idProfileVar from profile_users pu where pu.name_profile=profile;
+	select pu.view_name, pu.permissions from profile_users_auth pu where pu.id_profile =idProfileVar and pu.view_name =vista;
+end//
+
+DELIMITER ;
+
+
+call ObtenerPermisosPorVistaPorProfile('FHPURHPRD','addcompras');

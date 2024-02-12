@@ -5,6 +5,7 @@ use App\Models\CompraHeader;
 use App\Models\Estado;
 use App\Models\Moneda;
 use App\Models\TipoCompra;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Log;
 
@@ -17,11 +18,28 @@ class CompraHeaderController extends Controller
 
 
 
-    public function getCompras(){
+    public function getSaveCompraHeader(){
         $monedas  = Moneda::all();
         $tipoCompra = TipoCompra::all();
         return view('addpurchase', compact('monedas','tipoCompra'));
     }
+
+    public function getCompras(){
+        $compras  = DB::select("call ObtenerCabeceraCompras(?)", array(1));
+        return view('compras', compact('compras'));
+    }
+
+    
+    public function getDetalleCompra(){
+        $monedas  = Moneda::all();
+        $tipoCompra = TipoCompra::all();
+        return view('detalleCompraReport');
+    }
+
+    public function makeRollbackPurchase(Request $request){
+
+    }
+
 
 
 

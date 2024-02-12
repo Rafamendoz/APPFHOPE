@@ -38,8 +38,14 @@ Route::middleware('auth')->group( function() {
 
 Route::group(["middleware" => "auth"], function () {
     /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
-   
-   
+    Route::get('apiCredenciales', 'App\Http\Controllers\CredencialesConsumoController@GetCredencialesConsumo');
+
+    Route::get('logout', 'App\Http\Controllers\LoginController@logout')->name('Logout');
+
+    Route::group(["middleware" => "permissions.2.0.web"], function () {
+
+
+      
     Route::get('cuentasBancarias', 'App\Http\Controllers\CuentaBancariaController@getCuentasBancarias')->name("cuentasBancarias");
     Route::get('cuentasBancarias/addCuentaBancaria', 'App\Http\Controllers\CuentaBancariaController@AddCuentaBancaria')->name("addCuentaBancaria");
 
@@ -99,7 +105,6 @@ Route::group(["middleware" => "auth"], function () {
        //RUTAS PARA ENTIDAD CLIENTE
         /* RUTA PARA METODO DE OBTENER TODOS LOS USUARIOS ACTIVOS PARA LA VISTA*/
     Route::get('cliente', 'App\Http\Controllers\ClienteController@getCliente');
-    Route::get('apiCredenciales', 'App\Http\Controllers\CredencialesConsumoController@GetCredencialesConsumo');
 
       
       /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
@@ -154,7 +159,6 @@ Route::group(["middleware" => "auth"], function () {
      
    
       
-    Route::get('logout', 'App\Http\Controllers\LoginController@logout')->name('Logout');
 
  
  
@@ -162,9 +166,15 @@ Route::group(["middleware" => "auth"], function () {
 
     Route::get('detalleGlobal', 'App\Http\Controllers\DetalleBancoController@getDetalleGlobal')->name('DetalleGlobal');
 
-    Route::get('compras', 'App\Http\Controllers\CompraHeaderController@getCompras')->name('Compras');
 
-   
+
+    Route::get('addcompras', 'App\Http\Controllers\CompraHeaderController@getSaveCompraHeader')->name('AddCompras');
+    Route::get('detallecompra/{id}', 'App\Http\Controllers\CompraHeaderController@getDetalleCompra')->name('GetDetalleCompra');
+
+      Route::get('compras', 'App\Http\Controllers\CompraHeaderController@getCompras')->name('Compras');
+
+    });
+
    
 });
 
