@@ -114,8 +114,9 @@ Route::group(["middleware" => "auth"], function () {
     //CRUD USUARIO//
     Route::get('usuarios', 'App\Http\Controllers\UsuarioController@getUsuario')->name('Usuarios');
     Route::get('usuariosAll', 'App\Http\Controllers\UsuarioController@getUsuarioAll')->name('UsuariosAll');
-
+    
     Route::get('usuarios/addusuario', 'App\Http\Controllers\UsuarioController@addUsuario')->name('AddUsuario');
+    Route::get('usuarios/getUsuarioUpdate', 'App\Http\Controllers\UsuarioController@getUsuarioUpdate')->name('GetUsuarioUpdate');
 
     //CRUD CLIENTE//
     Route::get('clientes', 'App\Http\Controllers\ClienteController@getClientes')->name('Clientes');
@@ -172,6 +173,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('detallecompra/{id}', 'App\Http\Controllers\CompraHeaderController@getDetalleCompra')->name('GetDetalleCompra');
 
       Route::get('compras', 'App\Http\Controllers\CompraHeaderController@getCompras')->name('Compras');
+      Route::get('profilesAuth', 'App\Http\Controllers\ProfileUsersController@getApplicationAuth')->name('ProfilesAuth');
 
     });
 

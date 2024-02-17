@@ -11,4 +11,8 @@ class ProfileUsers extends Model
 
     public $table='profile_users';
     public $fillable = ['name_profile', 'start_date', 'end_date','estado'];
+
+
+
+    
 }

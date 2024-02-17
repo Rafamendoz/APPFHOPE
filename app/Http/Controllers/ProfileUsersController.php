@@ -5,6 +5,8 @@ use App\Models\ProfileUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\Error;
+use Illuminate\Support\Facades\DB;
+
 
 class ProfileUsersController extends Controller
 {
@@ -50,4 +52,39 @@ class ProfileUsersController extends Controller
         }
 
     }
+
+    public function getApplicationAuth(){
+        return view('profilesAuth');
+
+    }
+
+    public function getAuthProfileRest(Request $request){
+
+        try {
+            log::info("REQUEST: ".$request);
+            $profiles = DB::select("CALL ObtenerVistaDetallePorProfile(?)", array($request->name_profile));
+            if(is_null($profiles)){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Profiles"=>$profiles, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+
+                return $response;  
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+
+    }
+
+
+   
 }

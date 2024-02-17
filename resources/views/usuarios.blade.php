@@ -25,7 +25,7 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
-                                            <a class="dropdown-item" href="{{route('AddUsuario')}}">Agregar Usuarios</a>
+                                            <a class="dropdown-item" href="{{route('AddUsuario', ['destination' => 'AddUsuario', 'value' => 'r'])}}">Agregar Usuarios</a>
                                             <div class="dropdown-divider"></div>
                                         </div>
                                     </div>
@@ -61,7 +61,7 @@
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>
                                                             <button class="btn btn-danger btn-sm" type="button" onclick="ConsultarEliminar({{$valor->id}})"><i class="fas fa-trash"></i></button>
-                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-save"></i></button>              
+                                                            <button class="btn btn-primary btn-sm" type="button"><i class="fas fa-pen"></i></button>              
                                                 </td>
                                                 @endif    
                                                 @if($valor->valor=="INACTIVO")
@@ -171,6 +171,8 @@
         });
 
     }
+
+
     
 
     function Eliminar(id){

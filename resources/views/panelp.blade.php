@@ -128,7 +128,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tablas Dependientes:</h6>
                         <a class="collapse-item" href="{{route('VentasAll')}}">Resumen Ventas</a>
-                        <a class="collapse-item" href="{{route('UsuariosAll')}}">Usuarios</a>
+                        <a class="collapse-item" href="{{route('UsuariosAll', ['destination' => 'UsuariosAll', 'value' => 'r'])}}">Usuarios</a>
                         <a class="collapse-item" href="{{route('Colaboradores')}}">Colaboradores</a>
                  
                         <h6 class="collapse-header">Tablas Independientes</h6> 
@@ -146,6 +146,24 @@
                 </div>
             </li>
             @endrole
+
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFive"
+                    aria-expanded="true" aria-controls="collapseFive">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Seguridad</span>
+                </a>
+                <div id="collapseFive" class="collapse" aria-labelledby="headingPages" data-parent="#collapseFive">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Perfiles:</h6>
+                        <a class="collapse-item" href="{{route('GetUsuarioUpdate', ['destination' => 'GetUsuarioUpdate', 'value' => 'r'])}}">Asignar Perfiles</a>
+                        <a class="collapse-item" href="{{route('ProfilesAuth', ['destination' => 'ProfilesAuth', 'value' => 'r'])}}">Aplicaciones Autorizadas</a>
+
+
+                    </div>
+                </div>
+            </li>
            
             <!-- Divider -->
             <hr class="sidebar-divider">

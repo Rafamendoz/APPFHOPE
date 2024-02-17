@@ -43,9 +43,9 @@ Route::group(["middleware" => "auth.basic.2.0"], function () {
 
  Route::get('usuarioR', 'App\Http\Controllers\UsuarioController@getUsuarioRest');
  /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
-Route::get('usuarioR/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestById');
+Route::get('usuarioR', 'App\Http\Controllers\UsuarioController@getUsuarioRestById');
 
-Route::get('usuarioR/user/{id}', 'App\Http\Controllers\UsuarioController@getUsuarioRestByUsuario');
+Route::get('usuarioR/user', 'App\Http\Controllers\UsuarioController@getUsuarioRestByUsuario');
 Route::post('usuarioR/assingRole/{id}', 'App\Http\Controllers\UsuarioController@setAssingRoleUserRest');
 Route::post('usuarioR/addMasive', 'App\Http\Controllers\UsuarioController@setUsuariosMasivosRest');
 
@@ -63,7 +63,7 @@ Route::get('rolR/{id}', 'App\Http\Controllers\RolController@getRolRestById');
  /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
 Route::post('usuarioR/add', 'App\Http\Controllers\UsuarioController@setUsuario');
  /* RUTA PARA METODO DE ACTUALIZAR UN USUARIO POR ID*/
-Route::put('usuarioR/update/{id}', 'App\Http\Controllers\UsuarioController@putUsuario');
+Route::put('usuarioR/update', 'App\Http\Controllers\UsuarioController@putUsuario');
  /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
 Route::put('usuarioR/delete/{id}', 'App\Http\Controllers\UsuarioController@deleteUsuario');
 
@@ -304,6 +304,11 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
   Route::get('profilesR', 'App\Http\Controllers\ProfileUsersController@getProfilesRest');
   Route::post('userprofileR/assign', 'App\Http\Controllers\UserHasProfilesController@AssignProfileToUser');
   Route::get('userprofileR', 'App\Http\Controllers\UserHasProfilesController@getProfileFromUser');
+  Route::post('getapplicationsAuth', 'App\Http\Controllers\ProfileUsersController@getAuthProfileRest');
+  Route::post('profileuserauthR/add', 'App\Http\Controllers\ProfileUsersAuthController@saveAplicationAuth');
+  Route::patch('profileuserauthR/update', 'App\Http\Controllers\ProfileUsersAuthController@updateAplicationAuth');
+
+  
 
   });
 

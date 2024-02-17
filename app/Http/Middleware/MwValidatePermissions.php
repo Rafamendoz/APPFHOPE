@@ -37,19 +37,12 @@ class MwValidatePermissions
                 // El usuario ha sido autenticado exitosamente
                
                 $tipoPeticion = strtoupper($request->application_type);
-                $segmentos = $request->segments();
-                $posicionApi = array_search('api', $segmentos);
-
-                if ($posicionApi !== false && isset($segmentos[$posicionApi + 1])) {
-                    // Obtener el siguiente segmento después de 'api'
-                    $siguienteParametro = $segmentos[$posicionApi + 1];
-                    $path = "api/".$siguienteParametro;
-                    // $siguienteParametro contendrá 'clientes'
-                }
+                $path_temp = $request->path();
+                
 
                 // Buscar la posición del segmento 'api'
 
-                Log::info("PATH ".$path);
+                Log::info("PATH ".$path_temp);
 
                 $vistaEncontrada =false;
                 $profiles = DB::select("call ObtenerPerfilesPorUsuario(?)", array($usuario));
@@ -60,14 +53,14 @@ class MwValidatePermissions
                     foreach ($profiles as $value) {
                         $vistas = DB::select("call ObtenerVistaPorProfile(?)", array($value->name_profile));
                         foreach ($vistas as $vista) {
-                            if ($vista->view_name === $path) {
+                            if ($vista->view_name === $path_temp) {
                                 $vistaEncontrada = true;
                                 break;
                             }
                         }
     
                         if ($vistaEncontrada) {
-                            $permission = DB::select("call ObtenerPermisosPorVistaPorProfile(?,?)", array($value->name_profile,$path));
+                            $permission = DB::select("call ObtenerPermisosPorVistaPorProfile(?,?)", array($value->name_profile,$path_temp));
                             /*$permissionTrs = $permission->permissions;*/
                            /* return response()->json(['permmis'=>$permission]);*/
                             $valores = explode("|", $permission[0]->permissions);

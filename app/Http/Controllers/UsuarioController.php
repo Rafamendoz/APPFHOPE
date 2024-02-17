@@ -22,6 +22,24 @@ class UsuarioController extends Controller
 
     
 
+    public function getUsuarioUpdate(Request $request){
+        try {
+            $estados = Estado::all();
+            $data = $this->getUsuarioRestByUsuario($request);
+
+            return view('updateusuario', compact('data','estados'));
+
+
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+       
+   }
+
+
+
     public function getUsuarioAll(){
         try {
             $data = DB::select('CALL Obtener_usuarios_vista_all()');
@@ -59,28 +77,28 @@ class UsuarioController extends Controller
 
 
    public function getUsuarioRest(Request $request){
-    try {
-        log::info("REQUEST: ".$request);
-        $usuarios = User::all();
-        if(sizeof($usuarios)<1){
-            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
-            Log::info("RESPONSE: ".$response);
-            return $response;
-        }else{
-            $response =  response()->json([
-                "Usuarios"=>$usuarios, "Data_Respuesta"=>[
-                "Codigo"=>"200",
-                "Estado"=>"Exitoso"]
-            ], 200);
-            Log::info("RESPONSE: ".$response);
-            return $response;  
+        try {
+            log::info("REQUEST: ".$request);
+            $usuarios = User::all();
+            if(sizeof($usuarios)<1){
+                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+            }else{
+                $response =  response()->json([
+                    "Usuarios"=>$usuarios, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                Log::info("RESPONSE: ".$response);
+                return $response;  
 
+            }
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
         }
-    } catch (\Throwable $th) {
-        Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-        $error = Error::where('codigo_error',$th->getCode())->get();
-        return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
-    }
 
     }
 
@@ -128,10 +146,10 @@ class UsuarioController extends Controller
 
     }
 
-    public function getUsuarioRestById(Request $request, $id){
+    public function getUsuarioRestById(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $usuario = User::find($id);
+            $usuario = User::find($request->user_id);
             if(is_null($usuario)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
@@ -153,19 +171,23 @@ class UsuarioController extends Controller
         }
     }
 
-    public function getUsuarioRestByUsuario(Request $request, $id){
+    public function getUsuarioRestByUsuario(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $usuario = User::where('user',$id)->get();
+            
+            $usuario = User::where('user',$request->username)->get();
+            $profiles = DB::select('call ObtenerPerfilesPorUsuario(?)',array($request->username));
+
             if(sizeof($usuario)<1){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
+                
                 $response =  response()->json([
-                    "Usuario"=>$usuario, "Data_Respuesta"=>[
+                    "Data_Respuesta"=>[
                     "Codigo"=>"200",
-                    "Estado"=>"Exitoso"]
+                    "Estado"=>"Exitoso"],"Usuario"=>$usuario,"Profiles"=>$profiles
                 ], 200);
                 Log::info("RESPONSE: ".$response);
                 return $response;
@@ -201,9 +223,13 @@ class UsuarioController extends Controller
 
     }
 
-    public function putUsuario(Request $request, $id){
+    public function putUsuario(Request $request){
         try {
-            Log::info("REQUEST: ".$request);
+            $iduser = DB::select('select id from users u where u.user=?', array($request->user));
+            $id =$iduser[0]->id;
+
+            Log::info("REQUEST: ".$request." id user".$id);
+
             $usuario = User::find($id);
             if(is_null($usuario)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede actualizar"]], 202);
@@ -212,7 +238,7 @@ class UsuarioController extends Controller
 
             }else{
                 $contra =   Hash::make($request->password);
-                $apikey = $request->email.":".$request->password;
+                $apikey = $request->user.":".$request->password;
                 $baseapi = base64_encode($apikey);
                 $ApiToken =  Crypt::encrypt($baseapi);
                 $data['ApiToken']= $ApiToken;
@@ -240,10 +266,11 @@ class UsuarioController extends Controller
 
 
 
-    public function deleteUsuario(Request $request,$id){
+    public function deleteUsuario(Request $request){
         try {
+            $iduser = DB::select('select id from user u where u.user=?', array($request->user));
             Log::info("REQUEST: ".$request);
-            $user = User::find($id);
+            $user = User::find($iduser);
             if(is_null($user)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No existe el registro, por lo tanto no se puede eliminar"]], 202);
                 Log::info("RESPONSE: ".$response);

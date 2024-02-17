@@ -596,7 +596,7 @@ end//
 DELIMITER ;
 
 DELIMITER //
-create procedure ObtenerPermisosPorVistaPorProfile(in profile varchar (15) , in vista varchar(15))
+create procedure ObtenerPermisosPorVistaPorProfile(in profile varchar (15) , in vista varchar(30))
 begin
 	DECLARE idProfileVar int;
 	select pu.id into idProfileVar from profile_users pu where pu.name_profile=profile;
@@ -605,5 +605,28 @@ end//
 
 DELIMITER ;
 
+
+DELIMITER //
+create procedure ObtenerVistaDetallePorProfile(in profile varchar (15))
+begin
+	DECLARE idProfileVar int;
+	select pu.id into idProfileVar from profile_users pu where pu.name_profile=profile;
+	select pu.id,pu.id_profile ,pu2.name_profile ,pu.permissions ,pu.view_name from profile_users_auth pu
+	inner join profile_users pu2 on pu2.id = pu.id_profile 
+	where pu.id_profile =idProfileVar;
+end//
+
+DELIMITER ;
+
+
+DELIMITER //
+create procedure InsertarPermisosAplicacion (in profile varchar (15))
+begin
+	insert into profile_users_auth (id_profile, )
+end//
+
+DELIMITER ;
+
+select * from profile_users_auth pua 
 
 call ObtenerPermisosPorVistaPorProfile('FHPURHPRD','addcompras');
