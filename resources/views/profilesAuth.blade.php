@@ -11,6 +11,7 @@
   </ol>
 </nav>
                     <!-- DataTales Example -->
+                
                     <div class="row">
 
                         <div class="col-md-8" id="idCapaPermisos" hidden>
@@ -47,6 +48,8 @@
                         </div>
 
                         <div class="col-md-4">
+                       ` <div class="card-body">
+
                             <div class="row">
                                 <div class="card shadow mb-4">
                                         <div class="card-header py-3 bg-primary">
@@ -129,6 +132,8 @@
                                 </div>
                             </div>
 
+                        </div>
+
                           
                                
                         </div>
@@ -158,7 +163,6 @@
                     authorization = response.Token;
                 }).fail(function(data){
                     let response = JSON.parse(JSON.stringify(data));
-                    console.log(response);
                 });
 
         })();
@@ -211,7 +215,6 @@
                         let cont = 0;
                         response["Profiles"].forEach(element => {
                         cont = cont+1;
-                        console.log(element.permissions);
                         var nuevoContenido ="<div class=\"row mb-3 capaApp\">\n" +
                             "<div class=\"col-sm-3\">\n" +
                             "<label for=\"profile\" class=\"col-sm-12 col-form-label\">Application N."+element.id+":</label> <input id="+"N"+cont+" value="+element.id+" hidden />\n"+
@@ -237,7 +240,6 @@
                     }
                 }).fail(function(data){
                     let response = JSON.parse(JSON.stringify(data));
-                    console.log(response);
                     mostrarMensaje(response['responseJSON']);
 
                 });
@@ -280,7 +282,6 @@
                     }
                 }).fail(function(data){
                     let response = JSON.parse(JSON.stringify(data));
-                    console.log(response);
                     mostrarMensaje(response['responseJSON']);
 
                 });
@@ -387,7 +388,6 @@
             }).then((result) => {
             /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
-                console.log("I was closed by the timer");
             }
             });
         }
