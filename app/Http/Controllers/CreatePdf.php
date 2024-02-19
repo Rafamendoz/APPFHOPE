@@ -22,9 +22,9 @@ class CreatePdf extends Controller
 
 }
 
-    public function verRecibo($id){
-        $cabecera = DB::select('CALL ObtenerCabeceraVenta(?)', array($id));
-        $data = DetalleVenta::join('producto','producto_id','=','producto.id')->select('producto.producto_nom', 'detalleventa.precio','detalleventa.descuento','detalleventa.cantidad','detalleventa.subtotal')->where('detalleventa.venta_id',$id)->where('detalleventa.estado',1)->get();
+    public function verRecibo(Request $request){
+        $cabecera = DB::select('CALL ObtenerCabeceraVenta(?)', array($request->id));
+        $data = DetalleVenta::join('producto','producto_id','=','producto.id')->select('producto.producto_nom', 'detalleventa.precio','detalleventa.descuento','detalleventa.cantidad','detalleventa.subtotal')->where('detalleventa.venta_id',$request->id)->where('detalleventa.estado',1)->get();
         return view('recibos', compact('data', 'cabecera'));
     }
 

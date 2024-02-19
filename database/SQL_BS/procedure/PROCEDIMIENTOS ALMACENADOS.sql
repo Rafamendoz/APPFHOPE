@@ -596,7 +596,7 @@ end//
 DELIMITER ;
 
 DELIMITER //
-create procedure ObtenerPermisosPorVistaPorProfile(in profile varchar (15) , in vista varchar(30))
+create procedure ObtenerPermisosPorVistaPorProfile(in profile varchar (15) , in vista varchar(80))
 begin
 	DECLARE idProfileVar int;
 	select pu.id into idProfileVar from profile_users pu where pu.name_profile=profile;
@@ -604,6 +604,24 @@ begin
 end//
 
 DELIMITER ;
+
+
+DELIMITER //
+create procedure InsertarRutas(in ruta varchar (100), in idRuta int, in metodo varchar(15))
+begin
+	insert into routes (id,route_name, `method`) values(idRuta,ruta,metodo);
+end//
+
+DELIMITER ;
+
+DELIMITER //
+create procedure EliminarRutas()
+begin
+	delete from routes;
+end//
+
+DELIMITER ;
+
 
 
 DELIMITER //
@@ -618,15 +636,8 @@ end//
 
 DELIMITER ;
 
-
 DELIMITER //
-create procedure InsertarPermisosAplicacion (in profile varchar (15))
+create procedure ConsultarRutas()
 begin
-	insert into profile_users_auth (id_profile, )
+	select * from routes;
 end//
-
-DELIMITER ;
-
-select * from profile_users_auth pua 
-
-call ObtenerPermisosPorVistaPorProfile('FHPURHPRD','addcompras');

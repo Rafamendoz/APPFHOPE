@@ -8,9 +8,17 @@ use App\Models\Estado;
 use App\Models\Error;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ResponseController;
 
 class ClienteController extends Controller
 {
+
+    protected $responseController;
+
+    public function __construct(ResponseController $responseController) {
+        $this->responseController = $responseController;
+    }
+
     public function getClientes(){
         try {
             $clientes = DB::select('CALL Obtener_clientes_vista(?)', array('ACTIVO'));
@@ -40,13 +48,13 @@ class ClienteController extends Controller
         try {
             $cliente = Cliente::create($request->all());
             Log::info("REQUEST: ".$request);
-           $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+           $response = $this->responseController->responseAfterSave();
            Log::info("RESPONSE: ".$response);
            return $response;
         } catch (\Illuminate\Database\QueryException $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
+
         }
     }
 
@@ -55,7 +63,7 @@ class ClienteController extends Controller
             log::info("REQUEST: ".$request);
             $clientes = Cliente::all();
             if(sizeof($clientes)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500();
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -76,12 +84,71 @@ class ClienteController extends Controller
         
     }
 
-    public function getClienteRestById($id, Request $request){
+    public function getClienteRestById(Request $request){
         try {
-            $cliente = Cliente::where('id',$id)->get();
+            $cliente = Cliente::where('id',$request->id)->get();
             Log::info("REQUEST: ".$request);
             if(sizeof($cliente)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+
+            }else{
+                $response = response()->json([
+                    "Cliente"=>$cliente, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Descripcion"=>"Registro Encontrado",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                    Log::info("RESPONSE: ".$response);
+                    return $response;
+
+            }
+            
+        } catch (\Throwable $th) {
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
+        }
+        
+    }
+
+    public function getClienteActiveRestById(Request $request){
+        try {
+            $cliente = Cliente::where('id',$request->id)->where('estado',1)->get();
+            Log::info("REQUEST: ".$request);
+            if(sizeof($cliente)<1){
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
+                Log::info("RESPONSE: ".$response);
+                return $response;
+
+            }else{
+                $response = response()->json([
+                    "Cliente"=>$cliente, "Data_Respuesta"=>[
+                    "Codigo"=>"200",
+                    "Descripcion"=>"Registro Encontrado",
+                    "Estado"=>"Exitoso"]
+                ], 200);
+                    Log::info("RESPONSE: ".$response);
+                    return $response;
+
+            }
+            
+        } catch (\Throwable $th) {
+            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
+            $error = Error::where('codigo_error',$th->getCode())->get();
+            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+        }
+        
+    }
+
+
+    public function getClienteRestByDNI(Request $request){
+        try {
+            $cliente = Cliente::where('cliente_DNI',$request->dni)->where('estado',1)->get();
+            Log::info("REQUEST: ".$request);
+            if(sizeof($cliente)<1){
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
                 Log::info("RESPONSE: ".$response);
                 return $response;
 
@@ -105,65 +172,7 @@ class ClienteController extends Controller
         }
         
     }
-
-    public function getClienteActiveRestById($id, Request $request){
-        try {
-            $cliente = Cliente::where('id',$id)->where('estado',1)->get();
-            Log::info("REQUEST: ".$request);
-            if(sizeof($cliente)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
-                Log::info("RESPONSE: ".$response);
-                return $response;
-
-
-            }else{
-                $response = response()->json([
-                    "Cliente"=>$cliente, "Data_Respuesta"=>[
-                    "Codigo"=>"200",
-                    "Descripcion"=>"Registro Encontrado",
-                    "Estado"=>"Exitoso"]
-                ], 200);
-                    Log::info("RESPONSE: ".$response);
-                    return $response;
-
-            }
-            
-        } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
-        }
-        
-    }
-
-    public function getClienteRestByDNI($id, Request $request){
-        try {
-            log::info("REQUEST: ".$request);
-            $cliente = Cliente::where('cliente_DNI',$id)->get();
-            if(sizeof($cliente)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
-                Log::info("RESPONSE: ".$response);
-                return $response;
-
-            }else{
-                $response =  response()->json([
-                    "Cliente"=>$cliente, "Data_Respuesta"=>[
-                    "Codigo"=>"200",
-                    "Estado"=>"Exitoso"]
-                ], 200);
-                Log::info("RESPONSE: ".$response);
-                return $response;  
-
-            }
-        
-
-        } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
-        }
-        
-    }
+   
 
     public function putCliente(Request $request,$id){
         try {

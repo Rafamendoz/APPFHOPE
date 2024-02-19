@@ -172,7 +172,13 @@
     }
 
     function VerInventario(id){
-        location.href = '../inventarios/'+id;
+        let params = {
+                    id: id,
+                    value: "r",
+                    destination: "Inventarios"
+
+            }
+        location.href = '../inventarios/byid?'+$.param(params);
     }
 
     

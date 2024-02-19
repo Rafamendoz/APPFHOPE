@@ -48,6 +48,8 @@ drop procedure if exists getTablesNoDebug;
 drop procedure if exists insertTempTable;
 drop procedure if exists ReportClosure;
 drop procedure if exists RollbackClosure;
+drop procedure if exists ObtenerPermisosPorVistaPorProfile;
+
 
 /* -------------------------ROLLBACK FUNCIONES------------------------------------------ */
 drop function if exists Funcion_obtener_total_entradas;

@@ -23,7 +23,7 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <form>
+                                    <form id="formProductos">
                                         <div class="row mb-3">
                                             <label for="nombreProducto" class="col-sm-2 col-form-label">Nombre del Producto:</label>
                                             <div class="col-sm-10">
@@ -166,6 +166,7 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('
             "producto_des": descripcion,
             "precio": precio,
             "estado": estado,
+            "application_type":"w"
         }
         })
         .done(function( data ) {
@@ -193,7 +194,7 @@ var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('
         },
         didClose: (toast) => {
                 if(dataResponse.Codigo==200){
-                    location.reload();
+                    $("#formProductos")[0].reset();
                 }
     
         }

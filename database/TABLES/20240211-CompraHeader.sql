@@ -96,3 +96,15 @@ CREATE TABLE `_user_has_profiles` (
   CONSTRAINT `_user_has_profiles_profile_users_FK` FOREIGN KEY (`id_profile`) REFERENCES `profile_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `_user_has_profiles_users_FK` FOREIGN KEY (`id_usuario`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
+
+
+ALTER TABLE fhopeonl_gestion_fhope.inventory MODIFY COLUMN estado bigint unsigned DEFAULT 1 NOT NULL;
+
+
+
+CREATE TABLE `routes` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `route_name` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  `method` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8mb4 COLLATE

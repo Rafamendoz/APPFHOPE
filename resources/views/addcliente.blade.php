@@ -23,9 +23,9 @@
                                 </div>
 
                                 <div class="card-body">
-                                    <form>
+                                    <form id="formCliente">
                                         <div class="row mb-3">
-                                            <label for="nombrePuesto" class="col-sm-2 col-form-label">Nombre del Cliente:</label>
+                                            <label for="nombreCliente" class="col-sm-2 col-form-label">Nombre del Cliente:</label>
                                             <div class="col-sm-10">
                                             <input type="text" class="form-control" id="nombreCliente">
                                             </div>
@@ -161,6 +161,7 @@
         let dni = $("#dni").val();
         let estado = $("#estado").val();
 
+
         var headers= {
         'X-CSRF-TOKEN': csrfToken,
         'Authorization': 'Basic '+ authorization
@@ -175,7 +176,8 @@
                 "cliente_tel": telefono, 
                 "cliente_correo":correo, 
                 "cliente_DNI":dni, 
-                "estado":estado
+                "estado":estado,
+                "application_type":"w"
         }
         })
         .done(function( data ) {
@@ -203,7 +205,7 @@
         },
         didClose: (toast) => {
                 if(dataResponse.Codigo==200){
-                    location.reload();
+                    $("#formCliente")[0].reset();
                 }
     
         }

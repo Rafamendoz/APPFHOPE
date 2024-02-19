@@ -25,7 +25,7 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
-                                            <a class="dropdown-item" href="{{route('AddProducto')}}">Agregar Producto</a>
+                                            <a class="dropdown-item" href="{{route('AddProducto', ['destination' => 'AddProducto', 'value' => 'r'])}}">Agregar Producto</a>
                                         </div>
                                     </div>
                                 </div>

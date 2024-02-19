@@ -135,7 +135,10 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    Route::put('puestoR/update/{id}', 'App\Http\Controllers\PuestoController@putPuesto');
     /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
    Route::put('puestoR/delete/{id}', 'App\Http\Controllers\PuestoController@deletePuesto');
-   
+   // RUTA PARA ENTIDAD RUTA//
+
+   Route::get('routes', 'App\Http\Controllers\RutasController@makeTableRoutes');
+
  
       //RUTAS PARA ENTIDAD TipoCuenta
    Route::get('cuentaR', 'App\Http\Controllers\TipoCuentaController@getTipoCuentasRest');
@@ -189,12 +192,13 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
   Route::get('clienteR', 'App\Http\Controllers\ClienteController@getClientesRest');
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
-  Route::get('clienteR/{id}', 'App\Http\Controllers\ClienteController@getClienteRestById');
+  Route::get('clienteR/byid', 'App\Http\Controllers\ClienteController@getClienteRestById');
 
-  Route::get('clienteR/active/{id}', 'App\Http\Controllers\ClienteController@getClienteActiveRestById');
+  Route::get('clienteR/active', 'App\Http\Controllers\ClienteController@getClienteActiveRestById');
 
 
-  Route::get('clienteR/dni/{id}', 'App\Http\Controllers\ClienteController@getClienteRestByDNI');
+  Route::get('clienteR/dni', 'App\Http\Controllers\ClienteController@getClienteRestByDNI');
+
 
    /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
   Route::post('clienteR/add', 'App\Http\Controllers\ClienteController@setCliente');
@@ -208,7 +212,7 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
      /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
     Route::get('productoR', 'App\Http\Controllers\ProductoController@getProductosRest');
      /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
-    Route::get('productoR/{id}', 'App\Http\Controllers\ProductoController@getProductoRestById');
+    Route::get('productoR/byid', 'App\Http\Controllers\ProductoController@getProductoRestById');
      /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
     Route::post('productoR/add', 'App\Http\Controllers\ProductoController@setProducto');
      /* RUTA PARA METODO DE ACTUALIZAR UN USUARIO POR ID*/
@@ -219,14 +223,14 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
   
 
     /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
-   Route::get('ventaR/{id}', 'App\Http\Controllers\VentaController@getVentaRestById');
+   Route::get('ventaR', 'App\Http\Controllers\VentaController@getVentaRestById');
     /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
    Route::post('ventaR/add', 'App\Http\Controllers\VentaController@setVenta');
     /* RUTA PARA METODO DE ACTUALIZAR UN USUARIO POR ID*/
    Route::put('ventaR/update/{id}', 'App\Http\Controllers\VentaController@putVenta');
     /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
    Route::put('ventaR/delete/{id}', 'App\Http\Controllers\VentaController@deleteVenta');
-   Route::get('ventaR/rollback/{id_venta}', 'App\Http\Controllers\VentaController@generateRollback');
+   Route::get('ventaR/rollback', 'App\Http\Controllers\VentaController@generateRollback');
 
 
 
@@ -236,7 +240,7 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
    /* RUTA PARA METODO DE OBTENER EL USUARIO POR ID ACTIVO*/
    Route::get('detalleVentaR', 'App\Http\Controllers\DetalleVentaController@getDetallesVentaRest');
 
-  Route::get('detalleVentaR/{id}', 'App\Http\Controllers\DetalleVentaController@getDetalleVentaRestByVentaId');
+  Route::get('detalleVentaR/byid', 'App\Http\Controllers\DetalleVentaController@getDetalleVentaRestByVentaId');
    /* RUTA PARA METODO DE AGREGAR UN USUARIO*/
   Route::post('detalleVentaR/add', 'App\Http\Controllers\DetalleVentaController@setDetalleVenta');
    /* RUTA PARA METODO DE ACTUALIZAR EL ESTADO DEL USUARIO POR ID ACTIVO*/
@@ -272,13 +276,13 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
 
  //RUTAS PARA ENTIDAD DETALLE INVENTARIO//
  Route::get('inventoryR', 'App\Http\Controllers\InventoryController@getInventoriesRest');
- Route::get('inventoryR/{id}', 'App\Http\Controllers\InventoryController@getInventoryRestById');
+ Route::get('inventoryR/byid', 'App\Http\Controllers\InventoryController@getInventoryRestById');
  Route::post('inventoryR/add', 'App\Http\Controllers\InventoryController@setInventory');
  Route::put('inventoryR/update/{id}', 'App\Http\Controllers\InventoryController@putInventory');
  Route::put('inventoryR/delete/{id}', 'App\Http\Controllers\InventoryController@deleteInventory');
- Route::get('inventoryR/sizesWithOutStock/{idproducto}/{idcolor}', 'App\Http\Controllers\InventoryController@getSizesWithoutStockRest');
- Route::get('inventoryR/sizesWithStock/{idproducto}/{idcolor}', 'App\Http\Controllers\InventoryController@getSizesWithStockRest');
- Route::get('inventoryR/stockDisponible/{idproducto}/{idcolor}/{idsize}', 'App\Http\Controllers\InventoryController@getInventoryByProductColorSizeRest');
+ Route::get('inventoryR/sizesWithOutStock', 'App\Http\Controllers\InventoryController@getSizesWithoutStockRest');
+ Route::get('inventoryR/sizesWithStock', 'App\Http\Controllers\InventoryController@getSizesWithStockRest');
+ Route::get('inventoryR/stockDisponible', 'App\Http\Controllers\InventoryController@getInventoryByProductColorSizeRest');
 
 
   //RUTAS PARA ENTIDAD CABECERA INVENTARIO//
@@ -304,9 +308,10 @@ Route::post('usuarioR/loggin/validate', 'App\Http\Controllers\UsuarioController@
   Route::get('profilesR', 'App\Http\Controllers\ProfileUsersController@getProfilesRest');
   Route::post('userprofileR/assign', 'App\Http\Controllers\UserHasProfilesController@AssignProfileToUser');
   Route::get('userprofileR', 'App\Http\Controllers\UserHasProfilesController@getProfileFromUser');
-  Route::post('getapplicationsAuth', 'App\Http\Controllers\ProfileUsersController@getAuthProfileRest');
+  Route::get('getapplicationsAuth', 'App\Http\Controllers\ProfileUsersController@getAuthProfileRest');
   Route::post('profileuserauthR/add', 'App\Http\Controllers\ProfileUsersAuthController@saveAplicationAuth');
   Route::patch('profileuserauthR/update', 'App\Http\Controllers\ProfileUsersAuthController@updateAplicationAuth');
+  Route::post('profileuserauthR/add/admin', 'App\Http\Controllers\ProfileUsersAuthController@saveAplicationAuthAdmin');
 
   
 

@@ -9,9 +9,19 @@ use App\Models\Error;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ResponseController;
+
 
 class ProductoController extends Controller
 {
+
+    protected $responseController;
+
+    public function __construct(ResponseController $responseController) {
+        $this->responseController = $responseController;
+    }
+
+
     public function getProductos(){
         try {
             $productos = DB::select('CALL Obtener_productos_vista(?)', array('ACTIVO'));
@@ -34,13 +44,12 @@ class ProductoController extends Controller
         try {
             log::info("REQUEST: ".$request);
             $producto = Producto::create($request->all());
-            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            $response = $this->responseController->responseAfterSave();
             Log::info("RESPONSE: ".$response);
             return $response;  
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 
@@ -49,7 +58,7 @@ class ProductoController extends Controller
             log::info("REQUEST: ".$request);
             $productos = Producto::all();
             if(sizeof($productos)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -63,19 +72,18 @@ class ProductoController extends Controller
     
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
         
     }
 
-    public function getProductoRestById($id, Request $request){
+    public function getProductoRestById(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $producto = Producto::find($id);
+            $producto = Producto::find($request->id);
             if(is_null($producto)){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -90,9 +98,8 @@ class ProductoController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 

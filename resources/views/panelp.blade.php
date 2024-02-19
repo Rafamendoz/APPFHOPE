@@ -68,11 +68,11 @@
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de <br>Produccion:</h6>
-                        <a class="collapse-item" href="{{route('Ventas',['destination' => 'ventas', 'value' => 'r'])}}">Resumen Ventas</a>
-                        <a class="collapse-item" href="{{route('POS',['destination' => 'pos', 'value' => 'r'])}}">POS</a>
-                        <a class="collapse-item" href="{{route('Clientes',['destination' => 'clientes', 'value' => 'r'])}}">Clientes</a>
-                        <a class="collapse-item" href="{{route('Productos',['destination' => 'productos', 'value' => 'r'])}}">Productos</a>
-                        <a class="collapse-item" href="{{route('Compras',['destination' => 'compras', 'value' => 'r'])}}">Compras</a>
+                        <a class="collapse-item" href="{{route('Ventas',['destination' => 'Ventas', 'value' => 'r'])}}">Resumen Ventas</a>
+                        <a class="collapse-item" href="{{route('POS',['destination' => 'POS', 'value' => 'r'])}}">POS</a>
+                        <a class="collapse-item" href="{{route('Clientes',['destination' => 'Clientes', 'value' => 'r'])}}">Clientes</a>
+                        <a class="collapse-item" href="{{route('Productos',['destination' => 'Productos', 'value' => 'r'])}}">Productos</a>
+                        <a class="collapse-item" href="{{route('Compras',['destination' => 'Compras', 'value' => 'r'])}}">Compras</a>
                     </div>
                 </div>
             </li>
@@ -88,8 +88,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de Finanzas:</h6>
-                        <a class="collapse-item" href="{{route('cuentasBancarias')}}">Cuentas Bancarias</a>
-                        <a class="collapse-item" href="{{route('DetalleGlobal')}}">Resumen Operativo</a>
+                        <a class="collapse-item" href="{{route('cuentasBancarias',['destination' => 'cuentasBancarias', 'value' => 'r'])}}">Cuentas Bancarias</a>
+                        <a class="collapse-item" href="{{route('DetalleGlobal',['destination' => 'DetalleGlobal', 'value' => 'r'])}}">Resumen Operativo</a>
 
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                 <div id="collapseFour" class="collapse" aria-labelledby="headingPages" data-parent="#collapseFour">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Componentes de <br>Inventario:</h6>
-                        <a class="collapse-item" href="{{route('InventariosHeader')}}">Ver Inventario</a>
+                        <a class="collapse-item" href="{{route('InventariosHeader', ['value'=>'r', 'destination'=>'InventariosHeader'])}}">Ver Inventario</a>
                     </div>
                 </div>
             </li>
@@ -127,18 +127,18 @@
                 <div id="collapseThree" class="collapse" aria-labelledby="headingPages" data-parent="#collapseThree">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Tablas Dependientes:</h6>
-                        <a class="collapse-item" href="{{route('VentasAll')}}">Resumen Ventas</a>
+                        <a class="collapse-item" href="{{route('VentasAll',['destination' => 'VentasAll', 'value' => 'r'])}}">Resumen Ventas</a>
                         <a class="collapse-item" href="{{route('UsuariosAll', ['destination' => 'UsuariosAll', 'value' => 'r'])}}">Usuarios</a>
-                        <a class="collapse-item" href="{{route('Colaboradores')}}">Colaboradores</a>
+                        <a class="collapse-item" href="{{route('Colaboradores',['destination' => 'Colaboradores', 'value' => 'r'])}}">Colaboradores</a>
                  
                         <h6 class="collapse-header">Tablas Independientes</h6> 
-                        <a class="collapse-item" href="{{route('Bancos')}}">Bancos</a>
-                        <a class="collapse-item" href="{{route('Puestos')}}">Puestos</a>
-                        <a class="collapse-item" href="{{route('TipoCuentas')}}">Tipo Cuentas Bancarias</a>
-                        <a class="collapse-item" href="{{route('Monedas')}}">Tipo Monedas</a>
-                        <a class="collapse-item" href="{{route('TipoTransaccionAll')}}">Tipo Transaccion</a>
+                        <a class="collapse-item" href="{{route('Bancos',['destination' => 'Bancos', 'value' => 'r'])}}">Bancos</a>
+                        <a class="collapse-item" href="{{route('Puestos',['destination' => 'Puestos', 'value' => 'r'])}}">Puestos</a>
+                        <a class="collapse-item" href="{{route('TipoCuentas',['destination' => 'TipoCuentas', 'value' => 'r'])}}">Tipo Cuentas Bancarias</a>
+                        <a class="collapse-item" href="{{route('Monedas',['destination' => 'Monedas', 'value' => 'r'])}}">Tipo Monedas</a>
+                        <a class="collapse-item" href="{{route('TipoTransaccionAll',['destination' => 'TipoTransaccionAll', 'value' => 'r'])}}">Tipo Transaccion</a>
                         <h6 class="collapse-header">Configuracion Cierre</h6> 
-                        <a class="collapse-item" href="{{route('DashboardOperativoTI')}}">Dashboard Operativo TI</a>
+                        <a class="collapse-item" href="{{route('DashboardOperativoTI',['destination' => 'DashboardOperativoTI', 'value' => 'r'])}}">Dashboard Operativo TI</a>
 
 
 

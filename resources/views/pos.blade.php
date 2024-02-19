@@ -327,8 +327,8 @@
 
     function Buscar(){
 
-        let dni = $("#dni").val();
-        if(dni==""){
+        let dniVal = $("#dni").val();
+        if(dniVal==""){
              
             const Toast = Swal.mixin({
             toast: true,
@@ -351,10 +351,19 @@
 
         }else{
             let urldinamica="";
+            
             if($('#flexRadioDefault1').is(':checked')){
-                urldinamica ="../../api/clienteR/dni/"+dni;
+                let params = {
+                    dni: dniVal,
+                    application_type: "r"
+                }
+                urldinamica ="../../api/clienteR/dni?"+ $.param(params);
             }else{
-                urldinamica ="../../api/clienteR/active/"+dni;
+                let params = {
+                    id: dniVal,
+                    application_type: "r"
+                }
+                urldinamica ="../../api/clienteR/active?"+$.param(params);
             }
             
         $.ajax({
@@ -422,6 +431,10 @@
 
 
         }else{
+            let params = {
+                    id: codigoproducto,
+                    application_type: "r"
+            }
             
             $.ajax({
             method: "GET",
@@ -431,7 +444,7 @@
             
 
             },
-            url: "../../api/productoR/"+codigoproducto,
+            url: "../../api/productoR/byid?"+$.param(params),
             })
             .done(function( data ) {
                 let response = JSON.parse(JSON.stringify(data));
@@ -503,6 +516,12 @@
         let talla = $("#size").val();
         let color = $("#color").val();
         let inventarioDisponible = 0;
+        let params = {
+                    idproducto: codigoproducto,
+                    idcolor: color,
+                    idsize: talla,
+                    application_type: "r"
+            }
 
         $.ajax({
             method: "GET",
@@ -512,7 +531,7 @@
             
 
             },
-            url: "../../api/inventoryR/stockDisponible/"+codigoproducto+"/"+color+"/"+talla
+            url: "../../api/inventoryR/stockDisponible?"+ $.param(params)
             })
             .done(function( data ) {
                 let response = JSON.parse(JSON.stringify(data));
@@ -780,7 +799,8 @@
                 "descuento": descuento,
                 "isv": 0.00,
                 "subtotal": subtotal,
-                "estado":1
+                "estado":1,
+                "application_type":"w"
             }
         })
         .done(function( data ) {
@@ -806,6 +826,11 @@
     }
 
     function rollback(venta_id) {
+        let params = {
+            id_venta:venta_id,
+            application_type:"E"
+
+        };
 
         $.ajax({
             method: "GET",
@@ -813,7 +838,7 @@
                 'X-CSRF-TOKEN': csrfToken,
                 'Authorization': 'Basic '+ authorization
             },
-            url: "../../api/ventaR/rollback/"+venta_id,
+            url: "../../api/ventaR/rollback?"+$.param(params)
            
         })
         .done(function( data ) {
@@ -847,7 +872,8 @@
                 "size_id": size_id,
                 "cantidad": cantidad,
                 "color_id": color_id,
-                "estado":1
+                "estado":1,
+                "application_type":"w"
             }
         })
         .done(function( data ) {
@@ -900,6 +926,7 @@
                 "direccionEnvio": direccion,
                 "total": total,
                 "estado": 1,
+                "application_type":"w"
 
 
             }
@@ -950,7 +977,8 @@
         confirmButtonText: 'Sí, mostrarlo!'
         }).then((result) => {
         if (result.isConfirmed) {
-            location.href = "../ver/recibo/"+$("#orden").val();
+            let params = {id:$("#orden").val(),destination:"VerRecibo", value:"r"};
+            location.href = "../ver/recibo?"+ $.param(params);
 
         }else{
             location.href = "../dashboard";
@@ -964,9 +992,14 @@
 
 
     function ObtenerTallas(idcolor, idproducto){
+        let params = {
+            idproducto:idproducto,
+            idcolor:idcolor,
+            application_type:"r"
+        };
     $.ajax({
         method: "GET",
-        url: '../../api/inventoryR/sizesWithStock/'+idproducto+"/"+idcolor,
+        url: '../../api/inventoryR/sizesWithStock?'+ $.param(params),
         headers: {
         'X-CSRF-TOKEN': csrfToken,
         'Authorization':'Basic '+authorization

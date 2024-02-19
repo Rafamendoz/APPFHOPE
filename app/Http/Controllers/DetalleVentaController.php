@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\Log;
 
 class DetalleVentaController extends Controller
 {
+
+    protected $responseController;
+
+
+    public function __construct(ResponseController $responseController) {
+        $this->responseController = $responseController;
+    }
+
+
+
     
 
 
@@ -17,22 +27,22 @@ class DetalleVentaController extends Controller
         try {
             $dventa = DetalleVenta::create($request->all());
             Log::info("REQUEST: ".$request);
-           $response = response()->json(["Data_Respuesta"=>["Orden"=>$dventa->venta_id,"Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
-           Log::info("RESPONSE: ".$response);
-           return $response;
+            $response = $this->responseController->responseAfterSave();
+            Log::info("RESPONSE: ".$response);
+            return $response; 
+
         } catch (\Illuminate\Database\QueryException $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 
   
 
-    public function getDetalleVentaRestByVentaId(Request $request,$id){
+    public function getDetalleVentaRestByVentaId(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $detalleV = DetalleVenta::where("venta_id",$id)->get();
+            $detalleV = DetalleVenta::where("venta_id",$request->id)->get();
             if(sizeof($detalleV)<1){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
                 Log::info("RESPONSE: ".$response);
@@ -48,9 +58,8 @@ class DetalleVentaController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;;
         }
      
     }
@@ -74,9 +83,8 @@ class DetalleVentaController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
      
     }

@@ -199,7 +199,7 @@
                 };
                 urldinamica ="../../api/getapplicationsAuth?" + $.param(params);
                 $.ajax({
-                    method: "POST",
+                    method: "GET",
                     url: urldinamica,
                     headers: {
                     'X-CSRF-TOKEN': csrfToken,

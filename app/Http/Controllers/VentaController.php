@@ -10,9 +10,17 @@ use App\Models\Venta;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\ResponseController;
 
 class VentaController extends Controller
 {
+
+    protected $responseController;
+
+
+    public function __construct(ResponseController $responseController) {
+        $this->responseController = $responseController;
+    }
 
     public function getVentasAll(){
         try {
@@ -21,9 +29,8 @@ class VentaController extends Controller
            
             return view('ventas', compact('ventas'));
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = 'errir';
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
       
     }
@@ -35,9 +42,8 @@ class VentaController extends Controller
            
             return view('ventas', compact('ventas'));
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = 'errir';
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
       
     }
@@ -54,14 +60,12 @@ class VentaController extends Controller
         try {
             log::info("REQUEST: ".$request);
             $venta = Venta::create($request->all());
-            $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Registro Agregado"]], 200);
+            $response = $this->responseController->responseAfterSave();
             Log::info("RESPONSE: ".$response);
             return $response;  
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $data = app(ServiceGatewayController::class)->Enrutar(100, $th->getMessage(), __METHOD__, $th->getCode());
-            $error = Error::select('subcodigo','descripcion','codigo_error')->where('subcodigo',$data['CodeError'])->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 
@@ -84,9 +88,8 @@ class VentaController extends Controller
     
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
         
     }
@@ -111,9 +114,8 @@ class VentaController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 
@@ -159,9 +161,8 @@ class VentaController extends Controller
                 }
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
        
     }
@@ -183,23 +184,21 @@ class VentaController extends Controller
             }
 
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 
 
-    public function generateRollback(Request $request, $id_venta){
+    public function generateRollback(Request $request){
         try {
-            $rollback = DB::select("CALL generateRollback(?)", array($id_venta));
+            $rollback = DB::select("CALL generateRollback(?)", array($request->id_venta));
             $response = response()->json(["Data_Respuesta"=>["Codigo"=>"200","Estado"=>"Exitoso", "Descripcion"=>"Rollback ejecutado"]], 200);
             Log::info("RESPONSE: ".$response);
             return $response;
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
 

@@ -13,16 +13,25 @@ use App\Models\Producto;
 use App\Models\Inventory;
 
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\ResponseController;
 
 
 class InventoryController extends Controller
 {
 
+    protected $responseController;
+
+
+    public function __construct(ResponseController $responseController) {
+        $this->responseController = $responseController;
+    }
+
+
      
-    public function getInventoryByProductColorSizeRest(Request $request,$idproducto, $idcolor, $idsize){
+    public function getInventoryByProductColorSizeRest(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $inventoryDisponible = DB::select('CALL Obtener_stock_disponible_by_size_product_color(?,?,?)', array($idproducto, $idcolor, $idsize));
+            $inventoryDisponible = DB::select('CALL Obtener_stock_disponible_by_size_product_color(?,?,?)', array($request->idproducto, $request->idcolor, $request->idsize));
             if(is_null($inventoryDisponible)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No hay inventario disponible"]], 202);
                 Log::info("RESPONSE: ".$response);
@@ -38,18 +47,17 @@ class InventoryController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
 
 
     }
     
-    public function getSizesWithoutStockRest(Request $request,$idproducto, $idcolor){
+    public function getSizesWithoutStockRest(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $sizes = DB::select('CALL Obtener_sizes_without_stock(?,?)', array($idproducto, $idcolor));
+            $sizes = DB::select('CALL Obtener_sizes_without_stock(?,?)', array($request->idproducto, $request->idcolor));
             if(is_null($sizes)){
                 $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"El producto ya contiene todas las tallas en inventario"]], 202);
                 Log::info("RESPONSE: ".$response);
@@ -65,20 +73,19 @@ class InventoryController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
 
 
     }
 
-    public function getSizesWithStockRest(Request $request,$idproducto, $idcolor){
+    public function getSizesWithStockRest(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $sizes = DB::select('CALL Obtener_sizes_with_stock(?,?)', array($idproducto, $idcolor));
+            $sizes = DB::select('CALL Obtener_sizes_with_stock(?,?)', array($request->idproducto, $request->idcolor));
             if(is_null($sizes) || sizeof($sizes)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No hay inventario disponible"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -92,9 +99,8 @@ class InventoryController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
 
 
@@ -110,9 +116,8 @@ class InventoryController extends Controller
             log::info("RESPONSE: VISTA addinventory devuelta");
             return $vista;
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
      
         
@@ -120,17 +125,16 @@ class InventoryController extends Controller
 
 
 
-    public function getInventories($id){
+    public function getInventories(Request $request){
         try {
             $colors = DB::select('CALL Obtener_colors_vista()');
-            $inventories = DB::select('CALL Obtener_inventories_vista(?)',array($id));
-           
+            $inventories = DB::select('CALL Obtener_inventories_vista(?)',array($request->id));
+           $id = $request->id;
 
             return view('inventory', compact('inventories', 'id'));
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
       
     }
@@ -144,9 +148,8 @@ class InventoryController extends Controller
             Log::info("RESPONSE: ".$response);
             return $response;  
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
       }
 
@@ -155,7 +158,7 @@ class InventoryController extends Controller
             log::info("REQUEST: ".$request);
             $inventories = Inventory::all();
             if(sizeof($inventories)<1){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -169,21 +172,20 @@ class InventoryController extends Controller
     
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
         
        
        
     }
 
-    public function getInventoryRestById(Request $request,$id){
+    public function getInventoryRestById(Request $request){
         try {
             log::info('REQUEST '.$request);
-            $color = Inventory::find($id);
+            $color = Inventory::find($request->id);
             if(is_null($color)){
-                $response = response()->json(["Data_Respuesta"=>["Codigo"=>"202","Estado"=>"Aceptado", "Descripcion"=>"No se encontraron registros"]], 202);
+                $response = $this->responseController->responseAfterHttpCodeNot500(404,__METHOD__);
                 Log::info("RESPONSE: ".$response);
                 return $response;
             }else{
@@ -197,9 +199,8 @@ class InventoryController extends Controller
 
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     
 
@@ -222,9 +223,8 @@ class InventoryController extends Controller
             }
 
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
     }
     
@@ -262,9 +262,8 @@ class InventoryController extends Controller
                 }
             }
         } catch (\Throwable $th) {
-            Log::error("Codigo de error: ".$th->getCode()." Mensaje: ".$th->getMessage());
-            $error = Error::where('codigo_error',$th->getCode())->get();
-            return response()->json(["Estado"=>"Fallido","Codigo"=>500, "Mapping_Error"=>$error],500);
+            $response = $this->responseController->responseAfterError($th, __METHOD__);
+            return $response;
         }
  
        

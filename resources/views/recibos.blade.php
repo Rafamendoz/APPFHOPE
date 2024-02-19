@@ -187,7 +187,7 @@
 <br>
 <br>
   <div class="col-md-12 ">
-          <a href="{{route('Ventas')}}" class="btn btn-primary">Regresar</a>
+          <a href="{{route('Ventas', ['destination' => 'Ventas', 'value' => 'r'])}}" class="btn btn-primary">Regresar</a>
   </div>
   
       @section('js')

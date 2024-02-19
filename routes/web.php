@@ -63,7 +63,7 @@ Route::group(["middleware" => "auth"], function () {
     Route::get('tipocuentas/addtipocuenta', 'App\Http\Controllers\TipoCuentaController@addTipoCuenta')->name("AddTipoCuenta");
 
     Route::get('/recibo', 'App\Http\Controllers\CreatePdf@crearRecibo');
-    Route::get('ver/recibo/{id}', 'App\Http\Controllers\CreatePdf@verRecibo')->name('VerRecibo');
+    Route::get('ver/recibo', 'App\Http\Controllers\CreatePdf@verRecibo')->name('VerRecibo');
     
 
     Route::get('puestos', 'App\Http\Controllers\PuestoController@getPuestos')->name('Puestos');
@@ -144,7 +144,7 @@ Route::group(["middleware" => "auth"], function () {
 
     Route::get('bancos/addbanco', 'App\Http\Controllers\BancoController@addBanco')->name('AddBanco');
 
-    Route::get('inventarios/{id}', 'App\Http\Controllers\InventoryController@getInventories')->name('Inventarios');
+    Route::get('inventarios/byid', 'App\Http\Controllers\InventoryController@getInventories')->name('Inventarios');
     Route::get('inventariosHeader', 'App\Http\Controllers\InventoryHeaderController@getInventoriesHeader')->name('InventariosHeader');
 
     Route::get('inventarios/{id}/addinventario', 'App\Http\Controllers\InventoryController@addInventory')->name('AddInventario');
