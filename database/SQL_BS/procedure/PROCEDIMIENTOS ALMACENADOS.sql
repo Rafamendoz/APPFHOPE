@@ -567,10 +567,8 @@ begin
 	inner join profile_users pu on uhp.id_profile = pu.id
 	where u.`user` = usuario and pu.estado=1;
 end//
-
 DELIMITER ;
 
-drop procedure if exists ObtenerPerfilesPorUsuario;
 
 DELIMITER //
 create procedure AsignarPerfilAUsuario(in usuario varchar (15), in profile varchar (15))
@@ -641,3 +639,4 @@ create procedure ConsultarRutas()
 begin
 	select * from routes;
 end//
+DELIMITER ;

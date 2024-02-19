@@ -179,7 +179,8 @@
             "referencia":referencia,
             "descripcion": descripcion,
             "fecha":fecha,
-            "estado": 1
+            "estado": 1,
+            "application_type":"w"
         }
         })
         .done(function( data ) {

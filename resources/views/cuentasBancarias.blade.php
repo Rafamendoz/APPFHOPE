@@ -26,7 +26,7 @@
                                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                             aria-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones</div>
-                                            <a class="dropdown-item" href="{{route('addCuentaBancaria')}}">Agregar Cuenta Bancaria</a>
+                                            <a class="dropdown-item" href="{{route('addCuentaBancaria', ['destination'=>'addCuentaBancaria', 'type'=>'r'])}}">Agregar Cuenta Bancaria</a>
                                           
                                         </div>
                                      
@@ -67,7 +67,7 @@
                                                 @endif                                                <td>{{$valor->created_at }}</td>
                                                 <td>{{$valor->updated_at }}</td>
                                                 <td>                                                           
-                                                            <a class="btn btn-primary btn-sm" href="../detalleBancario/{{ $valor->id }}"><i class="fas fa-eye"></i></button>
+                                                            <a class="btn btn-primary btn-sm" href="../detalleBancario?destination=detalleBancario&value=r&id={{ $valor->id }}"><i class="fas fa-eye"></i></button>
                                                 </td>
                                             </tr>
                                         @endforeach

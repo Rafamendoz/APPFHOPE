@@ -19,7 +19,7 @@
                                             <div class="col-md-12 mb-3">
                                                 <button onclick="Buscar()" class="btn btn-primary">Editar Cuenta</button>
                                                 <button onclick="ConsultarEliminar({{$valor->id}})" class="btn btn-danger">Desactivar Cuenta</button>
-                                                <a href="../detalleBancario/{{$valor->id}}/adddetallebanco" class="btn btn-primary">Registrar Transaccion</a>
+                                                <a href="../detalleBancario/adddetallebanco?destination=AddDetalleBanco&value=r&id={{$valor->id}}" class="btn btn-primary">Registrar Transaccion</a>
 
                                             </div>
                             @endforeach

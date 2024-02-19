@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\DB;
 class DetalleBancoController extends Controller
 {
     
-    public function addDetalleBanco($id){
+    public function addDetalleBanco(Request $request){
         try {
-            $idCuentaBancaria = $id;
+            $idCuentaBancaria = $request->id;
             $transacciones = Transaccion::all();
             $estados = Estado::all();
             return view('adddetallebanco', compact('estados','transacciones','idCuentaBancaria'));
@@ -33,20 +33,20 @@ class DetalleBancoController extends Controller
     }
 
 
-    public function getDetalleBancario($id){
+    public function getDetalleBancario(Request $request){
         try {
-            $estado = CuentaBancaria::where('id',$id)->select('estado')->get();
+            $estado = CuentaBancaria::where('id',$request->id)->select('estado')->get();
 
             if(sizeof($estado)<1 || $estado[0]->estado==2){
                 return redirect("cuentasBancarias");
 
             }else{
-                $datosCuenta = DB::select('call Obtener_cuentaBancaria_vista(?)', array($id));
-                $totalEntradas = DB::select('call Obtener_detalleBancarios_totalEntradas_by_cuentabancaria(?)',array($id));
-                $totalSalidas = DB::select('call Obtener_detalleBancarios_totalSalidas_by_cuentabancaria(?)',array($id));
+                $datosCuenta = DB::select('call Obtener_cuentaBancaria_vista(?)', array($request->id));
+                $totalEntradas = DB::select('call Obtener_detalleBancarios_totalEntradas_by_cuentabancaria(?)',array($request->id));
+                $totalSalidas = DB::select('call Obtener_detalleBancarios_totalSalidas_by_cuentabancaria(?)',array($request->id));
                 $totalNeto = floatval($totalEntradas[0]->totalEntradas)-floatval( $totalSalidas[0]->totalSalidas);
-                $salidasBancarias = DB::select('call Obtener_detalleBancarios_salidas_by_cuentabancaria(?)',array($id));
-                $entradasBancarias = DB::select('call Obtener_detalleBancarios_entradas_by_cuentabancaria(?)',array($id));
+                $salidasBancarias = DB::select('call Obtener_detalleBancarios_salidas_by_cuentabancaria(?)',array($request->id));
+                $entradasBancarias = DB::select('call Obtener_detalleBancarios_entradas_by_cuentabancaria(?)',array($request->id));
     
                 return view('detalleBanco', compact('datosCuenta','salidasBancarias', 'entradasBancarias', 'totalEntradas', 'totalSalidas', 'totalNeto'));
 

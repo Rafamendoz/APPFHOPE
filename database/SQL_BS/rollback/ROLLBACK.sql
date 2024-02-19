@@ -48,6 +48,12 @@ drop procedure if exists getTablesNoDebug;
 drop procedure if exists insertTempTable;
 drop procedure if exists ReportClosure;
 drop procedure if exists RollbackClosure;
+drop procedure if exists AsignarPerfilAUsuario;
+drop procedure if exists ObtenerCabeceraCompras;
+drop procedure if exists ObtenerVistaDetallePorProfile;
+drop procedure if exists ObtenerVistaPorProfile;
+drop procedure if exists procesar_tabla;
+
 drop procedure if exists ObtenerPermisosPorVistaPorProfile;
 
 

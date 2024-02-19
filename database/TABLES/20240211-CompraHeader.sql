@@ -77,7 +77,7 @@ CREATE TABLE `profile_users_auth` (
   `permissions` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL,
   `view_name` varchar(255) COLLATE utf8mb4_spanish_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULxL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `profile_users_auth_profile_users_FK` (`id_profile`),
   CONSTRAINT `profile_users_auth_profile_users_FK` FOREIGN KEY (`id_profile`) REFERENCES `profile_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -97,9 +97,7 @@ CREATE TABLE `_user_has_profiles` (
   CONSTRAINT `_user_has_profiles_users_FK` FOREIGN KEY (`id_usuario`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
-
 ALTER TABLE fhopeonl_gestion_fhope.inventory MODIFY COLUMN estado bigint unsigned DEFAULT 1 NOT NULL;
-
 
 
 CREATE TABLE `routes` (
@@ -107,4 +105,4 @@ CREATE TABLE `routes` (
   `route_name` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   `method` varchar(100) COLLATE utf8mb4_spanish_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8mb4 COLLATE
+) ENGINE=InnoDB AUTO_INCREMENT=199 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
